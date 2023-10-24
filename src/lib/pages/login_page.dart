@@ -111,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8.0))),
         hintText: hintText,
+        hintStyle: TextStyle(color: Colors.grey.shade400),
         isDense: true, // Added this
         contentPadding: EdgeInsets.all(16),
         suffixIcon: isPassword ? Icon(Icons.remove_red_eye) : null,
@@ -124,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         debugPrint("Email : ${emailController.text}");
         debugPrint("Password : ${passwordController.text}");
+        Navigator.pushNamed(context, '/listTeacherPage');
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
