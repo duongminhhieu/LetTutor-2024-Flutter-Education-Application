@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../components/dateSelection.dart';
-import '../../components/timeRange.dart';
+import '../../../untils//dateSelection.dart';
+import '../../../untils//timeRange.dart';
 
-class FilterItem extends StatelessWidget {
-  const FilterItem({Key? key}) : super(key: key);
+class FilterComponent extends StatelessWidget {
+  const FilterComponent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -164,8 +164,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                   }
                 });
               },
-              selectedColor: Colors.blue.shade500, // Màu nền khi chọn
-              checkmarkColor: Colors.white, // Màu dấu check
+              selectedColor: Colors.blue.shade500,
+              checkmarkColor: Colors.white,
             );
           }).toList(),
         ),

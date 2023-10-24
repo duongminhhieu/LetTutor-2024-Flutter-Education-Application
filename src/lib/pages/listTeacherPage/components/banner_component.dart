@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-class BannerItem extends StatelessWidget {
+class BannerComponent extends StatelessWidget {
   final Color myColor;
 
-  const BannerItem({
+  const BannerComponent({
     super.key,
     required this.myColor,
   });

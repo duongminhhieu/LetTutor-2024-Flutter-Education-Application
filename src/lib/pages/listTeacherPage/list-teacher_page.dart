@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:src/pages/listTeacherPage/banner_item.dart';
-import 'package:src/pages/listTeacherPage/filter_item.dart';
+import 'package:src/pages/listTeacherPage/components/banner_component.dart';
+import 'package:src/pages/listTeacherPage/components/filter_component.dart';
+import 'package:src/pages/listTeacherPage/components/listTeacher_component.dart';
 
 class ListTeacherPage extends StatefulWidget {
   const ListTeacherPage({Key? key}) : super(key: key);
@@ -53,8 +54,8 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
         ],
       ),
       body: ListView(children: [
-        BannerItem(myColor: myColor),
-        const FilterItem(),
+        BannerComponent(myColor: myColor),
+        const FilterComponent(),
         Container(
           padding: const EdgeInsets.only(top: 12, left: 16, right: 16),
           child: const Divider(
@@ -62,7 +63,8 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
             color: Color.fromRGBO(238, 238, 238, 60),
             thickness: 1,
           ),
-        )
+        ),
+        const ListTeacherComponent()
       ]),
     );
   }
