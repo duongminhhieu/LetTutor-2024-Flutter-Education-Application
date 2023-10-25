@@ -1,7 +1,6 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class InfoComponent extends StatefulWidget {
@@ -47,6 +46,7 @@ class _InfoComponentState extends State<InfoComponent> {
           _buildVideoInfo(),
           const SizedBox(height: 20),
           _buildOtherInfo(),
+          const SizedBox(height: 20),
         ],
       ),
     );

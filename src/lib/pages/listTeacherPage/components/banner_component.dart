@@ -28,21 +28,24 @@ class BannerComponent extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: 200,
-                child: const Text(
-                  'Wed, 25 Oct 23 00:00 - 00:25 (starts in 11:02:11)',
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                      color: Colors.white),
-                  textAlign: TextAlign.center,
+              SizedBox(width: 10),
+              Expanded(
+                child: Container(
+                  child: const Text(
+                    'Wed, 25 Oct 23 00:00 - 00:25 (starts in 11:02:11)',
+                    style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-              Container(
+              SizedBox(width: 30),
+              Expanded(child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -70,7 +73,9 @@ class BannerComponent extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              )),
+              SizedBox(width: 10),
+
             ],
           ),
           SizedBox(height: 16),
