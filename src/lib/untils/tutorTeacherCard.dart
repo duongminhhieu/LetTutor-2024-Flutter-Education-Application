@@ -44,29 +44,57 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: <Widget>[
-            ListTile(
-              trailing: IconButton(
-                icon: Icon(
-                  _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: _isFavorite ? Colors.red : null,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _isFavorite = !_isFavorite;
-                  });
-                },
+            Container(
+              width: double.infinity,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipOval(
+                      child: Image.asset('lib/images/loginImage.png'),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        _isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
+                        color: _isFavorite ? Colors.red : null,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isFavorite = !_isFavorite;
+                        });
+                      },
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                ],
               ),
             ),
             Column(
               children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    widget.name,
-                    style: const TextStyle(
+                InkWell(
+                  onTap: () {
+                    print('Name pressed: ${widget.name}');
+                    Navigator.pushNamed(context, '/detailATeacher');
+                  },
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      widget.name,
+                      style: const TextStyle(
                         fontSize: 24,
                         color: Colors.black,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 5),
