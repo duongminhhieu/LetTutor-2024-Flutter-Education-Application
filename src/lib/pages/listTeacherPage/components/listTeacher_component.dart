@@ -35,7 +35,15 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
       subtitle:
           'I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
       isFavorite: true,
-      filterLabels: ['History', 'Geography','History', 'Geography','History', 'Geography', 'English'],
+      filterLabels: [
+        'History',
+        'Geography',
+        'History',
+        'Geography',
+        'History',
+        'Geography',
+        'English'
+      ],
     ),
     TutorTeacherData(
       imageAsset: 'lib/images/loginImage.png',
