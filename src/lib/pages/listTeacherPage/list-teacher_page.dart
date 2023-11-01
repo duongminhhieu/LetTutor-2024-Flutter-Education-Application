@@ -17,7 +17,9 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
 
   @override
   Widget build(BuildContext context) {
-    myColor = Theme.of(context).primaryColor;
+    myColor = Theme
+        .of(context)
+        .primaryColor;
     return Scaffold(
       backgroundColor: Colors.white,
       endDrawer: Drawer(
@@ -57,10 +59,11 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
-                    Icon(Icons.calendar_month_rounded, size: 36, color: Colors.blue,),
+                    Icon(Icons.calendar_month_rounded, size: 36,
+                      color: Colors.blue,),
                     SizedBox(width: 12),
                     Text(
                       "Recurring Lesson Schedule",
@@ -79,7 +82,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
                     Icon(Icons.co_present, size: 36, color: Colors.blue,),
@@ -101,10 +104,11 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
-                    Icon(Icons.calendar_today_rounded, size: 36, color: Colors.blue,),
+                    Icon(Icons.calendar_today_rounded, size: 36,
+                      color: Colors.blue,),
                     SizedBox(width: 12),
                     Text(
                       "Schedule",
@@ -117,13 +121,12 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
                 ),
               ),
               onTap: () {
-
                 // Then close the drawer
                 Navigator.pushNamed(context, '/schedulePage');
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
                     Icon(Icons.history, size: 40, color: Colors.blue,),
@@ -145,7 +148,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
                     Icon(Icons.add_card_rounded, size: 36, color: Colors.blue,),
@@ -163,14 +166,15 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               onTap: () {
                 // Update the state of the app
                 // Then close the drawer
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/coursesPage');
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
-                    Icon(Icons.co_present_rounded, size: 36, color: Colors.blue,),
+                    Icon(
+                      Icons.co_present_rounded, size: 36, color: Colors.blue,),
                     SizedBox(width: 12),
                     Text(
                       "My course",
@@ -189,7 +193,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
                     Icon(Icons.people_alt, size: 36, color: Colors.blue,),
@@ -211,7 +215,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
               },
             ),
             ListTile(
-              title:  Container(
+              title: Container(
                 child: const Row(
                   children: [
                     Icon(Icons.logout, size: 36, color: Colors.blue,),
@@ -250,7 +254,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
             shape: const CircleBorder(),
             child: ClipRRect(
               borderRadius:
-                  BorderRadius.circular(10), // Adjust the radius as needed
+              BorderRadius.circular(10), // Adjust the radius as needed
               child: SvgPicture.asset('lib/images/vietnam.svg',
                   semanticsLabel: "My SVG", height: 18),
             ),

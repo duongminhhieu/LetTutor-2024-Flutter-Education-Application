@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
 import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/detailATeacher': (context) => DetailATeacherPage(),
         '/schedulePage': (context) => SchedulePage(),
         '/historyPage': (context) => HistoryPage(),
+        '/coursesPage': (context) => CoursesPage(),
 
       },
       theme: ThemeData(primarySwatch: Colors.blue, primaryColor: const Color.fromRGBO(0, 113, 240, 1.0)),
