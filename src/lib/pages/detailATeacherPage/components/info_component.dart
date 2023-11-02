@@ -79,7 +79,7 @@ class _InfoComponentState extends State<InfoComponent> {
             shape: BoxShape.circle,
           ),
           child: ClipOval(
-            child: Image.asset('lib/images/loginImage.png'),
+            child: Image.asset('lib/assets/images/loginImage.png'),
           ),
         ),
         const SizedBox(width: 20),
@@ -125,7 +125,7 @@ class _InfoComponentState extends State<InfoComponent> {
               child: Row(
                 children: [
                   SvgPicture.asset(
-                    'lib/images/vietnam.svg',
+                    'lib/assets/images/vietnam.svg',
                     semanticsLabel: "My SVG",
                     height: 20,
                   ),

@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: SvgPicture.asset('lib/images/lettutor_logo.svg',
+        title: SvgPicture.asset('lib/assets/images/lettutor_logo.svg',
             semanticsLabel: "My SVG", height: 36),
         actions: [
           MaterialButton(
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             child: ClipRRect(
               borderRadius:
                   BorderRadius.circular(10), // Adjust the radius as needed
-              child: SvgPicture.asset('lib/images/vietnam.svg',
+              child: SvgPicture.asset('lib/assets/images/vietnam.svg',
                   semanticsLabel: "My SVG", height: 18),
             ),
           )
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: ListView(children: [
         Image.asset(
-          'lib/images/loginImage.png',
+          'lib/assets/images/loginImage.png',
           fit: BoxFit.fitWidth,
         ),
         Padding(
@@ -150,8 +150,8 @@ class _LoginPageState extends State<LoginPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Tab(icon: SvgPicture.asset("lib/images/facebook-logo.svg")),
-              Tab(icon: SvgPicture.asset("lib/images/google-logo.svg")),
+              Tab(icon: SvgPicture.asset("lib/assets/images/facebook-logo.svg")),
+              Tab(icon: SvgPicture.asset("lib/assets/images/google-logo.svg")),
               Padding(
                 padding: const EdgeInsets.only(left: 6),
                 child: MaterialButton(

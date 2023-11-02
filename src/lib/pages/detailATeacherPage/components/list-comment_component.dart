@@ -43,7 +43,7 @@ class ListCommentComponent extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.asset('lib/images/loginImage.png'),
+              child: Image.asset('lib/assets/images/loginImage.png'),
             ),
           ),
           SizedBox(width: 10),

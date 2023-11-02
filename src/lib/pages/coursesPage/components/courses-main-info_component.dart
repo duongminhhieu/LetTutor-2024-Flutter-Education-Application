@@ -88,7 +88,7 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
     return Container(
       child: Row(
         children: [
-          SvgPicture.asset('lib/images/course.svg',
+          SvgPicture.asset('lib/assets/images/course.svg',
               semanticsLabel: "Course", height: 100),
           SizedBox(width: 24),
           Expanded(

@@ -27,7 +27,7 @@ class _CourseCardState extends State<CourseCard> {
             child: Column(
               children: [
                 Container(
-                  child: Image.asset("lib/images/loginImage.png",
+                  child: Image.asset("lib/assets/images/loginImage.png",
                   fit: BoxFit.cover,),
                 ),
                 Container(

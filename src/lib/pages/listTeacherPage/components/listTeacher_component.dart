@@ -11,7 +11,7 @@ class ListTeacherComponent extends StatefulWidget {
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
   final List<TutorTeacherData> teachers = [
     TutorTeacherData(
-      imageAsset: 'lib/images/loginImage.png',
+      imageAsset: 'lib/assets/images/loginImage.png',
       name: 'John Doe',
       rating: 4.5,
       subtitle:
@@ -20,7 +20,7 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
       filterLabels: ['Math', 'Science', 'English'],
     ),
     TutorTeacherData(
-      imageAsset: 'lib/images/loginImage.png',
+      imageAsset: 'lib/assets/images/loginImage.png',
       name: 'Jane Smith',
       rating: 4.8,
       subtitle:
@@ -29,7 +29,7 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
       filterLabels: ['History', 'Geography', 'English'],
     ),
     TutorTeacherData(
-      imageAsset: 'lib/images/loginImage.png',
+      imageAsset: 'lib/assets/images/loginImage.png',
       name: 'Jane Smith',
       rating: 4.8,
       subtitle:
@@ -46,7 +46,7 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
       ],
     ),
     TutorTeacherData(
-      imageAsset: 'lib/images/loginImage.png',
+      imageAsset: 'lib/assets/images/loginImage.png',
       name: 'Jane Smith',
       rating: 4.8,
       subtitle:

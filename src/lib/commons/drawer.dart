@@ -19,7 +19,7 @@ class CustomDrawer extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: Image.asset('lib/images/loginImage.png'),
+                      child: Image.asset('lib/assets/images/loginImage.png'),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -218,6 +218,7 @@ class CustomDrawer extends StatelessWidget {
               // Update the state of the app
               // Then close the drawer
               Navigator.pop(context);
+              Navigator.pushNamed(context, "/loginPage");
             },
           ),
         ],

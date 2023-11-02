@@ -56,7 +56,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: Image.asset('lib/images/loginImage.png'),
+                      child: Image.asset('lib/assets/images/loginImage.png'),
                     ),
                   ),
                   Positioned(
@@ -100,7 +100,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    SvgPicture.asset('lib/images/vietnam.svg',
+                    SvgPicture.asset('lib/assets/images/vietnam.svg',
                         semanticsLabel: "My SVG", height: 20),
                     SizedBox(width: 5),
                     const Text(

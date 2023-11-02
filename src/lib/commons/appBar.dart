@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
-      title: SvgPicture.asset('lib/images/lettutor_logo.svg',
+      title: SvgPicture.asset('lib/assets/images/lettutor_logo.svg',
           semanticsLabel: "My SVG", height: 36),
       actions: [
         MaterialButton(
@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           shape: const CircleBorder(),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: SvgPicture.asset('lib/images/vietnam.svg',
+            child: SvgPicture.asset('lib/assets/images/vietnam.svg',
                 semanticsLabel: "My SVG", height: 18),
           ),
         ),

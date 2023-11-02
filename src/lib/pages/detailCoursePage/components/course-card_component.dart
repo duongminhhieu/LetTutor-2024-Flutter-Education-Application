@@ -18,14 +18,14 @@ class CourseCardComponent extends StatelessWidget {
             children: [
               Container(
                 child: Image.asset(
-                  "lib/images/loginImage.png",
+                  "lib/assets/images/loginImage.png",
                   fit: BoxFit.cover,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 32, bottom: 20),
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: const Text(
                   "Life in the Internet Age",
                   style: TextStyle(
                       color: Colors.black,
@@ -35,7 +35,7 @@ class CourseCardComponent extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: const Text(
                   "Let's discuss how technology is changing the way we live",
                   style: TextStyle(
                       color: Colors.grey,
@@ -43,17 +43,17 @@ class CourseCardComponent extends StatelessWidget {
                       fontWeight: FontWeight.normal),
                 ),
               ),
-              SizedBox(
-                height: 12,
-              ),
+              const SizedBox(height: 12),
               Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/detailLessonPage");
+                  },
                   child: Text("Discover"),
                   style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 40),
-                  backgroundColor: Colors.blueAccent),
+                      backgroundColor: Colors.blueAccent),
                 ),
               ),
             ],

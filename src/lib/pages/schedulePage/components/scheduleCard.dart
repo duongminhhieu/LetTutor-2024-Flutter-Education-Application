@@ -79,7 +79,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.asset('lib/images/loginImage.png'),
+              child: Image.asset('lib/assets/images/loginImage.png'),
             ),
           ),
           const SizedBox(width: 8),
@@ -103,7 +103,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                 child: Row(
                   children: [
                     SvgPicture.asset(
-                      'lib/images/vietnam.svg',
+                      'lib/assets/images/vietnam.svg',
                       semanticsLabel: "My SVG",
                       height: 16,
                     ),

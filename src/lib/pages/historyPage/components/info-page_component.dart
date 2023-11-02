@@ -25,7 +25,7 @@ class InfoPageHistoryComponent extends StatelessWidget {
   Widget _buildImage() {
     return Container(
       alignment: Alignment.centerLeft,
-      child:SvgPicture.asset('lib/images/history.svg',
+      child:SvgPicture.asset('lib/assets/images/history.svg',
           semanticsLabel: "History", height: 120)
     );
   }

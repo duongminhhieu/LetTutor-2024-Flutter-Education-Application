@@ -30,11 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^2.0.5
   expandable_text: ^2.3.0
   youtube_player_flutter: ^8.1.0
   flutter_rating_bar: ^4.0.1
   multiselect:
+  syncfusion_flutter_pdfviewer: ^23.1.43
+  flutter_svg: ^2.0.5
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -64,8 +66,11 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/images/
-#     - images/a_dot_ham.jpeg
+    - lib/assets/images/
+    - lib/assets/GiaoTrinhDanGuitar.pdf
+    - lib/assets/NoiLongNguoiDi.pdf
+
+  #     - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
