@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:src/untils/courseCard.dart';
+import 'package:src/pages/coursesPage/components/courseCard.dart';
 
 class CoursesMainInfoComponent extends StatefulWidget {
   const CoursesMainInfoComponent({Key? key}) : super(key: key);

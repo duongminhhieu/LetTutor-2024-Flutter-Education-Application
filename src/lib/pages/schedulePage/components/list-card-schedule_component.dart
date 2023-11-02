@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:src/untils/scheduleCard.dart';
+import 'package:src/pages/schedulePage/components/scheduleCard.dart';
 
 
 class ListCardScheduleComponent extends StatefulWidget {

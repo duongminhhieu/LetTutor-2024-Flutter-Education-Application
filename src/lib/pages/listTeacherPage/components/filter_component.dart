@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../untils//dateSelection.dart';
-import '../../../untils//timeRange.dart';
+import '../../../commons/dateSelection.dart';
+import '../../../commons/timeRange.dart';
 
 class FilterComponent extends StatelessWidget {
   const FilterComponent({Key? key}) : super(key: key);

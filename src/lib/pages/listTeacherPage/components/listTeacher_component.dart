@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:src/untils/tutorTeacherCard.dart';
+import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 
 class ListTeacherComponent extends StatefulWidget {
   const ListTeacherComponent({Key? key}) : super(key: key);
