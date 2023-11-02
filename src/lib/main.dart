@@ -7,6 +7,7 @@ import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
+import 'package:src/pages/videoCallPage/videoCallPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/coursesPage': (context) => CoursesPage(),
         '/detailCoursePage': (context) => DetailCoursePage(),
         '/detailLessonPage': (context) => DetailLessonPage(),
+        '/videoCallPage': (context) => VideoCallPage(),
 
 
       },

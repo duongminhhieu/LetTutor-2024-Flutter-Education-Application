@@ -50,7 +50,9 @@ class BannerComponent extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/videoCallPage");
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     elevation: MaterialStateProperty.all(4),
