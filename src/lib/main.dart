@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
+import 'package:src/pages/detailCoursePage/detail-course_page.dart';
 import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/schedulePage': (context) => SchedulePage(),
         '/historyPage': (context) => HistoryPage(),
         '/coursesPage': (context) => CoursesPage(),
+        '/detailCoursePage': (context) => DetailCoursePage(),
 
       },
       theme: ThemeData(primarySwatch: Colors.blue, primaryColor: const Color.fromRGBO(0, 113, 240, 1.0)),
