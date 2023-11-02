@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: SvgPicture.asset('lib/assets/images/lettutor_logo.svg',
             semanticsLabel: "My SVG", height: 36),

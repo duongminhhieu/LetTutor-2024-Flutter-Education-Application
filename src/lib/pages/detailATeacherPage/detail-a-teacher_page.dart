@@ -12,8 +12,9 @@ class DetailATeacherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      endDrawer: CustomDrawer(),
-      appBar: CustomAppBar(),
+      appBar: AppBar(
+          title: Text("Detail Teacher", textAlign: TextAlign.center,),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20.0),

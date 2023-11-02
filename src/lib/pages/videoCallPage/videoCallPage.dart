@@ -78,9 +78,3 @@ class _VideoCallPageState extends State<VideoCallPage> {
     );
   }
 }
-
-void main() {
-  runApp(MaterialApp(
-    home: VideoCallPage(),
-  ));
-}

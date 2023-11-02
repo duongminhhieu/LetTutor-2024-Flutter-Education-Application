@@ -17,8 +17,10 @@ class _DetailLessonPageState extends State<DetailLessonPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        endDrawer: CustomDrawer(),
-        appBar: CustomAppBar(),
+        appBar:AppBar(
+          title: Text("Detail Lesson", textAlign: TextAlign.center,),
+
+        ),
         body: Container(
           padding: EdgeInsets.all(16.0),
           child: ListView(

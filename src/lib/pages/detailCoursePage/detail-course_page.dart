@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../commons/appBar.dart';
-import '../../commons/drawer.dart';
 import 'components/course-card_component.dart';
 import 'components/overview-course_component.dart';
 
@@ -18,8 +14,9 @@ class _DetailCoursePageState extends State<DetailCoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        endDrawer: CustomDrawer(),
-        appBar: CustomAppBar(),
+        appBar: AppBar(
+          title: Text("Detail Course", textAlign: TextAlign.center,),
+        ),
         body: Container(
           padding: EdgeInsets.all(36.0),
           child: ListView(
