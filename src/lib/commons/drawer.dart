@@ -135,7 +135,7 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               child: const Row(
                 children: [
-                  Icon(Icons.add_card_rounded, size: 36, color: Colors.blue,),
+                  Icon(Icons.school, size: 36, color: Colors.blue,),
                   SizedBox(width: 12),
                   Text(
                     "Courses",

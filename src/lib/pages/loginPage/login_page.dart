@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         debugPrint("Email : ${emailController.text}");
         debugPrint("Password : ${passwordController.text}");
-        Navigator.pushNamed(context, '/listTeacherPage');
+        Navigator.pushNamed(context, '/bottomNavBar');
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
