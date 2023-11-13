@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/UserProvider.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
     return Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
@@ -88,75 +92,6 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               child: const Row(
                 children: [
-                  Icon(Icons.calendar_today_rounded, size: 36,
-                    color: Colors.blue,),
-                  SizedBox(width: 12),
-                  Text(
-                    "Schedule",
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              // Then close the drawer
-              Navigator.pop(context);
-
-              Navigator.pushNamed(context, '/schedulePage');
-            },
-          ),
-          ListTile(
-            title: Container(
-              child: const Row(
-                children: [
-                  Icon(Icons.history, size: 40, color: Colors.blue,),
-                  SizedBox(width: 12),
-                  Text(
-                    "History",
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              // Update the state of the app
-              // Then close the drawer
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/historyPage');
-            },
-          ),
-          ListTile(
-            title: Container(
-              child: const Row(
-                children: [
-                  Icon(Icons.school, size: 36, color: Colors.blue,),
-                  SizedBox(width: 12),
-                  Text(
-                    "Courses",
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              // Update the state of the app
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/coursesPage');
-            },
-          ),
-          ListTile(
-            title: Container(
-              child: const Row(
-                children: [
                   Icon(
                     Icons.co_present_rounded, size: 36, color: Colors.blue,),
                   SizedBox(width: 12),
@@ -217,6 +152,7 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               // Update the state of the app
               // Then close the drawer
+              userProvider.logout();
               Navigator.pop(context);
               Navigator.pushNamed(context, "/loginPage");
             },

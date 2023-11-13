@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:src/providers/UserProvider.dart';
 import 'package:src/utilities/validator.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -140,12 +142,25 @@ class _SignUpPageState extends State<SignUpPage> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          debugPrint("Email : ${emailController.text}");
-          debugPrint("Password : ${passwordController.text}");
-          debugPrint("Password Confirm : ${confirmPasswordController.text}");
 
-          Navigator.pop(context);
-          Navigator.pushNamed(context, '/loginPage');        }
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setCredentials(emailController.text, passwordController.text);
+
+          // Show a success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful!'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          // Delay the navigation to give time for the user to see the success message
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pop(context); // Go back to the previous screen
+            Navigator.pushNamed(context, '/loginPage'); // Navigate to the login page
+          });
+        }
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(

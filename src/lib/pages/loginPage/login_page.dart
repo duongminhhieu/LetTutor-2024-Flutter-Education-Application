@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:src/providers/UserProvider.dart';
+import 'package:src/utilities/validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,6 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Color myColor;
   late Size mediaSize;
   TextEditingController emailController = TextEditingController();
@@ -56,38 +60,49 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Say hello to your English tutors",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: myColor, fontSize: 32, fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 16),
-        const Text(
-          "Become fluent faster through one on one video chat lessons tailored to your goals.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 16),
-        _buildGreyText("EMAIL"),
-        const SizedBox(height: 8),
-        _buildInputField(emailController, 'mail@example.com'),
-        const SizedBox(height: 16),
-        _buildGreyText("PASSWORD"),
-        const SizedBox(height: 8),
-        _buildInputField(passwordController, "Enter your password",
-            isPassword: true),
-        const SizedBox(height: 12),
-        _buildPrimaryColorText('Forgot Password?'),
-        const SizedBox(height: 12),
-        _buildLoginButton(),
-        const SizedBox(height: 24),
-        _buildOtherLogin(),
-      ],
+    var userProvider = Provider.of<UserProvider>(context);
+    return Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.always,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Say hello to your English tutors",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: myColor, fontSize: 32, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Become fluent faster through one on one video chat lessons tailored to your goals.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildGreyText("EMAIL"),
+          const SizedBox(height: 8),
+          _buildInputField(emailController, 'mail@example.com', validator: Validator.validateEmail),
+          const SizedBox(height: 16),
+          _buildGreyText("PASSWORD"),
+          const SizedBox(height: 8),
+          _buildInputField(passwordController, "Enter your password",
+              isPassword: true, validator: Validator.validatePassword),
+          const SizedBox(height: 12),
+          _buildPrimaryColorText('Forgot Password?'),
+          const SizedBox(height: 12),
+          _buildLoginButton(),
+          const SizedBox(height: 16),
+          if (userProvider.isRegistered)
+            const Text(
+              'Registration successful! Please log in.',
+              style: TextStyle(color: Colors.green, fontSize: 14),
+            ),
+          const SizedBox(height: 24),
+          _buildOtherLogin(),
+        ],
+      ),
     );
   }
 
@@ -105,8 +120,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildInputField(TextEditingController controller, String hintText,
-      {isPassword = false}) {
-    return TextField(
+      {isPassword = false, Function? validator}) {
+    return TextFormField(
+      validator: (value) {
+        return validator!(value ?? "");
+      },
       controller: controller,
       decoration: InputDecoration(
         border: const OutlineInputBorder(
@@ -124,9 +142,28 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLoginButton() {
     return ElevatedButton(
       onPressed: () {
-        debugPrint("Email : ${emailController.text}");
-        debugPrint("Password : ${passwordController.text}");
-        Navigator.pushNamed(context, '/bottomNavBar');
+        if (_formKey.currentState!.validate()) {
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          // Check login status
+          if (userProvider.email == emailController.text &&
+              userProvider.password == passwordController.text) {
+            // Login successful
+            userProvider.login(emailController.text, passwordController.text);
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/bottomNavBar');
+          } else {
+            // Invalid credentials, show an error message or handle accordingly
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Invalid email or password. Please try again.'),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        }
+
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
