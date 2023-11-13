@@ -4,6 +4,7 @@ import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
 import 'package:src/pages/detailCoursePage/detail-course_page.dart';
 import 'package:src/pages/detailLessonPage/detail-lesson_page.dart';
+import 'package:src/pages/forgotPasswordPage/forgot-password_page.dart';
 import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           '/bottomNavBar': (context) => BottomNavBar(),
           '/loginPage': (context) => LoginPage(),
           '/signUpPage': (context) => SignUpPage(),
+          '/forgotPasswordPage': (context) => ForgotPasswordPage(),
           '/listTeacherPage': (context) => ListTeacherPage(),
           '/detailATeacher': (context) => DetailATeacherPage(),
           '/schedulePage': (context) => SchedulePage(),
@@ -57,6 +59,11 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
+
+    if (!userProvider.isLoggedIn) {
+      return const LoginPage();
+    }
     List<Widget> _buildScreens() {
       return [ListTeacherPage(), SchedulePage(), CoursesPage(), HistoryPage()];
     }

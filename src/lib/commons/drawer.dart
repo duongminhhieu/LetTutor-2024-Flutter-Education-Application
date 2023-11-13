@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/loginPage/login_page.dart';
 import '../providers/UserProvider.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -154,8 +155,7 @@ class CustomDrawer extends StatelessWidget {
               // Then close the drawer
               userProvider.logout();
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/loginPage");
-            },
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));            },
           ),
         ],
       ),

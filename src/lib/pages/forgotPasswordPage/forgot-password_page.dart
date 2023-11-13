@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:src/providers/UserProvider.dart';
-import 'package:src/utilities/validator.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+import '../../providers/UserProvider.dart';
+import '../../utilities/validator.dart';
+
+
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Color myColor;
   late Size mediaSize;
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   bool rememberUser = false;
 
   @override
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: const CircleBorder(),
             child: ClipRRect(
               borderRadius:
-                  BorderRadius.circular(10), // Adjust the radius as needed
+              BorderRadius.circular(10), // Adjust the radius as needed
               child: SvgPicture.asset('lib/assets/images/vietnam.svg',
                   semanticsLabel: "My SVG", height: 18),
             ),
@@ -67,15 +68,18 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Say hello to your English tutors",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: myColor, fontSize: 32, fontWeight: FontWeight.w700),
+          Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Reset Password",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: myColor, fontSize: 32, fontWeight: FontWeight.w700),
+            ),
           ),
           const SizedBox(height: 16),
           const Text(
-            "Become fluent faster through one on one video chat lessons tailored to your goals.",
+            "Please enter your email address to search for your account.",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
@@ -84,23 +88,8 @@ class _LoginPageState extends State<LoginPage> {
           _buildGreyText("EMAIL"),
           const SizedBox(height: 8),
           _buildInputField(emailController, 'mail@example.com', validator: Validator.validateEmail),
-          const SizedBox(height: 16),
-          _buildGreyText("PASSWORD"),
-          const SizedBox(height: 8),
-          _buildInputField(passwordController, "Enter your password",
-              isPassword: true, validator: Validator.validatePassword),
           const SizedBox(height: 12),
-          GestureDetector(onTap:(){
-            Navigator.pushNamed(context, '/forgotPasswordPage');
-          },child: _buildPrimaryColorText('Forgot Password?')),
-          const SizedBox(height: 12),
-          _buildLoginButton(),
-          const SizedBox(height: 16),
-          if (userProvider.isRegistered)
-            const Text(
-              'Registration successful! Please log in.',
-              style: TextStyle(color: Colors.green, fontSize: 14),
-            ),
+          _buildResetButton(),
           const SizedBox(height: 24),
           _buildOtherLogin(),
         ],
@@ -141,28 +130,24 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildResetButton() {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
           var userProvider = Provider.of<UserProvider>(context, listen: false);
           // Check login status
-          if (userProvider.email == emailController.text &&
-              userProvider.password == passwordController.text) {
+          if (userProvider.email == emailController.text) {
             // Login successful
-            userProvider.login(emailController.text, passwordController.text);
-
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login successful!.'),
-                backgroundColor: Colors.green,
+              SnackBar(
+                content: Text('Your password: ${userProvider.password}'),
+                backgroundColor: Colors.blue,
                 behavior: SnackBarBehavior.floating,
                 duration: Duration(seconds: 2),
               ),
             );
-
             Navigator.pop(context);
-            Navigator.pushNamed(context, '/bottomNavBar');
+            Navigator.pushNamed(context, '/loginPage');
           } else {
             // Invalid credentials, show an error message or handle accordingly
             ScaffoldMessenger.of(context).showSnackBar(
@@ -179,13 +164,13 @@ class _LoginPageState extends State<LoginPage> {
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-            // border radius
+          // border radius
             borderRadius: BorderRadius.circular(8)),
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(52),
       ),
       child: const Text(
-        "LOG IN",
+        "Send reset link",
         style: TextStyle(fontSize: 20),
       ),
     );
@@ -205,45 +190,63 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 6),
                 child: MaterialButton(
-                  onPressed: () {},
-                  textColor: Colors.white,
-                  minWidth: 32,
-                  padding: const EdgeInsets.all(8),
-                  shape: CircleBorder(
-                      side: BorderSide(
-                          width: 1, style: BorderStyle.solid, color: myColor)),
-                  child: ClipRRect(
-                    borderRadius:
+                    onPressed: () {},
+                    textColor: Colors.white,
+                    minWidth: 32,
+                    padding: const EdgeInsets.all(8),
+                    shape: CircleBorder(
+                        side: BorderSide(
+                            width: 1, style: BorderStyle.solid, color: myColor)),
+                    child: ClipRRect(
+                        borderRadius:
                         BorderRadius.circular(10), // Adjust the radius as needed
-                    child: const Icon(
-                      Icons.phone_android,
-                      color: Colors.grey,
-                      size: 30,
+                        child: const Icon(
+                          Icons.phone_android,
+                          color: Colors.grey,
+                          size: 30,
+                        )
                     )
-                )
                 ),
               )],
           ),
           const SizedBox(height: 16),
-            GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/signUpPage');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildGreyText("Not a member yet?"),
-                  Text("Sign up",
-                      style: TextStyle(
-                          color: myColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500),),
-                ],
-              ),
-            )
+          GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/signUpPage');
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildGreyText("Not a member yet?"),
+                Text("Sign up",
+                  style: TextStyle(
+                      color: myColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500),),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, '/loginPage');
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildGreyText("Already have an account? "),
+                Text("Login",
+                    style: TextStyle(
+                        color: myColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500)),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 }
+

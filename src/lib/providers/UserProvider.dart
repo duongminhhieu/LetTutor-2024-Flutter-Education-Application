@@ -23,8 +23,6 @@ class UserProvider extends ChangeNotifier {
   }
 
   void logout() {
-    _email = '';
-    _password = '';
     _isRegistered = false;
     _isLoggedIn  = false;
 
