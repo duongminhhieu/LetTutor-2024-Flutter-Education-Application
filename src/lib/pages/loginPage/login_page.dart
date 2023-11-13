@@ -176,17 +176,23 @@ class _LoginPageState extends State<LoginPage> {
               )],
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildGreyText("Not a member yet?"),
-              Text("Sign up",
-                  style: TextStyle(
-                      color: myColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500)),
-            ],
-          )
+            GestureDetector(
+              onTap: (){
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/signUpPage');
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildGreyText("Not a member yet?"),
+                  Text("Sign up",
+                      style: TextStyle(
+                          color: myColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500),),
+                ],
+              ),
+            )
         ],
       ),
     );

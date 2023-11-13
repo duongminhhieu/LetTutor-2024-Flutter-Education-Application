@@ -7,6 +7,7 @@ import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
+import 'package:src/pages/signUpPage/sign-up_page.dart';
 import 'package:src/pages/videoCallPage/videoCallPage.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/bottomNavBar': (context) => BottomNavBar(),
         '/loginPage': (context) => LoginPage(),
+        '/signUpPage': (context) => SignUpPage(),
         '/listTeacherPage': (context) => ListTeacherPage(),
         '/detailATeacher': (context) => DetailATeacherPage(),
         '/schedulePage': (context) => SchedulePage(),
