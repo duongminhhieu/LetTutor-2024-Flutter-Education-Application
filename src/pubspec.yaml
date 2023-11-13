@@ -71,6 +71,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/GiaoTrinhDanGuitar.pdf
     - lib/assets/NoiLongNguoiDi.pdf
+    - lib/assets/tutor-mock-data.json
 
   #     - images/a_dot_ham.jpeg
 

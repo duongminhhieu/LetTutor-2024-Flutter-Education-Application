@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:src/pages/historyPage/components/historyCard.dart';
+import 'package:src/pages/historyPage/components/history-card.dart';
 
 class ListCardHistoryComponent extends StatefulWidget {
   const ListCardHistoryComponent({Key? key}) : super(key: key);

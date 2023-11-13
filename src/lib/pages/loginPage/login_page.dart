@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:src/providers/UserProvider.dart';
+import 'package:src/providers/user_provider.dart';
 import 'package:src/utilities/validator.dart';
 
 class LoginPage extends StatefulWidget {

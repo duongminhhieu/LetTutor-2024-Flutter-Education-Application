@@ -10,9 +10,10 @@ import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
 import 'package:src/pages/signUpPage/sign-up_page.dart';
-import 'package:src/pages/videoCallPage/videoCallPage.dart';
+import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:src/providers/UserProvider.dart';
+import 'package:src/providers/tutor_provider.dart';
+import 'package:src/providers/user_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +24,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => TutorProvider())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Consumer<UserProvider>(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/UserProvider.dart';
+import '../../providers/user_provider.dart';
 import '../../utilities/validator.dart';
 
 

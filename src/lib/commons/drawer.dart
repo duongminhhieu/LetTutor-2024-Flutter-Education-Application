@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/loginPage/login_page.dart';
-import '../providers/UserProvider.dart';
+import '../providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
