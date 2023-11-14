@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TutorTeacherCard extends StatefulWidget {
-  final String imageAsset;
-  final String name;
-  final double rating;
-  final String subtitle;
-  final bool isFavorite;
-  final List<String> filterLabels; // Danh sách các nhãn cho FilterChips
+  final String? imageAsset;
+  final String? name;
+  final double? rating;
+  final String? subtitle;
+  final bool? isFavorite;
+  final List<String>? filterLabels; // Danh sách các nhãn cho FilterChips
 
   TutorTeacherCard({
-    required this.imageAsset,
-    required this.name,
-    required this.rating,
-    required this.subtitle,
-    required this.isFavorite,
-    required this.filterLabels, // Thêm danh sách nhãn
+     this.imageAsset,
+     this.name,
+     this.rating,
+     this.subtitle,
+     this.isFavorite,
+     this.filterLabels, // Thêm danh sách nhãn
   });
 
   @override
@@ -28,7 +28,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
   @override
   void initState() {
     super.initState();
-    _isFavorite = widget.isFavorite;
+    _isFavorite = widget.isFavorite!;
   }
 
   @override
@@ -88,7 +88,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      widget.name,
+                      widget.name != null ? widget.name! : '',
                       style: const TextStyle(
                         fontSize: 24,
                         color: Colors.black,
@@ -120,7 +120,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               children: <Widget>[
                 for (int i = 0; i < 5; i++)
                   Icon(
-                    i < widget.rating ? Icons.star : Icons.star_border,
+                    i < widget.rating! ? Icons.star : Icons.star_border,
                     color: Colors.yellow,
                     size: 16,
                   ),
@@ -130,7 +130,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               alignment: Alignment.centerLeft,
               child: Wrap(
                 spacing: 8.0,
-                children: widget.filterLabels.map((label) {
+                children: widget.filterLabels!.map((label) {
                   return FilterChip(
                     backgroundColor: Colors.lightBlue.shade100,
                     label: Text(
@@ -151,7 +151,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                widget.subtitle,
+                widget.subtitle!,
                 textAlign: TextAlign.justify,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,

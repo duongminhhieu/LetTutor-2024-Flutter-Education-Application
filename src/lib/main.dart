@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
@@ -31,11 +32,12 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Consumer<UserProvider>(
-          builder: (context, userProvider, child) {
-            return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
-          },
-        ),
+        home: ListTeacherPage(),
+        // home: Consumer<UserProvider>(
+        //   builder: (context, userProvider, child) {
+        //     return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
+        //   },
+        // ),
         routes: {
           '/bottomNavBar': (context) => BottomNavBar(),
           '/loginPage': (context) => LoginPage(),

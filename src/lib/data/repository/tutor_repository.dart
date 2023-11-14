@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import '../model/tutor/tutor.dart';
@@ -14,5 +15,32 @@ class TutorRepository {
 
     return tutors;
   }
+
+  Future<List<Tutor>> searchTutor({String? filterStr, String? tutorName, String? tutorNation}) async {
+    List<Tutor> tutors = await getTutors();
+
+    // Lọc theo chuỗi filter
+    if (filterStr != null && filterStr.isNotEmpty) {
+      if(filterStr.toLowerCase() != 'all'){
+        tutors = tutors.where((tutor) =>
+            tutor.specialties!.contains(filterStr.toLowerCase())).toList();
+      }
+    }
+
+    // Lọc theo tên giáo viên
+    if (tutorName != null && tutorName.isNotEmpty) {
+      tutors = tutors.where((tutor) =>
+          tutor.name!.toLowerCase().contains(tutorName.toLowerCase())).toList();
+    }
+
+    // Lọc theo quốc gia của giáo viên
+    if (tutorNation != null && tutorNation.isNotEmpty) {
+      tutors = tutors.where((tutor) =>
+          tutor.country!.toLowerCase().contains(tutorNation.toLowerCase())).toList();
+    }
+
+    return tutors;
+  }
+
 
 }

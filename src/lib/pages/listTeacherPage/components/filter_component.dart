@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:src/data/model/tutor/tutor.dart';
+import 'package:src/providers/tutor_provider.dart';
 
 import '../../../commons/dateSelection.dart';
 import '../../../commons/timeRange.dart';
 
-class FilterComponent extends StatelessWidget {
+class FilterComponent extends StatefulWidget {
   const FilterComponent({Key? key}) : super(key: key);
+
+  @override
+  State<FilterComponent> createState() => _FilterComponentState();
+}
+
+class _FilterComponentState extends State<FilterComponent> {
+  TextEditingController tutorNameController = TextEditingController();
+  TextEditingController tutorNationController = TextEditingController();
+  String selectedFilter = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -29,34 +41,50 @@ class FilterComponent extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        hintText: 'Enter tutor name...',
-                        hintStyle: TextStyle(
-                            fontSize: 14, color: Colors.grey.shade400),
-                        isDense: true, // Added this
-                        contentPadding: EdgeInsets.all(8),
-                      ),
+                    child: Consumer<TutorProvider>(
+                      builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
+                        return TextField(
+                          controller: tutorNameController,
+                          onChanged: (text){
+                            tutorProvider.searchTutor(filterStr: selectedFilter,tutorName: tutorNameController.text, tutorNation: tutorNationController.text);
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            hintText: 'Enter tutor name...',
+                            hintStyle: TextStyle(
+                                fontSize: 14, color: Colors.grey.shade400),
+                            isDense: true, // Added this
+                            contentPadding: EdgeInsets.all(8),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
                 SizedBox(width: 12),
                 Expanded(
                   child: Container(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        hintText: 'Select tutor nation',
-                        hintStyle: TextStyle(
-                            fontSize: 14, color: Colors.grey.shade400),
-                        isDense: true, // Added this
-                        contentPadding: EdgeInsets.all(8),
-                      ),
+                    child: Consumer<TutorProvider>(
+                      builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
+                        return TextField(
+                          controller: tutorNationController,
+                          onChanged: (text){
+                            tutorProvider.searchTutor(filterStr: selectedFilter,tutorName: tutorNameController.text, tutorNation: tutorNationController.text);
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            hintText: 'Select tutor nation',
+                            hintStyle: TextStyle(
+                                fontSize: 14, color: Colors.grey.shade400),
+                            isDense: true, // Added this
+                            contentPadding: EdgeInsets.all(8),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -92,12 +120,16 @@ class FilterComponent extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: FilterWidget(),
+            child: FilterWidget(selectedFilter: selectedFilter, tutorNameController: tutorNameController, tutorNationController: tutorNationController),
           ),
           Container(
             alignment: Alignment.centerLeft,
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  tutorNameController.text = '';
+                  tutorNationController.text = '';
+                  selectedFilter = 'All';
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
@@ -120,6 +152,12 @@ class FilterComponent extends StatelessWidget {
 }
 
 class FilterWidget extends StatefulWidget {
+
+  String selectedFilter;
+  TextEditingController tutorNameController;
+  TextEditingController tutorNationController;
+  FilterWidget({super.key, required this.selectedFilter, required this.tutorNameController, required this.tutorNationController});
+
   @override
   _FilterWidgetState createState() => _FilterWidgetState();
 }
@@ -127,16 +165,22 @@ class FilterWidget extends StatefulWidget {
 class _FilterWidgetState extends State<FilterWidget> {
   List<String> filterOptions = [
     'All',
-    'English for Kids',
-    'English for Business',
+    'English-For-Kids',
+    'Business-English',
     'TOEIC',
+    'Conversational',
+    "TOEFL"
     'PET',
+    "KET",
     'IELTS',
     'TOEFL',
+    "STARTERS",
+    "MOVERS",
+    "FLYERS",
+
     // add new filters
   ];
 
-  String selectedFilter = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -145,37 +189,36 @@ class _FilterWidgetState extends State<FilterWidget> {
         Wrap(
           spacing: 8.0, // Khoảng cách giữa các nút chọn
           children: filterOptions.map((option) {
-            final isSelected = selectedFilter == option;
-            return FilterChip(
-              backgroundColor: Colors.grey.shade300,
-              label: Text(
-                option,
-                style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.normal),
-              ),
-              selected: isSelected,
-              onSelected: (isSelected) {
-                setState(() {
-                  if (isSelected) {
-                    selectedFilter = option;
-                  } else {
-                    selectedFilter = 'All';
-                  }
-                });
+            final isSelected = widget.selectedFilter == option;
+            return Consumer<TutorProvider>(
+              builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
+                return FilterChip(
+                  backgroundColor: Colors.grey.shade300,
+                  label: Text(
+                    option,
+                    style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.normal),
+                  ),
+                  selected: isSelected,
+                  onSelected: (isSelected) {
+                    setState(() {
+                      if (isSelected) {
+                        widget.selectedFilter = option;
+                        tutorProvider.searchTutor(filterStr: widget.selectedFilter, tutorName: widget.tutorNameController.text, tutorNation: widget.tutorNationController.text);
+                      } else {
+                        widget.selectedFilter = 'All';
+                      }
+                    });
+                  },
+                  selectedColor: Colors.blue.shade500,
+                  checkmarkColor: Colors.white,
+                );
               },
-              selectedColor: Colors.blue.shade500,
-              checkmarkColor: Colors.white,
+
             );
           }).toList(),
         ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     // Thực hiện tìm kiếm hoặc xử lý dựa trên selectedFilter
-        //     print('Selected Filter: $selectedFilter');
-        //   },
-        //   child: Text('Apply Filter'),
-        // ),
       ],
     );
   }

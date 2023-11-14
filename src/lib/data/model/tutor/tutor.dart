@@ -1,98 +1,98 @@
 import 'package:src/data/model/tutor/tutor_feedback.dart';
 
 class Tutor {
-  final String id;
-  final String level;
-  final String email;
+  final String? id;
+  final String? level;
+  final String? email;
   final String? google;
   final String? facebook;
   final String? apple;
-  final String avatar;
-  final String name;
-  final String country;
-  final String phone;
-  final String language;
-  final String birthday;
-  final bool requestPassword;
-  final bool isActivated;
+  final String? avatar;
+  final String? name;
+  final String? country;
+  final String? phone;
+  final String? language;
+  final String? birthday;
+  final bool? requestPassword;
+  final bool? isActivated;
   final bool? isPhoneActivated;
   final String? requireNote;
-  final int timezone;
+  final int? timezone;
   final String? phoneAuth;
-  final bool isPhoneAuthActivated;
-  final String studySchedule;
-  final bool canSendMessage;
-  final bool isPublicRecord;
+  final bool? isPhoneAuthActivated;
+  final String? studySchedule;
+  final bool? canSendMessage;
+  final bool? isPublicRecord;
   final String? caredByStaffId;
   final String? zaloUserId;
-  final String createdAt;
-  final String updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
   final String? deletedAt;
   final String? studentGroupId;
-  final List<Feedback> feedbacks;
-  final String video;
-  final String bio;
-  final String education;
-  final String experience;
-  final String profession;
+  final List<Feedback>? feedbacks;
+  final String? video;
+  final String? bio;
+  final String? education;
+  final String? experience;
+  final String? profession;
   final String? accent;
-  final String targetStudent;
-  final String interests;
-  final String languages;
-  final String specialties;
+  final String? targetStudent;
+  final String? interests;
+  final String? languages;
+  final String? specialties;
   final String? resume;
-  final double rating;
+  final double? rating;
   final bool? isNative;
   final String? youtubeVideoId;
-  final int price;
-  final bool isOnline;
+  final int? price;
+  final bool? isOnline;
 
   Tutor({
-    required this.id,
-    required this.level,
-    required this.email,
+     this.id,
+     this.level,
+     this.email,
     this.google,
     this.facebook,
     this.apple,
-    required this.avatar,
-    required this.name,
-    required this.country,
-    required this.phone,
-    required this.language,
-    required this.birthday,
-    required this.requestPassword,
-    required this.isActivated,
+     this.avatar,
+     this.name,
+     this.country,
+     this.phone,
+     this.language,
+     this.birthday,
+     this.requestPassword,
+     this.isActivated,
     this.isPhoneActivated,
     this.requireNote,
-    required this.timezone,
+     this.timezone,
     this.phoneAuth,
-    required this.isPhoneAuthActivated,
-    required this.studySchedule,
-    required this.canSendMessage,
-    required this.isPublicRecord,
+     this.isPhoneAuthActivated,
+     this.studySchedule,
+     this.canSendMessage,
+     this.isPublicRecord,
     this.caredByStaffId,
     this.zaloUserId,
-    required this.createdAt,
-    required this.updatedAt,
+     this.createdAt,
+     this.updatedAt,
     this.deletedAt,
     this.studentGroupId,
-    required this.feedbacks,
-    required this.video,
-    required this.bio,
-    required this.education,
-    required this.experience,
-    required this.profession,
+     this.feedbacks,
+     this.video,
+     this.bio,
+     this.education,
+     this.experience,
+     this.profession,
     this.accent,
-    required this.targetStudent,
-    required this.interests,
-    required this.languages,
-    required this.specialties,
+     this.targetStudent,
+     this.interests,
+     this.languages,
+     this.specialties,
     this.resume,
-    required this.rating,
+     this.rating,
     this.isNative,
     this.youtubeVideoId,
-    required this.price,
-    required this.isOnline,
+     this.price,
+     this.isOnline,
   });
 
   factory Tutor.fromJson(Map<String, dynamic> json) {
