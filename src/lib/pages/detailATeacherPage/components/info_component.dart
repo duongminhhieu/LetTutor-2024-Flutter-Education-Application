@@ -482,8 +482,7 @@ class _ChewieDemoState extends State<ChewieDemo> {
         ];
       },
       hideControlsTimer: const Duration(seconds: 1),
-
-      showControls: true,
+      // showControls: true,
       // materialProgressColors: ChewieProgressColors(
       //   playedColor: Colors.red,
       //   handleColor: Colors.blue,
