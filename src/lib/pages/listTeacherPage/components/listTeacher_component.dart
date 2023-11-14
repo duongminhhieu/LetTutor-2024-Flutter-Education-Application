@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 import 'package:src/providers/tutor_provider.dart';
 
+import '../../detailATeacherPage/detail-a-teacher_page.dart';
+
 class ListTeacherComponent extends StatefulWidget {
   const ListTeacherComponent({Key? key}) : super(key: key);
 
@@ -39,7 +41,11 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/detailATeacher', arguments: tutorProvider.tutors[index]);
+                  debugPrint("Tutor info: " + tutorProvider.tutors[index].name.toString());
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => DetailATeacherPage(),
+                    settings: RouteSettings(arguments: tutorProvider.tutors[index]),
+                  ),);
                 },
                 child: TutorTeacherCard(
                   imageAsset: tutorProvider.tutors[index].avatar,

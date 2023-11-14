@@ -31,13 +31,14 @@ dependencies:
   flutter:
     sdk: flutter
   expandable_text: ^2.3.0
-  youtube_player_flutter: ^8.1.0
   flutter_rating_bar: ^4.0.1
   multiselect:
   syncfusion_flutter_pdfviewer: ^23.1.43
   flutter_svg: ^2.0.5
   persistent_bottom_nav_bar: ^5.0.2
   provider: ^6.1.1
+  chewie: ^1.7.1
+  video_player: ^2.8.1
 
 
   # The following adds the Cupertino Icons font to your application.
