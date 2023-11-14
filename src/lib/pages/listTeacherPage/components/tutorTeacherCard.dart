@@ -6,6 +6,7 @@ class TutorTeacherCard extends StatefulWidget {
   final String? name;
   final double? rating;
   final String? subtitle;
+  final String? country;
   final bool? isFavorite;
   final List<String>? filterLabels; // Danh sách các nhãn cho FilterChips
 
@@ -14,6 +15,7 @@ class TutorTeacherCard extends StatefulWidget {
      this.name,
      this.rating,
      this.subtitle,
+      this.country,
      this.isFavorite,
      this.filterLabels, // Thêm danh sách nhãn
   });
@@ -56,7 +58,8 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: Image.asset('lib/assets/images/loginImage.png'),
+                      child: widget.imageAsset == null ? Image.network("https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1686033849227.jpeg") : 
+                      Image.network(widget.imageAsset!),
                     ),
                   ),
                   Positioned(
@@ -80,20 +83,14 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             ),
             Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    print('Name pressed: ${widget.name}');
-                    Navigator.pushNamed(context, '/detailATeacher');
-                  },
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.name != null ? widget.name! : '',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.name ?? '',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -103,8 +100,8 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                     SvgPicture.asset('lib/assets/images/vietnam.svg',
                         semanticsLabel: "My SVG", height: 20),
                     SizedBox(width: 5),
-                    const Text(
-                      'Viet nam',
+                     Text(
+                     widget.country ?? "",
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey,
@@ -120,7 +117,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               children: <Widget>[
                 for (int i = 0; i < 5; i++)
                   Icon(
-                    i < widget.rating! ? Icons.star : Icons.star_border,
+                    i < (widget.rating == null ? 0 : widget.rating!) ? Icons.star : Icons.star_border,
                     color: Colors.yellow,
                     size: 16,
                   ),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:src/data/model/tutor/tutor.dart';
 import 'package:src/pages/detailATeacherPage/components/info_component.dart';
 import 'package:src/pages/detailATeacherPage/components/list-comment_component.dart';
 
-import '../../commons/appBar.dart';
-import '../../commons/drawer.dart';
 
 class DetailATeacherPage extends StatelessWidget {
   const DetailATeacherPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final tutor = ModalRoute.of(context)!.settings.arguments as Tutor;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -18,18 +19,10 @@ class DetailATeacherPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20.0),
-          child: const Column(
+          child:  Column(
             children: [
-              InfoComponent(filterLabels: [
-                'History',
-                'Geography',
-                'History',
-                'Geography',
-                'History',
-                'Geography',
-                'English'
-              ]),
-              ListCommentComponent()
+              InfoComponent(tutor: tutor,),
+              ListCommentComponent(tutor: tutor)
             ],
           ),
         ),

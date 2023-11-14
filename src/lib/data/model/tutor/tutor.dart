@@ -29,7 +29,7 @@ class Tutor {
   final String? updatedAt;
   final String? deletedAt;
   final String? studentGroupId;
-  final List<Feedback>? feedbacks;
+  final List<FeedbackTutor>? feedbacks;
   final String? video;
   final String? bio;
   final String? education;
@@ -125,8 +125,8 @@ class Tutor {
       updatedAt: json['updatedAt'],
       deletedAt: json['deletedAt'],
       studentGroupId: json['studentGroupId'],
-      feedbacks: List<Feedback>.from(
-        json['feedbacks'].map((feedbackJson) => Feedback.fromJson(feedbackJson)),
+      feedbacks: List<FeedbackTutor>.from(
+        json['feedbacks'].map((feedbackJson) => FeedbackTutor.fromJson(feedbackJson)),
       ),
       video: json['video'],
       bio: json['bio'],

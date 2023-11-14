@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../../data/model/tutor/tutor.dart';
+
 class InfoComponent extends StatefulWidget {
-  const InfoComponent({Key? key, required this.filterLabels}) : super(key: key);
-  final List<String> filterLabels;
+  const InfoComponent({Key? key, required this.tutor}) : super(key: key);
+  final Tutor tutor;
   @override
   State<InfoComponent> createState() => _InfoComponentState();
 }
@@ -55,11 +57,12 @@ class _InfoComponentState extends State<InfoComponent> {
   Widget _buildTextDescription() {
     return Container(
       alignment: Alignment.centerLeft,
-      child: const ExpandableText(
-        'I am passionate about running and fitness, I often compete in trail mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
+      child: ExpandableText(
+        widget.tutor.bio!,
         expandText: "More",
+        collapseText: "Less",
         textAlign: TextAlign.justify,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.normal,
           fontSize: 14,
@@ -79,7 +82,7 @@ class _InfoComponentState extends State<InfoComponent> {
             shape: BoxShape.circle,
           ),
           child: ClipOval(
-            child: Image.asset('lib/assets/images/loginImage.png'),
+            child: Image.network(widget.tutor.avatar!),
           ),
         ),
         const SizedBox(width: 20),
@@ -89,9 +92,9 @@ class _InfoComponentState extends State<InfoComponent> {
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              child: const Text(
-                "Hieu Duong",
-                style: TextStyle(
+              child: Text(
+                widget.tutor.name!,
+                style: const TextStyle(
                   fontSize: 24,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -105,14 +108,14 @@ class _InfoComponentState extends State<InfoComponent> {
                 children: <Widget>[
                   for (int i = 0; i < 5; i++)
                     Icon(
-                      i < 3.5 ? Icons.star : Icons.star_border,
+                      i < (widget.tutor.rating == null ? 0 : widget.tutor.rating!) ? Icons.star : Icons.star_border,
                       color: Colors.yellow,
                       size: 16,
                     ),
                   const SizedBox(width: 4),
-                  const Text(
-                    '(125)',
-                    style: TextStyle(
+                  Text(
+                    '(${widget.tutor.feedbacks?.length!})',
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontStyle: FontStyle.italic,
                     ),
@@ -130,8 +133,8 @@ class _InfoComponentState extends State<InfoComponent> {
                     height: 20,
                   ),
                   SizedBox(width: 5),
-                  const Text(
-                    'Viet nam',
+                  Text(
+                    widget.tutor.country!,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       color: Colors.grey,
@@ -244,7 +247,7 @@ class _InfoComponentState extends State<InfoComponent> {
                 Container(
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
-                  child: const Text("VNU-University", style: TextStyle(
+                  child: Text(widget.tutor.education!, style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                       color: Colors.grey
@@ -269,7 +272,7 @@ class _InfoComponentState extends State<InfoComponent> {
                   alignment: Alignment.centerLeft,
                   child: Wrap(
                     spacing: 8.0,
-                    children: widget.filterLabels.map((label) {
+                    children: convertStringToLanguages(widget.tutor.languages)!.map((label) {
                       return FilterChip(
                         backgroundColor: Colors.lightBlue.shade100,
                         label: Text(
@@ -305,7 +308,7 @@ class _InfoComponentState extends State<InfoComponent> {
                   alignment: Alignment.centerLeft,
                   child: Wrap(
                     spacing: 8.0,
-                    children: widget.filterLabels.map((label) {
+                    children:  convertStringToSpecialties(widget.tutor.specialties)!.map((label) {
                       return FilterChip(
                         backgroundColor: Colors.lightBlue.shade100,
                         label: Text(
@@ -340,7 +343,7 @@ class _InfoComponentState extends State<InfoComponent> {
                 Container(
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
-                  child: const Text("I loved the weather, the scenery and the laid-back lifestyle of the locals.", style: TextStyle(
+                  child: Text(widget.tutor.interests!, style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                       color: Colors.grey
@@ -364,7 +367,7 @@ class _InfoComponentState extends State<InfoComponent> {
                 Container(
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
-                  child: const Text("I have more than 10 years of teaching english experience", style: TextStyle(
+                  child: Text(widget.tutor.experience!, style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
                       color: Colors.grey
@@ -378,4 +381,33 @@ class _InfoComponentState extends State<InfoComponent> {
     );
   }
 
+  List<String>? convertStringToSpecialties(String? inputString) {
+    List<String>? labels = inputString?.split(',');
+
+    // Một mapping giữa các từ khóa trong chuỗi và nhãn tương ứng
+    Map<String, String> keywordToLabel = {
+      'business-english': 'English for Business',
+      'conversational-english': 'Conversational',
+      'english-for-kids': 'English for Kids',
+      'ielts': 'IELTS',
+      'starters': 'STARTERS',
+      'movers': 'MOVERS',
+      'flyers': 'FLYERS',
+      'ket': 'KET',
+      'pet': 'PET',
+      'toefl': 'TOEFL',
+      'toeic': 'TOEIC',
+    };
+
+    List<String>? filterLabels = labels?.map((label) {
+      return keywordToLabel[label] ?? label;
+    }).toList();
+
+    return filterLabels;
+  }
+  List<String>? convertStringToLanguages(String? inputString) {
+    List<String>? labels = inputString?.split(' ');
+
+    return labels;
+  }
 }

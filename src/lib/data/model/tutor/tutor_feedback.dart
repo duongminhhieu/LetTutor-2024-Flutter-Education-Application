@@ -1,7 +1,6 @@
-import 'package:src/data/model/tutor/tutor.dart';
 import 'package:src/data/model/tutor/tutor_info.dart';
 
-class Feedback {
+class FeedbackTutor {
   final String? id;
   final String? bookingId;
   final String? firstId;
@@ -12,7 +11,7 @@ class Feedback {
   final String? updatedAt;
   final TutorInfo? firstInfo;
 
-  Feedback({
+  FeedbackTutor({
      this.id,
      this.bookingId,
      this.firstId,
@@ -24,8 +23,8 @@ class Feedback {
      this.firstInfo,
   });
 
-  factory Feedback.fromJson(Map<String, dynamic> json) {
-    return Feedback(
+  factory FeedbackTutor.fromJson(Map<String, dynamic> json) {
+    return FeedbackTutor(
       id: json['id'],
       bookingId: json['bookingId'],
       firstId: json['firstId'],

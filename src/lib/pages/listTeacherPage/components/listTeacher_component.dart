@@ -14,7 +14,7 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
   @override
   Widget build(BuildContext context) {
     TutorProvider tutorProvider = context.watch<TutorProvider>();
-    debugPrint("List tutor in listteacher component: " + tutorProvider.tutors.toString());
+
     return Container(
       padding: const EdgeInsets.only(top: 32, left: 16, right: 16),
       alignment: Alignment.centerLeft,
@@ -37,14 +37,20 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
             physics: NeverScrollableScrollPhysics(),
             itemCount: tutorProvider.tutors.length,
             itemBuilder: (context, index) {
-              return TutorTeacherCard(
-                imageAsset: tutorProvider.tutors[index].avatar,
-                name: tutorProvider.tutors[index].name,
-                rating: tutorProvider.tutors[index].rating,
-                subtitle: tutorProvider.tutors[index].bio,
-                isFavorite: false,
-                filterLabels: convertStringToFilterLabels(
-                    tutorProvider.tutors[index].specialties),
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/detailATeacher', arguments: tutorProvider.tutors[index]);
+                },
+                child: TutorTeacherCard(
+                  imageAsset: tutorProvider.tutors[index].avatar,
+                  name: tutorProvider.tutors[index].name,
+                  rating: tutorProvider.tutors[index].rating,
+                  subtitle: tutorProvider.tutors[index].bio,
+                  isFavorite: false,
+                  country: tutorProvider.tutors[index].country,
+                  filterLabels: convertStringToFilterLabels(
+                      tutorProvider.tutors[index].specialties),
+                ),
               );
             },
           )
