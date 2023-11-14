@@ -8,12 +8,14 @@ import '../../../data/model/tutor/tutor.dart';
 class InfoComponent extends StatefulWidget {
   const InfoComponent({Key? key, required this.tutor}) : super(key: key);
   final Tutor tutor;
+
   @override
   State<InfoComponent> createState() => _InfoComponentState();
 }
 
 class _InfoComponentState extends State<InfoComponent> {
   final videoUrl = "https://www.youtube.com/watch?v=rQx0fKQdUgM";
+  late bool isFavorite = false;
 
   late YoutubePlayerController _controller;
 
@@ -156,24 +158,32 @@ class _InfoComponentState extends State<InfoComponent> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            children: [
-              const Icon(
-                Icons.favorite,
-                color: Colors.red,
-                size: 24,
-              ),
-              Container(
-                child: const Text(
-                  "Favorite",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.red,
-                    fontWeight: FontWeight.normal,
-                  ),
+          GestureDetector(
+            onTap:() {
+              // Handle the favorite icon tap
+              setState(() {
+                isFavorite = !isFavorite;
+              });
+            },
+            child: Column(
+              children: [
+                Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : Colors.red,
+                  size: 24,
                 ),
-              )
-            ],
+                Container(
+                  child: const Text(
+                    "Favorite",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.red,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           SizedBox(width: 20),
           Column(
