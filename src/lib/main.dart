@@ -8,6 +8,7 @@ import 'package:src/pages/forgotPasswordPage/forgot-password_page.dart';
 import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
+import 'package:src/pages/profilePage/profile_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
 import 'package:src/pages/signUpPage/sign-up_page.dart';
 import 'package:src/pages/videoCallPage/video-call_page.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
           '/detailCoursePage': (context) => DetailCoursePage(),
           '/detailLessonPage': (context) => DetailLessonPage(),
           '/videoCallPage': (context) => VideoCallPage(),
+          '/profilePage': (context) => ProfilePage(),
         },
         theme: ThemeData(
             primarySwatch: Colors.blue,
@@ -92,6 +94,7 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
         PersistentBottomNavBarItem(
@@ -110,6 +113,7 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
         PersistentBottomNavBarItem(
@@ -128,6 +132,7 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
         PersistentBottomNavBarItem(
@@ -146,6 +151,7 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
       ];

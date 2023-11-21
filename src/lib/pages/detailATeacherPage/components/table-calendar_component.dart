@@ -1,6 +1,9 @@
 import 'package:booking_calendar/booking_calendar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../data/model/schedule/schedule.dart';
+import '../../../data/model/schedule/schedule_detail.dart';
+
 class TableCalendar extends StatefulWidget {
   const TableCalendar({Key? key}) : super(key: key);
 
@@ -26,7 +29,34 @@ class _TableCalendar extends State<TableCalendar> {
 
   Stream<dynamic>? getBookingStreamMock(
       {required DateTime end, required DateTime start}) {
-    return Stream.value([]);
+    List<Schedule> schedules = [
+      Schedule(
+        id: "f6aa6d7b-f64b-4a7c-80e4-6f692d88ba77",
+        tutorId: "4d54d3d7-d2a9-42e5-97a2-5ed38af5789a",
+        startTime: "07:00",
+        endTime: "07:25",
+        startTimestamp: 1675407600000,
+        endTimestamp: 1675409100000,
+        createdAt: ("2023-01-09T18:47:13.628Z"),
+        isBooked: false,
+        scheduleDetails: [
+          ScheduleDetail(
+            startPeriodTimestamp: 1675407600000,
+            endPeriodTimestamp: 1675409100000,
+            id: "6eb71db0-a80f-426a-ba8e-0889c0cb03e4",
+            scheduleId: "f6aa6d7b-f64b-4a7c-80e4-6f692d88ba77",
+            startPeriod: "07:00",
+            endPeriod: "07:25",
+            createdAt: ("2023-01-09T18:47:13.633Z"),
+            updatedAt: ("2023-01-09T18:47:13.633Z"),
+            bookingInfo: [],
+            isBooked: false,
+          ),
+        ],
+      ),
+      // Add more schedules as needed
+    ];
+    return Stream.value(schedules);
   }
 
   Future<dynamic> uploadBookingMock(
