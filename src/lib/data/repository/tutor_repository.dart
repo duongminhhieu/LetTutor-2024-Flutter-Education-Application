@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
+import '../model/tutor/favorite_tutor.dart';
 import '../model/tutor/tutor.dart';
 
 class TutorRepository {
@@ -12,6 +12,15 @@ class TutorRepository {
     List<dynamic> jsonData = json.decode(data);
 
     List<Tutor> tutors = jsonData.map((json) => Tutor.fromJson(json)).toList();
+
+    return tutors;
+  }
+
+  Future<List<FavoriteTutor>> getFavoriteTutors() async {
+    String data = await rootBundle.loadString('lib/assets/favorite_tutor-mock-data.json');
+    List<dynamic> jsonData = json.decode(data);
+
+    List<FavoriteTutor> tutors = jsonData.map((json) => FavoriteTutor.fromJson(json)).toList();
 
     return tutors;
   }
