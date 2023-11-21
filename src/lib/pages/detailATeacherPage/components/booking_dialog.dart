@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class BookingConfirmDialog extends StatefulWidget {
   const BookingConfirmDialog({Key? key, required this.start, required this.end, required this.date}) : super(key: key);
-   final String start;
-   final String end;
-   final String date;
+  final String start;
+  final String end;
+  final String date;
 
   @override
   State<BookingConfirmDialog> createState() => _BookingConfirmDialogState();
@@ -13,8 +13,6 @@ class BookingConfirmDialog extends StatefulWidget {
 class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
   final _controller = TextEditingController();
 
-
-
   @override
   void initState() {
     super.initState();
@@ -22,75 +20,108 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
-      title: const Text('Booking details',style: TextStyle(
-        fontWeight: FontWeight.w500
-      ),),
+      title: Text(
+        'Booking Details',
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+        ),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Booking time',style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500
-
-          ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '  ${widget.start} - ${widget.end}',
-            style: const TextStyle(fontSize: 16),
-          ),
-          Text(
-            '  ${widget.date}',
-            style: const TextStyle(fontSize: 16),
-          ),
+          _buildBookingTime(),
           const SizedBox(height: 8),
-          Text(
-            'Note',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20
-            ),
-          ),
-          const SizedBox(height: 4),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: TextField(
-              controller: _controller,
-              minLines: 3,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                hintText: 'Your requests for the tutor',
-                hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
-                contentPadding: EdgeInsets.all(8),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(16))),
-              ),
-            ),
-          ),
+          _buildNoteSection(),
         ],
       ),
       actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context,false);
-            },
-            child: const Text(
-              'CANCEL',
-              style: TextStyle(color: Colors.red),
-            )),
-        TextButton(
-            onPressed: () async {
-              if (mounted) {
-                Navigator.pop(context,true);
-              }
-            },
-            child: const Text('BOOK')),
+        _buildCancelButton(),
+        _buildBookButton(),
       ],
+    );
+  }
+
+  Widget _buildBookingTime() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Booking Time',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '  ${widget.start} - ${widget.end}',
+          style: const TextStyle(fontSize: 16),
+        ),
+        Text(
+          '  ${widget.date}',
+          style: const TextStyle(fontSize: 16),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNoteSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Note',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
+        const SizedBox(height: 4),
+        _buildNoteTextField(),
+      ],
+    );
+  }
+
+  Widget _buildNoteTextField() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: TextField(
+        controller: _controller,
+        minLines: 3,
+        maxLines: 4,
+        decoration: InputDecoration(
+          hintText: 'Your requests for the tutor',
+          hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
+          contentPadding: EdgeInsets.all(8),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCancelButton() {
+    return TextButton(
+      onPressed: () {
+        Navigator.pop(context, false);
+      },
+      child: Text(
+        'CANCEL',
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+  }
+
+  Widget _buildBookButton() {
+    return TextButton(
+      onPressed: () {
+        Navigator.pop(context, true);
+      },
+      child: Text('BOOK'),
     );
   }
 }
