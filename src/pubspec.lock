@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  booking_calendar:
-    dependency: "direct main"
-    description:
-      name: booking_calendar
-      sha256: fad54ebaab82aed865927b70d958769d7e60fb7224a0af27d241620062058022
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.10"
   boolean_selector:
     dependency: transitive
     description:
@@ -222,7 +214,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
@@ -357,14 +349,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.1"
-  simple_gesture_detector:
-    dependency: transitive
+  settings_ui:
+    dependency: "direct main"
     description:
-      name: simple_gesture_detector
-      sha256: "86d08f85f1f58583b7b4b941d989f48ea6ce08c1724a1d10954a277c2ec36592"
+      name: settings_ui
+      sha256: d9838037cb554b24b4218b2d07666fbada3478882edefae375ee892b6c820ef3
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "2.0.2"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -418,11 +410,27 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_calendar:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_calendar
+      sha256: cc8dcd9269fc836067d106a3985f8f4f0c71e397d995e074f02fa34f6d30c330
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.1.44"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       sha256: "6f3056c548f4e039a8994904836881753c4c7643cd2142d3c226fcb45ec200fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.1.44"
+  syncfusion_flutter_datepicker:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_datepicker
+      sha256: "38743cbf4e8438a4b3a0622f402a739f08749dc5cbb02945221d5bd9971efca6"
       url: "https://pub.dev"
     source: hosted
     version: "23.1.44"
@@ -482,14 +490,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "23.1.43"
-  table_calendar:
-    dependency: transitive
-    description:
-      name: table_calendar
-      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.9"
   term_glyph:
     dependency: transitive
     description:
@@ -506,6 +506,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: "1cfd8ddc2d1cfd836bc93e67b9be88c3adaeca6f40a00ca999104c30693cdca0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.2"
   typed_data:
     dependency: transitive
     description:

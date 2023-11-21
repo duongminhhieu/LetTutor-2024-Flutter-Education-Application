@@ -25,7 +25,7 @@ class DetailATeacherPage extends StatelessWidget {
             children: [
               InfoComponent(tutor: tutor),
               ListCommentComponent(tutor: tutor),
-              TableCalendar(),
+              TableCalendar(tutor: tutor),
             ],
           ),
         ),

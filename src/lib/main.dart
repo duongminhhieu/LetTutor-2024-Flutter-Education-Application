@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:src/pages/SettingsPage/setting_page.dart';
 import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
 import 'package:src/pages/detailCoursePage/detail-course_page.dart';
@@ -13,6 +14,7 @@ import 'package:src/pages/schedulePage/schedule_page.dart';
 import 'package:src/pages/signUpPage/sign-up_page.dart';
 import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:src/providers/schedule_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 import 'package:src/providers/user_provider.dart';
 
@@ -29,14 +31,16 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => TutorProvider())
+        ChangeNotifierProvider(create: (context) => TutorProvider()),
+        ChangeNotifierProvider(create: (context) => ScheduleProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         // home: ListTeacherPage(),
         home: Consumer<UserProvider>(
           builder: (context, userProvider, child) {
-            return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
+            // return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
+            return ListTeacherPage();
           },
         ),
         routes: {
@@ -53,6 +57,7 @@ class MyApp extends StatelessWidget {
           '/detailLessonPage': (context) => DetailLessonPage(),
           '/videoCallPage': (context) => VideoCallPage(),
           '/profilePage': (context) => ProfilePage(),
+          '/settingPage': (context) => SettingPage(),
         },
         theme: ThemeData(
             primarySwatch: Colors.blue,
@@ -73,7 +78,7 @@ class BottomNavBar extends StatelessWidget {
       return const LoginPage();
     }
     List<Widget> _buildScreens() {
-      return [ListTeacherPage(), SchedulePage(), CoursesPage(), HistoryPage()];
+      return [ListTeacherPage(), SchedulePage(), CoursesPage(), SettingPage()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -136,8 +141,8 @@ class BottomNavBar extends StatelessWidget {
               },
             )),
         PersistentBottomNavBarItem(
-            icon: Icon(Icons.history),
-            title: ("History"),
+            icon: Icon(Icons.settings),
+            title: ("Settings"),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
