@@ -41,7 +41,7 @@ class _SettingPageState extends State<SettingPage> {
                   backgroundColor: Colors.blue[600],
                 ),
                 title: "Profile",
-                subtitle: "Tap to change your data",
+                subtitle: "Tap to change your profile",
                 onTap: () {
                   Navigator.pushNamed(context, "/profilePage" );
                 },
@@ -113,16 +113,6 @@ class _SettingPageState extends State<SettingPage> {
 
               ],
             ),
-            ExpansionTile(
-              title: Text("Language"),
-              children: [
-                _buildLanguageOption("English"),
-                _buildLanguageOption("Vietnamese"),
-                _buildLanguageOption("Japanese"),
-                _buildLanguageOption("Chinese"),
-              ],
-            ),
-            // You can add a settings title
             SettingsGroup(
               settingsGroupTitle: "Account",
               items: [
@@ -183,16 +173,5 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _buildLanguageOption(String language) {
-    return RadioListTile(
-      title: Text(language),
-      value: language,
-      groupValue: selectedLanguage,
-      onChanged: (value) {
-        setState(() {
-          selectedLanguage = value as String;
-        });
-      },
-    );
-  }
+
 }
