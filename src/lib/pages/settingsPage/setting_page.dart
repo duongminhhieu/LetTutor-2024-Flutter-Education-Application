@@ -29,23 +29,28 @@ class _SettingPageState extends State<SettingPage> {
         child: ListView(
           children: [
             // User card
-            BigUserCard(
-              backgroundColor: Colors.blue,
-              userName: "Hieu Duong",
-              userProfilePic: AssetImage("lib/assets/images/loginImage.png"),
-              cardActionWidget: SettingsItem(
-                icons: Icons.edit,
-                iconStyle: IconStyle(
-                  withBackground: true,
-                  borderRadius: 50,
-                  backgroundColor: Colors.blue[600],
-                ),
-                title: "Profile",
-                subtitle: "Tap to change your profile",
-                onTap: () {
-                  Navigator.pushNamed(context, "/profilePage" );
-                },
-              ),
+            Consumer<UserProvider>(
+              builder: (BuildContext context, UserProvider userProvider, Widget? child) {
+                return BigUserCard(
+                  backgroundColor: Colors.blue,
+                  userName: userProvider.userData?.user!.name ?? "Anonymous",
+                  userProfilePic: NetworkImage(userProvider.userData?.user!.avatar ?? "https://yt3.googleusercontent.com/mm2-5anuZ6ghmK2zL6QM7wciD6kuupOfOagiAh5vZE1hx9tRhKEXTAExZUUY4PVq2RSw9jBpBQ=s900-c-k-c0x00ffffff-no-rj"
+                  ,scale:1),
+                  cardActionWidget: SettingsItem(
+                    icons: Icons.edit,
+                    iconStyle: IconStyle(
+                      withBackground: true,
+                      borderRadius: 50,
+                      backgroundColor: Colors.blue[600],
+                    ),
+                    title: "Profile",
+                    subtitle: "Tap to change your profile",
+                    onTap: () {
+                      Navigator.pushNamed(context, "/profilePage");
+                    },
+                  ),
+                );
+              },
             ),
             SettingsGroup(
               settingsGroupTitle: "App Settings",

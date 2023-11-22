@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:provider/provider.dart';
+import 'package:src/data/model/user/user_data.dart';
 import 'package:src/pages/profilePage/components/birthday-select.dart';
 import 'package:src/pages/profilePage/components/text-area.dart';
+import 'package:src/providers/user_provider.dart';
 
+import '../../data/model/user/user.dart';
 import '../../utilities/validator.dart';
 import 'components/country-select.dart';
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -39,13 +42,50 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
   List<String> selectedLevel = [];
   List<String> selectedCategory = [];
+  late DateTime selectedDate;
+  late bool hasInitValue = false;
 
+  void initValues(UserData userData) {
+    setState(() {
+      nameController.text = userData.user?.name ?? "";
+      emailController.text = userData.user?.email ?? "";
+      phoneController.text = userData.user?.phone ?? "";
+      studyScheduleController.text = userData.user?.studySchedule ?? "";
+      String country = userData.user?.country ?? "Others";
+      bool check = false;
+      for (var element in countries) {
+        if(element == country) {
+          check == true;
+          break;
+        }
+      }
+      if(check == false) {
+        setState(() {
+          countries.add(country);
+        });
+      }
+      selectedCountry = country;
+      selectedDate = DateTime.parse(userData.user?.birthday ?? DateTime.now().toString());
+
+
+      hasInitValue = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    UserData userData = context.select<UserProvider, UserData>(
+        (userProvider) => userProvider.userData);
+
+    if (hasInitValue == false) {
+      initValues(userData);
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile", textAlign: TextAlign.center,),
+        title: Text(
+          "Profile",
+          textAlign: TextAlign.center,
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           color: Colors.white,
@@ -72,7 +112,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         child: SingleChildScrollView(
-
           child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -92,7 +131,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: BoxDecoration(
                               border: Border.all(
                                   width: 4,
-                                  color: Theme.of(context).scaffoldBackgroundColor),
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor),
                               boxShadow: [
                                 BoxShadow(
                                     spreadRadius: 2,
@@ -102,21 +142,21 @@ class _ProfilePageState extends State<ProfilePage> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
+                                  image: NetworkImage(userData.user?.avatar ??
                                       "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
-
                         ),
                         Positioned(
                           bottom: 0,
                           right: 0,
                           child: Container(
-                              height: 40,
+                            height: 40,
                             width: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
                                 width: 4,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                               color: Colors.blue.shade700,
                             ),
@@ -132,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 10),
                   Center(
                     child: Text(
-                      "Hieu Duong",
+                      userData.user?.name ?? "Anonymous",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
@@ -140,30 +180,28 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Center(child: _buildInfo("Account ID: ", "122222222222222222")),
+                  Center(
+                      child:
+                          _buildInfo("Account ID: ", userData.user!.id! ?? "")),
                   SizedBox(height: 10),
-                  Center(child: GestureDetector(
-                    onTap: (){},
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {},
                     child: Container(
-                      child: Text(
-                        "Others review you",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue
-                        ),
+                        child: Text(
+                      "Others review you",
+                      style: TextStyle(fontSize: 14, color: Colors.blue),
                     )),
                   )),
                   SizedBox(height: 10),
-                  Center(child: GestureDetector(
-                    onTap: (){},
+                  Center(
+                      child: GestureDetector(
+                    onTap: () {},
                     child: Container(
                         child: Text(
-                          "Change Password",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blue
-                          ),
-                        )),
+                      "Change Password",
+                      style: TextStyle(fontSize: 14, color: Colors.blue),
+                    )),
                   )),
                   SizedBox(height: 40),
                   Container(
@@ -176,9 +214,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    ),
-                  _buildForm(),
-
+                  ),
+                  _buildForm(userData),
                 ],
               ),
             ),
@@ -188,8 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-
-  Widget _buildForm() {
+  Widget _buildForm(UserData userData) {
     return Container(
       margin: EdgeInsets.all(20),
       child: Form(
@@ -200,11 +236,13 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildGreyText("Name"),
             const SizedBox(height: 8),
-            _buildInputField(nameController, 'Enter your name', validator: Validator.validateName),
+            _buildInputField(nameController, 'Enter your name',
+                validator: Validator.validateName),
             const SizedBox(height: 16),
             _buildGreyText("Email Address"),
             const SizedBox(height: 8),
-            _buildInputField(emailController, "Enter your email", validator: Validator.validateEmail),
+            _buildInputField(emailController, "Enter your email",
+                validator: Validator.validateEmail),
             const SizedBox(height: 16),
             _buildGreyText("Country"),
             const SizedBox(height: 8),
@@ -220,24 +258,31 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildGreyText("Phone Number"),
             const SizedBox(height: 8),
-            _buildInputField(phoneController, "Enter your phone", validator: Validator.validatePhoneNumber),
+            _buildInputField(phoneController, "Enter your phone",
+                validator: Validator.validatePhoneNumber),
             const SizedBox(height: 16),
             _buildGreyText("Birthday"),
             const SizedBox(height: 8),
-            BirthdayProfileSelect(),
+            BirthdayProfileSelect(dateTimeData: selectedDate, onBirthDayChanged: (String newBirthDay) {
+              setState(() {
+                selectedDate =DateTime.parse( newBirthDay);
+              });
+            },),
             const SizedBox(height: 16),
             _buildGreyText("My level"),
             const SizedBox(height: 8),
-            _buildSelect("Choose your level", itemsLevel, selectedLevel ),
+            _buildSelect("Choose your level", itemsLevel, selectedLevel),
             const SizedBox(height: 16),
             _buildGreyText("Want to learn"),
             const SizedBox(height: 8),
-            _buildSelect("Want to learn", itemsCategory, selectedCategory ),
+            _buildSelect("Want to learn", itemsCategory, selectedCategory),
             const SizedBox(height: 16),
             _buildGreyText("Study Schedule"),
             const SizedBox(height: 8),
-            CustomTextArea(controller: studyScheduleController, hintText: "Note the time of the week you want to study on LetTutor"),
-
+            CustomTextArea(
+                controller: studyScheduleController,
+                hintText:
+                    "Note the time of the week you want to study on LetTutor"),
             const SizedBox(height: 12),
             _buildSaveButton(),
           ],
@@ -248,11 +293,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildSaveButton() {
     return ElevatedButton(
-      onPressed: () {
-      },
+      onPressed: () {},
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          // border radius
+            // border radius
             borderRadius: BorderRadius.circular(8)),
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(46),
@@ -279,10 +323,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Text(
             content,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ],
       ),
@@ -344,5 +385,4 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
 }

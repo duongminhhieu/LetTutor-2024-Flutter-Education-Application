@@ -36,12 +36,12 @@ class TokenInfo {
 }
 
 class UserData {
-  final User user;
-  final Tokens tokens;
+  final User? user;
+  final Tokens? tokens;
 
   UserData({
-    required this.user,
-    required this.tokens,
+     this.user,
+     this.tokens,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {

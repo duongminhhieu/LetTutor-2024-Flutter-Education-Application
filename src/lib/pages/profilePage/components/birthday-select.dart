@@ -1,8 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BirthdayProfileSelect extends StatefulWidget {
-  const BirthdayProfileSelect({Key? key}) : super(key: key);
+  const BirthdayProfileSelect({Key? key, this.dateTimeData, required this.onBirthDayChanged}) : super(key: key);
+  final DateTime? dateTimeData;
+  final ValueChanged<String> onBirthDayChanged;
+
 
   @override
   State<BirthdayProfileSelect> createState() => _BirthdayProfileSelectState();
@@ -11,6 +15,7 @@ class BirthdayProfileSelect extends StatefulWidget {
 class _BirthdayProfileSelectState extends State<BirthdayProfileSelect> {
   TextEditingController dateController = TextEditingController();
   DateTime? selectedDate;
+  bool isInitValue = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = (await showDatePicker(
@@ -24,12 +29,19 @@ class _BirthdayProfileSelectState extends State<BirthdayProfileSelect> {
       setState(() {
         selectedDate = picked;
         dateController.text = "${picked.toLocal()}".split(' ')[0];
+        widget.onBirthDayChanged(selectedDate.toString());
+
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    if(!isInitValue){
+      dateController.text = DateFormat('yyyy-MM-dd').format(widget.dateTimeData!);
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
