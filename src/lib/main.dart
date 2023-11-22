@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
         // home: ListTeacherPage(),
         home: Consumer<UserProvider>(
           builder: (context, userProvider, child) {
-            // return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
-            return ListTeacherPage();
+            return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
+            // return SettingPage();
           },
         ),
         routes: {

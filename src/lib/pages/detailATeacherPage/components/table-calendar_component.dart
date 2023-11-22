@@ -34,11 +34,11 @@ class _TableCalendar extends State<TableCalendar> {
         builder: (BuildContext context, ScheduleProvider scheduleProvider, Widget? child) {
           if (!isDataFetched) {
             scheduleProvider.getScheduleById(widget.tutor.id!);
-            listScheduleOfTutor = scheduleProvider.schedules; // get data
 
             // Mark that data has been fetched
             isDataFetched = true;
           }
+          listScheduleOfTutor = scheduleProvider.schedules; // get data
           debugPrint("list: ${listScheduleOfTutor.length.toString()}");
           debugPrint(listScheduleOfTutor.toString());
           return SfCalendar(
