@@ -1,12 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
 import 'package:src/data/model/user/user_data.dart';
 import 'package:src/pages/profilePage/components/birthday-select.dart';
 import 'package:src/pages/profilePage/components/text-area.dart';
 import 'package:src/providers/user_provider.dart';
-
-import '../../data/model/user/user.dart';
 import '../../utilities/validator.dart';
 import 'components/country-select.dart';
 
@@ -44,6 +45,68 @@ class _ProfilePageState extends State<ProfilePage> {
   List<String> selectedCategory = [];
   late DateTime selectedDate;
   late bool hasInitValue = false;
+  XFile? _pickedFile;
+
+  Future<void> changeImage() async {
+
+    // Show options for image source (camera or gallery)
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.camera),
+                title: Text('Capture Photo'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  _captureImage();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Choose from Gallery'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  _pickImage();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _captureImage() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera, maxWidth: 1800, maxHeight: 1800);
+    setState(() {
+      _pickedFile = image;
+    });
+    if (_pickedFile != null) {
+      // Update the profile picture with the new image URL
+      // You may need to upload the image to a server and get the new URL
+      // For simplicity, I'm using the local file path as the URL
+      String newImageUrl = _pickedFile!.path;
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 1800, maxHeight: 1800);
+    setState(() {
+      _pickedFile = image;
+    });
+
+    if (_pickedFile != null) {
+      // Update the profile picture with the new image URL
+      // You may need to upload the image to a server and get the new URL
+      // For simplicity, I'm using the local file path as the URL
+      String newImageUrl = _pickedFile!.path;
+    }
+  }
 
   void initValues(UserData userData) {
     setState(() {
@@ -54,19 +117,19 @@ class _ProfilePageState extends State<ProfilePage> {
       String country = userData.user?.country ?? "Others";
       bool check = false;
       for (var element in countries) {
-        if(element == country) {
+        if (element == country) {
           check == true;
           break;
         }
       }
-      if(check == false) {
+      if (check == false) {
         setState(() {
           countries.add(country);
         });
       }
       selectedCountry = country;
-      selectedDate = DateTime.parse(userData.user?.birthday ?? DateTime.now().toString());
-
+      selectedDate =
+          DateTime.parse(userData.user?.birthday ?? DateTime.now().toString());
 
       hasInitValue = true;
     });
@@ -142,27 +205,35 @@ class _ProfilePageState extends State<ProfilePage> {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(userData.user?.avatar ??
+                                  image: _pickedFile != null
+                                      ? FileImage(File(_pickedFile!.path)) as ImageProvider<Object>
+                                      :
+                                  NetworkImage(userData.user?.avatar ??
                                       "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
                         ),
                         Positioned(
                           bottom: 0,
                           right: 0,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                width: 4,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                          child: GestureDetector(
+                            onTap: (){
+                              changeImage();
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 4,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                ),
+                                color: Colors.blue.shade700,
                               ),
-                              color: Colors.blue.shade700,
-                            ),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         )
@@ -263,11 +334,14 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildGreyText("Birthday"),
             const SizedBox(height: 8),
-            BirthdayProfileSelect(dateTimeData: selectedDate, onBirthDayChanged: (String newBirthDay) {
-              setState(() {
-                selectedDate =DateTime.parse( newBirthDay);
-              });
-            },),
+            BirthdayProfileSelect(
+              dateTimeData: selectedDate,
+              onBirthDayChanged: (String newBirthDay) {
+                setState(() {
+                  selectedDate = DateTime.parse(newBirthDay);
+                });
+              },
+            ),
             const SizedBox(height: 16),
             _buildGreyText("My level"),
             const SizedBox(height: 8),
