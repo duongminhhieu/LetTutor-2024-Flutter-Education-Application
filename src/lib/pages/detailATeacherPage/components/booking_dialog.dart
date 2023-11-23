@@ -119,7 +119,7 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
   Widget _buildBookButton() {
     return TextButton(
       onPressed: () {
-        Navigator.pop(context, true);
+        Navigator.pop(context, [true, _controller.text]);
       },
       child: Text('BOOK'),
     );

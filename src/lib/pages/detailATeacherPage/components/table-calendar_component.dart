@@ -27,20 +27,18 @@ class _TableCalendar extends State<TableCalendar> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       height: 600,
       child: Consumer<ScheduleProvider>(
-        builder: (BuildContext context, ScheduleProvider scheduleProvider, Widget? child) {
+        builder: (BuildContext context, ScheduleProvider scheduleProvider,
+            Widget? child) {
           if (!isDataFetched) {
-            scheduleProvider.getScheduleById(widget.tutor.id!);
+            //scheduleProvider.getScheduleById(widget.tutor.id!);
 
             // Mark that data has been fetched
             isDataFetched = true;
           }
           listScheduleOfTutor = scheduleProvider.schedules; // get data
-          debugPrint("list: ${listScheduleOfTutor.length.toString()}");
-          debugPrint(listScheduleOfTutor.toString());
           return SfCalendar(
             view: CalendarView.week,
             allowedViews: const <CalendarView>[
@@ -66,7 +64,8 @@ class _TableCalendar extends State<TableCalendar> {
               // Set the end hour (24-hour format)
             ),
             specialRegions: _getTimeRegions(),
-            timeRegionBuilder: (BuildContext context, TimeRegionDetails details) {
+            timeRegionBuilder:
+                (BuildContext context, TimeRegionDetails details) {
               if (details.region.text == 'Book') {
                 return Container(
                   alignment: Alignment.center,
@@ -77,7 +76,7 @@ class _TableCalendar extends State<TableCalendar> {
                         padding: MaterialStateProperty.all(
                             EdgeInsets.symmetric(horizontal: 8, vertical: 3)),
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
+                            MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                       onPressed: () {},
                       child: Text(
@@ -116,14 +115,17 @@ class _TableCalendar extends State<TableCalendar> {
                     String date = DateFormat.yMMMMEEEEd().format(
                         DateTime.fromMillisecondsSinceEpoch(
                             listScheduleOfTutor[i].startTimestamp!));
-                    final dialogResult = await showDialog(
+                    List<dynamic> result = await showDialog(
                       context: context,
-                      builder: (context) =>
-                          BookingConfirmDialog(start: start, end: end, date: date),
+                      builder: (context) => BookingConfirmDialog(
+                          start: start, end: end, date: date),
                     );
 
-                    if (dialogResult) {
+                    if (result[0] == true) {
                       setState(() {
+                        List<String> list = [];
+                        list.add(listScheduleOfTutor[i].id!);
+                        scheduleProvider.bookSchedule(list, result[1]);
                         listScheduleOfTutor[i].isBooked = true;
                       });
                     }

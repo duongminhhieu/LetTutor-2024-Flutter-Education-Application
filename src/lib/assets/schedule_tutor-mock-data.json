@@ -168,24 +168,96 @@
     ]
   },
   {
-    "id": "711072fd-d29b-4918-8f75-1b73814b436a",
+    "id": "72769def-7824-433c-bc49-314b638bf453",
     "tutorId": "4d54d3d7-d2a9-42e5-97a2-5ed38af5789a",
-    "startTime": "18:00",
-    "endTime": "18:25",
-    "startTimestamp": 1674756000000,
-    "endTimestamp": 1674757500000,
-    "createdAt": "2023-01-09T18:43:47.284Z",
+    "startTime": "18:30",
+    "endTime": "18:55",
+    "startTimestamp": 1700764200000,
+    "endTimestamp": 1700765700000,
+    "createdAt": "2023-11-23T09:51:21.607Z",
     "isBooked": false,
     "scheduleDetails": [
       {
-        "startPeriodTimestamp": 1674756000000,
-        "endPeriodTimestamp": 1674757500000,
-        "id": "a6a3fba5-a9e6-4f6c-a132-087a428c72ab",
-        "scheduleId": "711072fd-d29b-4918-8f75-1b73814b436a",
-        "startPeriod": "18:00",
-        "endPeriod": "18:25",
-        "createdAt": "2023-01-09T18:43:47.290Z",
-        "updatedAt": "2023-01-09T18:43:47.290Z",
+        "startPeriodTimestamp": 1700764200000,
+        "endPeriodTimestamp": 1700765700000,
+        "id": "349003ef-781c-46bd-99b7-85dff9ade71a",
+        "scheduleId": "72769def-7824-433c-bc49-314b638bf453",
+        "startPeriod": "18:30",
+        "endPeriod": "18:55",
+        "createdAt": "2023-11-23T09:51:21.614Z",
+        "updatedAt": "2023-11-23T09:51:21.614Z",
+        "bookingInfo": [],
+        "isBooked": false
+      }
+    ]
+  },
+  {
+    "id": "d83dad3b-aacd-4071-84f3-7f852c531dc8",
+    "tutorId": "4d54d3d7-d2a9-42e5-97a2-5ed38af5789a",
+    "startTime": "17:00",
+    "endTime": "17:25",
+    "startTimestamp": 1700758800000,
+    "endTimestamp": 1700760300000,
+    "createdAt": "2023-11-23T09:51:20.445Z",
+    "isBooked": false,
+    "scheduleDetails": [
+      {
+        "startPeriodTimestamp": 1700758800000,
+        "endPeriodTimestamp": 1700760300000,
+        "id": "1448da6a-3253-426b-8555-f153da3d61b8",
+        "scheduleId": "d83dad3b-aacd-4071-84f3-7f852c531dc8",
+        "startPeriod": "17:00",
+        "endPeriod": "17:25",
+        "createdAt": "2023-11-23T09:51:20.456Z",
+        "updatedAt": "2023-11-23T09:51:20.456Z",
+        "bookingInfo": [],
+        "isBooked": false
+      }
+    ]
+  },
+  {
+    "id": "507a81d6-c8a8-440a-9d8d-2e3636c51b47",
+    "tutorId": "4d54d3d7-d2a9-42e5-97a2-5ed38af5789a",
+    "startTime": "18:30",
+    "endTime": "18:55",
+    "startTimestamp": 1700850600000,
+    "endTimestamp": 1700852100000,
+    "createdAt": "2023-11-23T09:51:24.705Z",
+    "isBooked": false,
+    "scheduleDetails": [
+      {
+        "startPeriodTimestamp": 1700850600000,
+        "endPeriodTimestamp": 1700852100000,
+        "id": "339f106f-610d-4f3b-b589-2630a0c15e60",
+        "scheduleId": "507a81d6-c8a8-440a-9d8d-2e3636c51b47",
+        "startPeriod": "18:30",
+        "endPeriod": "18:55",
+        "createdAt": "2023-11-23T09:51:24.711Z",
+        "updatedAt": "2023-11-23T09:51:24.711Z",
+        "bookingInfo": [],
+        "isBooked": false
+      }
+    ]
+  },
+  {
+    "id": "c32cd080-6c8d-4378-81a4-44fd1131f414",
+    "tutorId": "4d54d3d7-d2a9-42e5-97a2-5ed38af5789a",
+    "startTime": "17:30",
+    "endTime": "17:55",
+    "startTimestamp": 1700933400000,
+    "endTimestamp": 1700934900000,
+    "createdAt": "2023-11-23T09:51:26.464Z",
+    "isBooked": false,
+    "scheduleDetails": [
+      {
+        "startPeriodTimestamp": 1700933400000,
+        "endPeriodTimestamp": 1700934900000,
+        "id": "f1e15ac2-9953-4c5c-a36c-771ed2d343ce",
+        "scheduleId": "c32cd080-6c8d-4378-81a4-44fd1131f414",
+        "startPeriod": "17:30",
+        "endPeriod": "17:55",
+        "createdAt": "2023-11-23T09:51:26.470Z",
+        "updatedAt": "2023-11-23T09:51:26.470Z",
         "bookingInfo": [],
         "isBooked": false
       }
