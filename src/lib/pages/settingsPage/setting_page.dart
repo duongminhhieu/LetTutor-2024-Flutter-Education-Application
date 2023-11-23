@@ -20,8 +20,6 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<UserProvider>(context);
-
     return Scaffold(
       appBar: CustomAppBar(),
       body:  Padding(
@@ -151,6 +149,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 SettingsItem(
                   onTap: () {
+                    final userProvider = Provider.of<UserProvider>(context, listen: false);
                     userProvider.logout();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
+import 'package:src/data/model/user/user.dart';
 import 'package:src/data/model/user/user_data.dart';
 import 'package:src/pages/profilePage/components/birthday-select.dart';
 import 'package:src/pages/profilePage/components/text-area.dart';
@@ -19,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -37,18 +39,27 @@ class _ProfilePageState extends State<ProfilePage> {
     "Very Advanced"
   ];
   List<String> itemsCategory = [
-    "For Studying Abroad",
-    "English for traveling",
-    "STARTERS"
+    'All',
+    'English-For-Kids',
+    'Business-English',
+    'TOEIC',
+    'Conversational',
+    "TOEFL",
+    'PET',
+    "KET",
+    'IELTS',
+    'TOEFL',
+    "STARTERS",
+    "MOVERS",
+    "FLYERS",
   ];
-  List<String> selectedLevel = [];
+  String selectedLevel = "Beginner";
   List<String> selectedCategory = [];
   late DateTime selectedDate;
   late bool hasInitValue = false;
   XFile? _pickedFile;
 
   Future<void> changeImage() async {
-
     // Show options for image source (camera or gallery)
     showModalBottomSheet<void>(
       context: context,
@@ -81,7 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _captureImage() async {
     final picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera, maxWidth: 1800, maxHeight: 1800);
+    final XFile? image = await picker.pickImage(
+        source: ImageSource.camera, maxWidth: 1800, maxHeight: 1800);
     setState(() {
       _pickedFile = image;
     });
@@ -95,7 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 1800, maxHeight: 1800);
+    final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery, maxWidth: 1800, maxHeight: 1800);
     setState(() {
       _pickedFile = image;
     });
@@ -117,8 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
       String country = userData.user?.country ?? "Others";
       bool check = false;
       for (var element in countries) {
-        if (element == country) {
-          check == true;
+        if (element.toLowerCase() == country.toLowerCase()) {
+          check = true;
+          selectedCountry = element;
           break;
         }
       }
@@ -127,9 +141,40 @@ class _ProfilePageState extends State<ProfilePage> {
           countries.add(country);
         });
       }
-      selectedCountry = country;
       selectedDate =
           DateTime.parse(userData.user?.birthday ?? DateTime.now().toString());
+
+      String level = userData.user?.level ?? "Beginner";
+      check = false;
+      for (var element in itemsLevel) {
+        if (element.toLowerCase().compareTo(level.toLowerCase()) == 0) {
+          check = true;
+          selectedLevel = element;
+          break;
+        }
+      }
+      if (check == false) {
+        setState(() {
+          itemsLevel.add(level);
+        });
+      }
+
+      // check = false;
+      // userData.user?.learnTopics?.forEach((element) {
+      //   selectedCategory.add(element.key!.toUpperCase());
+      // });
+      // for(var element in itemsCategory){
+      //   userData.user?.learnTopics?.forEach((e) {
+      //     if(e.key?.toString().compareTo(element.toLowerCase()) != null){
+      //       check == true;
+      //
+      //       setState(() {
+      //         itemsCategory.add(e.key!.toUpperCase().toString());
+      //       });
+      //     }
+      //   });
+      // }
+
 
       hasInitValue = true;
     });
@@ -206,16 +251,16 @@ class _ProfilePageState extends State<ProfilePage> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: _pickedFile != null
-                                      ? FileImage(File(_pickedFile!.path)) as ImageProvider<Object>
-                                      :
-                                  NetworkImage(userData.user?.avatar ??
-                                      "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
+                                      ? FileImage(File(_pickedFile!.path))
+                                          as ImageProvider<Object>
+                                      : NetworkImage(userData.user?.avatar ??
+                                          "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
                         ),
                         Positioned(
                           bottom: 0,
                           right: 0,
                           child: GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               changeImage();
                             },
                             child: Container(
@@ -300,6 +345,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Container(
       margin: EdgeInsets.all(20),
       child: Form(
+        key: _formKey,
         autovalidateMode: AutovalidateMode.always,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,7 +391,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildGreyText("My level"),
             const SizedBox(height: 8),
-            _buildSelect("Choose your level", itemsLevel, selectedLevel),
+            _buildSelectLevel("Choose your level", itemsLevel, selectedLevel),
             const SizedBox(height: 16),
             _buildGreyText("Want to learn"),
             const SizedBox(height: 8),
@@ -367,7 +413,30 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildSaveButton() {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          // Update user info
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          User updatedUser = userProvider.userData.user!;
+          updatedUser?.name = nameController.text;
+          updatedUser?.email = emailController.text;
+          updatedUser?.phone = phoneController.text;
+          updatedUser?.country = selectedCountry;
+          updatedUser?.birthday = "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+          updatedUser?.level = selectedLevel;
+          updatedUser?.studySchedule = studyScheduleController.text;
+          userProvider.updateData(updatedUser!);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Update successful!.'),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
             // border radius
@@ -456,6 +525,49 @@ class _ProfilePageState extends State<ProfilePage> {
         options: selects,
         selectedValues: selected,
         whenEmpty: title,
+      ),
+    );
+  }
+
+  Widget _buildSelectLevel(
+      String title, List<String> selects, String selected) {
+    return Container(
+      width: double.infinity, // Set width to match parent
+      height: 42.0, // Set height to match TextInput
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0), // Match the TextInput border radius
+        border: Border.all(
+          color: Colors.grey.shade400,
+          width: 1.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child:  DropdownButton<String>(
+          underline: Container(),
+          isDense: true,
+          isExpanded: true,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+          value: selected,
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              setState(() {
+                selectedLevel = newValue;
+
+              });
+            }
+          },
+          items:itemsLevel.map<DropdownMenuItem<String>>((String level) {
+            return DropdownMenuItem<String>(
+              value: level,
+              child: Text(level),
+            );
+          }).toList(),
+        )
       ),
     );
   }

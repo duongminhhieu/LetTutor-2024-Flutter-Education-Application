@@ -14,5 +14,4 @@ class UserRepository {
 
     return userData;
   }
-
 }

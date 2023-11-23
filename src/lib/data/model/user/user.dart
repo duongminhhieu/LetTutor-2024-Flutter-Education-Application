@@ -6,26 +6,26 @@ import 'package:src/data/model/user/wallet_info.dart';
 import 'learn_topic.dart';
 
 class User {
-  final String? id;
-  final String? email;
-  final String? name;
-  final String? avatar;
-  final String? country;
-  final String? phone;
-  final List<String>? roles;
-  final String? language;
-  final String? birthday;
-  final bool? isActivated;
-  final WalletInfo? walletInfo;
-  final List<String>? courses;
-  final String? requireNote;
-  final String? level;
-  final List<LearnTopic>? learnTopics;
-  final List<TestPreparation>? testPreparations;
-  final bool? isPhoneActivated;
-  final int? timezone;
-  final String? studySchedule;
-  final bool? canSendMessage;
+   String? id;
+   String? email;
+   String? name;
+   String? avatar;
+   String? country;
+   String? phone;
+   List<String>? roles;
+   String? language;
+   String? birthday;
+   bool? isActivated;
+   WalletInfo? walletInfo;
+   List<String>? courses;
+   String? requireNote;
+   String? level;
+   List<LearnTopic>? learnTopics;
+   List<TestPreparation>? testPreparations;
+   bool? isPhoneActivated;
+   int? timezone;
+   String? studySchedule;
+   bool? canSendMessage;
 
   User({
     this.id,

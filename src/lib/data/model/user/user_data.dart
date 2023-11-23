@@ -36,8 +36,8 @@ class TokenInfo {
 }
 
 class UserData {
-  final User? user;
-  final Tokens? tokens;
+   User? user;
+   Tokens? tokens;
 
   UserData({
      this.user,
