@@ -29,8 +29,6 @@ class ScheduleRepository {
         }
       }
 
-
-
     } catch (error) {
       debugPrint(error.toString());
     }

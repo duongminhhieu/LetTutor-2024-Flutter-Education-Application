@@ -162,7 +162,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             SizedBox(height: 32,),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/schedulePage');
+                //Navigator.pushNamed(context, '/schedulePage');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
