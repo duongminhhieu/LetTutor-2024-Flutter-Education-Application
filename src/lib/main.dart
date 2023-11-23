@@ -78,7 +78,7 @@ class BottomNavBar extends StatelessWidget {
       return const LoginPage();
     }
     List<Widget> _buildScreens() {
-      return [ListTeacherPage(), SchedulePage(), CoursesPage(), SettingPage()];
+      return [ListTeacherPage(), SchedulePage(), HistoryPage(), SettingPage()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -122,8 +122,8 @@ class BottomNavBar extends StatelessWidget {
               },
             )),
         PersistentBottomNavBarItem(
-            icon: Icon(Icons.school),
-            title: ("Course"),
+            icon: Icon(Icons.history),
+            title: ("History"),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(

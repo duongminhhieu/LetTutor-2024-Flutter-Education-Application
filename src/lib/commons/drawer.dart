@@ -101,10 +101,10 @@ class CustomDrawer extends StatelessWidget {
               child: const Row(
                 children: [
                   Icon(
-                    Icons.history, size: 36, color: Colors.blue,),
+                    Icons.school, size: 36, color: Colors.blue,),
                   SizedBox(width: 12),
                   Text(
-                    "History",
+                    "Courses",
                     style: TextStyle(
                         color: Colors.black87,
                         fontSize: 14,
@@ -117,7 +117,7 @@ class CustomDrawer extends StatelessWidget {
               // Update the state of the app
               // Then close the drawer
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/historyPage");
+              Navigator.pushNamed(context, "/coursesPage");
             },
           ),
           ListTile(
