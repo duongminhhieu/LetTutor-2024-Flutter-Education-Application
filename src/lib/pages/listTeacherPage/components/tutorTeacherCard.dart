@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TutorTeacherCard extends StatefulWidget {
-  final String imageAsset;
-  final String name;
-  final double rating;
-  final String subtitle;
-  final bool isFavorite;
-  final List<String> filterLabels; // Danh sách các nhãn cho FilterChips
+  final String? imageAsset;
+  final String? name;
+  final double? rating;
+  final String? subtitle;
+  final String? country;
+  final bool? isFavorite;
+  final List<String>? filterLabels; // Danh sách các nhãn cho FilterChips
 
   TutorTeacherCard({
-    required this.imageAsset,
-    required this.name,
-    required this.rating,
-    required this.subtitle,
-    required this.isFavorite,
-    required this.filterLabels, // Thêm danh sách nhãn
+     this.imageAsset,
+     this.name,
+     this.rating,
+     this.subtitle,
+      this.country,
+     this.isFavorite,
+     this.filterLabels, // Thêm danh sách nhãn
   });
 
   @override
@@ -28,7 +30,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
   @override
   void initState() {
     super.initState();
-    _isFavorite = widget.isFavorite;
+    _isFavorite = widget.isFavorite!;
   }
 
   @override
@@ -56,7 +58,8 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: Image.asset('lib/assets/images/loginImage.png'),
+                      child: widget.imageAsset == null ? Image.network("https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1686033849227.jpeg") : 
+                      Image.network(widget.imageAsset!),
                     ),
                   ),
                   Positioned(
@@ -80,20 +83,14 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             ),
             Column(
               children: [
-                InkWell(
-                  onTap: () {
-                    print('Name pressed: ${widget.name}');
-                    Navigator.pushNamed(context, '/detailATeacher');
-                  },
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.name ?? '',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -103,8 +100,8 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                     SvgPicture.asset('lib/assets/images/vietnam.svg',
                         semanticsLabel: "My SVG", height: 20),
                     SizedBox(width: 5),
-                    const Text(
-                      'Viet nam',
+                     Text(
+                     widget.country ?? "",
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey,
@@ -120,7 +117,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               children: <Widget>[
                 for (int i = 0; i < 5; i++)
                   Icon(
-                    i < widget.rating ? Icons.star : Icons.star_border,
+                    i < (widget.rating == null ? 0 : widget.rating!) ? Icons.star : Icons.star_border,
                     color: Colors.yellow,
                     size: 16,
                   ),
@@ -130,7 +127,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               alignment: Alignment.centerLeft,
               child: Wrap(
                 spacing: 8.0,
-                children: widget.filterLabels.map((label) {
+                children: widget.filterLabels!.map((label) {
                   return FilterChip(
                     backgroundColor: Colors.lightBlue.shade100,
                     label: Text(
@@ -151,7 +148,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                widget.subtitle,
+                widget.subtitle!,
                 textAlign: TextAlign.justify,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
@@ -165,7 +162,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             SizedBox(height: 32,),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/schedulePage');
+                //Navigator.pushNamed(context, '/schedulePage');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,

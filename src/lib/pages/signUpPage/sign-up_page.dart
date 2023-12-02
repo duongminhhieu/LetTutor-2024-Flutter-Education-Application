@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:src/providers/user_provider.dart';
 import 'package:src/utilities/validator.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Color myColor;
   late Size mediaSize;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   bool rememberUser = false;
 
   @override
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: const CircleBorder(),
             child: ClipRRect(
               borderRadius:
-                  BorderRadius.circular(10), // Adjust the radius as needed
+              BorderRadius.circular(10), // Adjust the radius as needed
               child: SvgPicture.asset('lib/assets/images/vietnam.svg',
                   semanticsLabel: "My SVG", height: 18),
             ),
@@ -60,7 +61,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildForm() {
-    var userProvider = Provider.of<UserProvider>(context);
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.always,
@@ -89,18 +89,15 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 8),
           _buildInputField(passwordController, "Enter your password",
               isPassword: true, validator: Validator.validatePassword),
-          const SizedBox(height: 12),
-          GestureDetector(onTap:(){
-            Navigator.pushNamed(context, '/forgotPasswordPage');
-          },child: _buildPrimaryColorText('Forgot Password?')),
-          const SizedBox(height: 12),
-          _buildLoginButton(),
           const SizedBox(height: 16),
-          if (userProvider.isRegistered)
-            const Text(
-              'Registration successful! Please log in.',
-              style: TextStyle(color: Colors.green, fontSize: 14),
-            ),
+          _buildGreyText("CONFIRM PASSWORD"),
+          const SizedBox(height: 8),
+          _buildInputField(confirmPasswordController, "Confirm your password",
+              isPassword: true, validator: Validator.validateConfirmPassword, isConfirmPassword: true),
+          const SizedBox(height: 12),
+          _buildPrimaryColorText('Forgot Password?'),
+          const SizedBox(height: 12),
+          _buildSignUpButton(),
           const SizedBox(height: 24),
           _buildOtherLogin(),
         ],
@@ -122,12 +119,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildInputField(TextEditingController controller, String hintText,
-      {isPassword = false, Function? validator}) {
+      {isPassword = false, Function? validator, isConfirmPassword}) {
     return TextFormField(
-      validator: (value) {
-        return validator!(value ?? "");
-      },
       controller: controller,
+      validator: (value) {
+        return isConfirmPassword ?? false ? validator!( passwordController.text, value) : validator!(value ?? "");
+      },
       decoration: InputDecoration(
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8.0))),
@@ -141,51 +138,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildSignUpButton() {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
+
           var userProvider = Provider.of<UserProvider>(context, listen: false);
-          // Check login status
-          if (userProvider.email == emailController.text &&
-              userProvider.password == passwordController.text) {
-            // Login successful
-            userProvider.login(emailController.text, passwordController.text);
+          userProvider.setCredentials(emailController.text, passwordController.text);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login successful!.'),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 2),
-              ),
-            );
-
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/bottomNavBar');
-          } else {
-            // Invalid credentials, show an error message or handle accordingly
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Invalid email or password. Please try again.'),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
+          // Show a success message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful!'),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          // Delay the navigation to give time for the user to see the success message
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pop(context); // Go back to the previous screen
+            Navigator.pushNamed(context, '/loginPage'); // Navigate to the login page
+          });
         }
-
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-            // border radius
+          // border radius
             borderRadius: BorderRadius.circular(8)),
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(52),
       ),
       child: const Text(
-        "LOG IN",
+        "SIGN UP",
         style: TextStyle(fontSize: 20),
       ),
     );
@@ -205,43 +190,42 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 6),
                 child: MaterialButton(
-                  onPressed: () {},
-                  textColor: Colors.white,
-                  minWidth: 32,
-                  padding: const EdgeInsets.all(8),
-                  shape: CircleBorder(
-                      side: BorderSide(
-                          width: 1, style: BorderStyle.solid, color: myColor)),
-                  child: ClipRRect(
-                    borderRadius:
+                    onPressed: () {},
+                    textColor: Colors.white,
+                    minWidth: 32,
+                    padding: const EdgeInsets.all(8),
+                    shape: CircleBorder(
+                        side: BorderSide(
+                            width: 1, style: BorderStyle.solid, color: myColor)),
+                    child: ClipRRect(
+                        borderRadius:
                         BorderRadius.circular(10), // Adjust the radius as needed
-                    child: const Icon(
-                      Icons.phone_android,
-                      color: Colors.grey,
-                      size: 30,
+                        child: const Icon(
+                          Icons.phone_android,
+                          color: Colors.grey,
+                          size: 30,
+                        )
                     )
-                )
                 ),
               )],
           ),
           const SizedBox(height: 16),
-            GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/signUpPage');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildGreyText("Not a member yet?"),
-                  Text("Sign up",
-                      style: TextStyle(
-                          color: myColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500),),
-                ],
-              ),
-            )
+          GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, '/loginPage');
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildGreyText("Already have an account? "),
+                Text("Login",
+                    style: TextStyle(
+                        color: myColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500)),
+              ],
+            ),
+          )
         ],
       ),
     );

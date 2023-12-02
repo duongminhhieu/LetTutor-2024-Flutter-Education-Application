@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:src/data/model/tutor/tutor.dart';
+import 'package:src/data/model/tutor/tutor_feedback.dart';
+
 
 class ListCommentComponent extends StatelessWidget {
-  const ListCommentComponent({Key? key}) : super(key: key);
+  const ListCommentComponent({Key? key, required this.tutor}) : super(key: key);
+  final Tutor tutor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,22 +21,29 @@ class ListCommentComponent extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       color: Colors.black))),
           SizedBox(height: 20),
-
-          _buildInfoCommentItem(),
-          SizedBox(height: 36),
-          _buildInfoCommentItem(),
-          SizedBox(height: 36),
-          _buildInfoCommentItem(),
-          SizedBox(height: 36),
-          _buildInfoCommentItem(),
-
+          _buildInfoCommentItems()
         ],
       ),
     );
   }
 
-  Widget _buildInfoCommentItem() {
+  Widget _buildInfoCommentItems() {
+    return Column(
+      children: tutor.feedbacks?.map((feedback) {
+        return _buildInfoCommentItem(feedback);
+      }).toList() ?? [],
+    );
+  }
+
+  Widget _buildInfoCommentItem(FeedbackTutor feedback) {
+    DateTime currentDate = DateTime.now();
+
+    // Parse the updatedAt string to a DateTime object
+    DateTime updateDate = DateTime.parse(feedback.updatedAt ?? '');
+
+    int daysAgo = currentDate.difference(updateDate).inDays;
     return Container(
+      margin: EdgeInsets.only(bottom: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,25 +54,25 @@ class ListCommentComponent extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.asset('lib/assets/images/loginImage.png'),
+              child: Image.network(feedback.firstInfo!.avatar!),
             ),
           ),
           SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
                   Text(
-                    'Hieu Duong',
+                    feedback.firstInfo!.name ?? 'Anonymous',
                     style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 14,
+                        color: Colors.grey.shade700,
                         fontWeight: FontWeight.normal),
                   ),
                   SizedBox(width: 5),
                   Text(
-                    '125 days',
+                    '$daysAgo days ago',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   )
                 ],
@@ -72,7 +83,7 @@ class ListCommentComponent extends StatelessWidget {
                 children: <Widget>[
                   for (int i = 0; i < 5; i++)
                     Icon(
-                      i < 3.5 ? Icons.star : Icons.star_border,
+                      i < (feedback.rating ?? 0) ? Icons.star : Icons.star_border,
                       color: Colors.yellow,
                       size: 16,
                     ),
@@ -80,10 +91,10 @@ class ListCommentComponent extends StatelessWidget {
               ),
               SizedBox(height: 6),
               Container(
-                child: Text('Good courses, very good'),
+                child: Text(feedback.content ?? ''),
               )
             ],
-          )
+          ),
         ],
       ),
     );

@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:src/pages/SettingsPage/setting_page.dart';
 import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
 import 'package:src/pages/detailCoursePage/detail-course_page.dart';
 import 'package:src/pages/detailLessonPage/detail-lesson_page.dart';
+import 'package:src/pages/forgotPasswordPage/forgot-password_page.dart';
 import 'package:src/pages/historyPage/history_page.dart';
 import 'package:src/pages/listTeacherPage/list-teacher_page.dart';
 import 'package:src/pages/loginPage/login_page.dart';
+import 'package:src/pages/profilePage/profile_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
-import 'package:src/pages/videoCallPage/videoCallPage.dart';
+import 'package:src/pages/signUpPage/sign-up_page.dart';
+import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:src/providers/schedule_provider.dart';
+import 'package:src/providers/tutor_provider.dart';
+import 'package:src/providers/user_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,24 +27,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
-      routes: {
-        '/bottomNavBar': (context) => BottomNavBar(),
-        '/loginPage': (context) => LoginPage(),
-        '/listTeacherPage': (context) => ListTeacherPage(),
-        '/detailATeacher': (context) => DetailATeacherPage(),
-        '/schedulePage': (context) => SchedulePage(),
-        '/historyPage': (context) => HistoryPage(),
-        '/coursesPage': (context) => CoursesPage(),
-        '/detailCoursePage': (context) => DetailCoursePage(),
-        '/detailLessonPage': (context) => DetailLessonPage(),
-        '/videoCallPage': (context) => VideoCallPage(),
-      },
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          primaryColor: const Color.fromRGBO(0, 113, 240, 1.0)),
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => TutorProvider()),
+        ChangeNotifierProvider(create: (context) => ScheduleProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        // home: ListTeacherPage(),
+        home: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
+            // return SettingPage();
+          },
+        ),
+        routes: {
+          '/bottomNavBar': (context) => BottomNavBar(),
+          '/loginPage': (context) => LoginPage(),
+          '/signUpPage': (context) => SignUpPage(),
+          '/forgotPasswordPage': (context) => ForgotPasswordPage(),
+          '/listTeacherPage': (context) => ListTeacherPage(),
+          '/detailATeacher': (context) => DetailATeacherPage(),
+          '/schedulePage': (context) => SchedulePage(),
+          '/historyPage': (context) => HistoryPage(),
+          '/coursesPage': (context) => CoursesPage(),
+          '/detailCoursePage': (context) => DetailCoursePage(),
+          '/detailLessonPage': (context) => DetailLessonPage(),
+          '/videoCallPage': (context) => VideoCallPage(),
+          '/profilePage': (context) => ProfilePage(),
+          '/settingPage': (context) => SettingPage(),
+        },
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+            primaryColor: const Color.fromRGBO(0, 113, 240, 1.0)),
+      ),
     );
   }
 }
@@ -46,8 +72,13 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
+
+    if (!userProvider.isLoggedIn) {
+      return const LoginPage();
+    }
     List<Widget> _buildScreens() {
-      return [ListTeacherPage(), SchedulePage(), CoursesPage(), HistoryPage()];
+      return [ListTeacherPage(), SchedulePage(), HistoryPage(), SettingPage()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -60,7 +91,6 @@ class BottomNavBar extends StatelessWidget {
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
               initialRoute: "/",
               routes: {
-                '/loginPage': (context) => LoginPage(),
                 '/listTeacherPage': (context) => ListTeacherPage(),
                 '/detailATeacher': (context) => DetailATeacherPage(),
                 '/schedulePage': (context) => SchedulePage(),
@@ -69,6 +99,7 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
         PersistentBottomNavBarItem(
@@ -79,7 +110,6 @@ class BottomNavBar extends StatelessWidget {
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
               initialRoute: "/",
               routes: {
-                '/loginPage': (context) => LoginPage(),
                 '/listTeacherPage': (context) => ListTeacherPage(),
                 '/detailATeacher': (context) => DetailATeacherPage(),
                 '/schedulePage': (context) => SchedulePage(),
@@ -88,25 +118,7 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
-              },
-            )),
-        PersistentBottomNavBarItem(
-            icon: Icon(Icons.school),
-            title: ("Course"),
-            activeColorPrimary: Colors.blue,
-            inactiveColorPrimary: Colors.grey,
-            routeAndNavigatorSettings: RouteAndNavigatorSettings(
-              initialRoute: "/",
-              routes: {
-                '/loginPage': (context) => LoginPage(),
-                '/listTeacherPage': (context) => ListTeacherPage(),
-                '/detailATeacher': (context) => DetailATeacherPage(),
-                '/schedulePage': (context) => SchedulePage(),
-                '/historyPage': (context) => HistoryPage(),
-                '/coursesPage': (context) => CoursesPage(),
-                '/detailCoursePage': (context) => DetailCoursePage(),
-                '/detailLessonPage': (context) => DetailLessonPage(),
-                '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
         PersistentBottomNavBarItem(
@@ -117,7 +129,6 @@ class BottomNavBar extends StatelessWidget {
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
               initialRoute: "/",
               routes: {
-                '/loginPage': (context) => LoginPage(),
                 '/listTeacherPage': (context) => ListTeacherPage(),
                 '/detailATeacher': (context) => DetailATeacherPage(),
                 '/schedulePage': (context) => SchedulePage(),
@@ -126,6 +137,26 @@ class BottomNavBar extends StatelessWidget {
                 '/detailCoursePage': (context) => DetailCoursePage(),
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
+              },
+            )),
+        PersistentBottomNavBarItem(
+            icon: Icon(Icons.settings),
+            title: ("Settings"),
+            activeColorPrimary: Colors.blue,
+            inactiveColorPrimary: Colors.grey,
+            routeAndNavigatorSettings: RouteAndNavigatorSettings(
+              initialRoute: "/",
+              routes: {
+                '/listTeacherPage': (context) => ListTeacherPage(),
+                '/detailATeacher': (context) => DetailATeacherPage(),
+                '/schedulePage': (context) => SchedulePage(),
+                '/historyPage': (context) => HistoryPage(),
+                '/coursesPage': (context) => CoursesPage(),
+                '/detailCoursePage': (context) => DetailCoursePage(),
+                '/detailLessonPage': (context) => DetailLessonPage(),
+                '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
               },
             )),
       ];
@@ -153,12 +184,12 @@ class BottomNavBar extends StatelessWidget {
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: ItemAnimationProperties(
+      itemAnimationProperties: const ItemAnimationProperties(
         // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
         curve: Curves.ease,
       ),
-      screenTransitionAnimation: ScreenTransitionAnimation(
+      screenTransitionAnimation: const ScreenTransitionAnimation(
         // Screen transition animation on change of selected tab.
         animateTabTransition: true,
         curve: Curves.ease,

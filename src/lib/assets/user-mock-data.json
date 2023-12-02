@@ -1,0 +1,51 @@
+{
+  "user": {
+    "id": "cb9e7deb-3382-48db-b07c-90acf52f541c",
+    "email": "phhai@ymail.com",
+    "name": "Phhai",
+    "avatar": "https://sandbox.api.lettutor.com/avatar/cb9e7deb-3382-48db-b07c-90acf52f541cavatar1686550060378.jpg",
+    "country": "VN",
+    "phone": "842499996508",
+    "roles": [
+      "student",
+      "CHANGE_PASSWORD"
+    ],
+    "language": null,
+    "birthday": "1999-06-01",
+    "isActivated": true,
+    "walletInfo": {
+      "id": "102ef671-a249-4d19-852e-ea23016d7d34",
+      "userId": "cb9e7deb-3382-48db-b07c-90acf52f541c",
+      "amount": "984200000",
+      "isBlocked": false,
+      "createdAt": "2021-12-18T03:55:53.522Z",
+      "updatedAt": "2023-11-21T08:36:08.472Z",
+      "bonus": 0
+    },
+    "courses": [],
+    "requireNote": "thich hoc",
+    "level": "INTERMEDIATE",
+    "learnTopics": [
+      {
+        "id": 3,
+        "key": "english-for-kids",
+        "name": "English for Kids"
+      }
+    ],
+    "testPreparations": [],
+    "isPhoneActivated": true,
+    "timezone": 7,
+    "studySchedule": "",
+    "canSendMessage": false
+  },
+  "tokens": {
+    "access": {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMiLCJpYXQiOjE3MDA2MzU1NzAsImV4cCI6MTcwMDcyMTk3MCwidHlwZSI6ImFjY2VzcyJ9.jitlw2WJyUKdcsQGvm9PRDCh6fBKJi8RMmyZgjdPyx8",
+      "expires": "2023-11-23T06:46:10.902Z"
+    },
+    "refresh": {
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYjllN2RlYi0zMzgyLTQ4ZGItYjA3Yy05MGFjZjUyZjU0MWMiLCJpYXQiOjE3MDA2MzU1NzAsImV4cCI6MTcwMzIyNzU3MCwidHlwZSI6InJlZnJlc2gifQ.NHDkP9zxze0VbcJrndILalBenL5vJEDSEdRF47A7S5Y",
+      "expires": "2023-12-22T06:46:10.902Z"
+    }
+  }
+}

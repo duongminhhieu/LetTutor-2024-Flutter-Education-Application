@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
+import 'package:src/providers/tutor_provider.dart';
+
+import '../../detailATeacherPage/detail-a-teacher_page.dart';
 
 class ListTeacherComponent extends StatefulWidget {
   const ListTeacherComponent({Key? key}) : super(key: key);
@@ -9,61 +13,17 @@ class ListTeacherComponent extends StatefulWidget {
 }
 
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
-  final List<TutorTeacherData> teachers = [
-    TutorTeacherData(
-      imageAsset: 'lib/assets/images/loginImage.png',
-      name: 'John Doe',
-      rating: 4.5,
-      subtitle:
-          'I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
-      isFavorite: false,
-      filterLabels: ['Math', 'Science', 'English'],
-    ),
-    TutorTeacherData(
-      imageAsset: 'lib/assets/images/loginImage.png',
-      name: 'Jane Smith',
-      rating: 4.8,
-      subtitle:
-          'I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
-      isFavorite: true,
-      filterLabels: ['History', 'Geography', 'English'],
-    ),
-    TutorTeacherData(
-      imageAsset: 'lib/assets/images/loginImage.png',
-      name: 'Jane Smith',
-      rating: 4.8,
-      subtitle:
-          'I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
-      isFavorite: true,
-      filterLabels: [
-        'History',
-        'Geography',
-        'History',
-        'Geography',
-        'History',
-        'Geography',
-        'English'
-      ],
-    ),
-    TutorTeacherData(
-      imageAsset: 'lib/assets/images/loginImage.png',
-      name: 'Jane Smith',
-      rating: 4.8,
-      subtitle:
-          'I am passionate about running and fitness, I often compete in trail/mountain running events and I love pushing myself. I am training to one day take part in ultra-endurance events. I also enjoy watching rugby on the weekends, reading and watching podcasts on Youtube. My most memorable life experience would be living in and traveling around Southeast Asia.',
-      isFavorite: true,
-      filterLabels: ['History', 'Geography', 'English'],
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    TutorProvider tutorProvider = context.watch<TutorProvider>();
+
     return Container(
       padding: const EdgeInsets.only(top: 32, left: 16, right: 16),
       alignment: Alignment.centerLeft,
       child: Column(
         children: [
           Container(
+            margin: EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.only(left: 5),
             alignment: Alignment.centerLeft,
             child: const Text(
@@ -77,15 +37,26 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: teachers.length,
+            itemCount: tutorProvider.tutors.length,
             itemBuilder: (context, index) {
-              return TutorTeacherCard(
-                imageAsset: teachers[index].imageAsset,
-                name: teachers[index].name,
-                rating: teachers[index].rating,
-                subtitle: teachers[index].subtitle,
-                isFavorite: teachers[index].isFavorite,
-                filterLabels: teachers[index].filterLabels,
+              return GestureDetector(
+                onTap: () {
+                  debugPrint("Tutor info: " + tutorProvider.tutors[index].name.toString());
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => DetailATeacherPage(),
+                    settings: RouteSettings(arguments: tutorProvider.tutors[index]),
+                  ),);
+                },
+                child: TutorTeacherCard(
+                  imageAsset: tutorProvider.tutors[index].avatar,
+                  name: tutorProvider.tutors[index].name,
+                  rating: tutorProvider.tutors[index].rating,
+                  subtitle: tutorProvider.tutors[index].bio,
+                  isFavorite: false,
+                  country: tutorProvider.tutors[index].country,
+                  filterLabels: convertStringToFilterLabels(
+                      tutorProvider.tutors[index].specialties),
+                ),
               );
             },
           )
@@ -93,22 +64,29 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
       ),
     );
   }
-}
 
-class TutorTeacherData {
-  final String imageAsset;
-  final String name;
-  final double rating;
-  final String subtitle;
-  final bool isFavorite;
-  final List<String> filterLabels;
+  List<String>? convertStringToFilterLabels(String? inputString) {
+    List<String>? labels = inputString?.split(',');
 
-  TutorTeacherData({
-    required this.imageAsset,
-    required this.name,
-    required this.rating,
-    required this.subtitle,
-    required this.isFavorite,
-    required this.filterLabels,
-  });
+    // Một mapping giữa các từ khóa trong chuỗi và nhãn tương ứng
+    Map<String, String> keywordToLabel = {
+      'business-english': 'English for Business',
+      'conversational-english': 'Conversational',
+      'english-for-kids': 'English for Kids',
+      'ielts': 'IELTS',
+      'starters': 'STARTERS',
+      'movers': 'MOVERS',
+      'flyers': 'FLYERS',
+      'ket': 'KET',
+      'pet': 'PET',
+      'toefl': 'TOEFL',
+      'toeic': 'TOEIC',
+    };
+
+    List<String>? filterLabels = labels?.map((label) {
+      return keywordToLabel[label] ?? label;
+    }).toList();
+
+    return filterLabels;
+  }
 }

@@ -31,12 +31,18 @@ dependencies:
   flutter:
     sdk: flutter
   expandable_text: ^2.3.0
-  youtube_player_flutter: ^8.1.0
   flutter_rating_bar: ^4.0.1
   multiselect:
   syncfusion_flutter_pdfviewer: ^23.1.43
   flutter_svg: ^2.0.5
   persistent_bottom_nav_bar: ^5.0.2
+  provider: ^6.1.1
+  chewie: ^1.7.1
+  video_player: ^2.8.1
+  syncfusion_flutter_calendar: ^23.1.44
+  intl: ^0.18.1
+  babstrap_settings_screen: ^0.1.6
+  image_picker: ^1.0.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -70,6 +76,11 @@ flutter:
     - lib/assets/images/
     - lib/assets/GiaoTrinhDanGuitar.pdf
     - lib/assets/NoiLongNguoiDi.pdf
+    - lib/assets/tutor-mock-data.json
+    - lib/assets/favorite_tutor-mock-data.json
+    - lib/assets/schedule_tutor-mock-data.json
+    - lib/assets/user-mock-data.json
+
 
   #     - images/a_dot_ham.jpeg
 

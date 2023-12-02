@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:src/data/model/schedule/schedule.dart';
 
 class ScheduleCard extends StatefulWidget {
-  const ScheduleCard({Key? key}) : super(key: key);
+  const ScheduleCard({Key? key, required this.schedule}) : super(key: key);
+  final Schedule schedule;
 
   @override
   State<ScheduleCard> createState() => _ScheduleCardState();
@@ -40,8 +42,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
-              'Thu, 24 Oct 23',
+            child:  Text(
+              formatDate(DateTime.fromMillisecondsSinceEpoch(widget.schedule!.startTimestamp!)),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,
@@ -64,6 +66,30 @@ class _ScheduleCardState extends State<ScheduleCard> {
         ],
       ),
     );
+  }
+
+  String formatDate(DateTime dateTime) {
+    // Danh sách tên thứ
+    List<String> daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Danh sách tên tháng
+    List<String> months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    // Lấy các thông tin về ngày, tháng, và năm từ DateTime
+    int day = dateTime.day;
+    int month = dateTime.month;
+    int year = dateTime.year % 100;
+
+    // Lấy tên thứ và tháng dựa vào index
+    String dayOfWeek = daysOfWeek[dateTime.weekday - 1];
+    String monthName = months[month - 1];
+
+    // Tạo chuỗi định dạng
+    String formattedDate = '$dayOfWeek, $day $monthName $year';
+
+    return formattedDate;
   }
 
   Widget _buildCardInfo() {
@@ -90,7 +116,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: const Text(
-                  "Hieu Duong",
+                  "Keegan",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -109,7 +135,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                     ),
                     SizedBox(width: 5),
                     const Text(
-                      'Viet nam',
+                      'Vietnam',
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.grey,
@@ -159,8 +185,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
               children: [
                 Expanded(
                   child: Container(
-                    child: const Text(
-                      '19:30 - 19:55',
+                    child: Text(
+                      "${widget.schedule!.startTime!} - ${widget.schedule!.endTime!}",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
