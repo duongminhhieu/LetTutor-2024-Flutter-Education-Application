@@ -21,7 +21,8 @@ class APIAuthentication{
 
   static const String RESEND_OTP = '${BASE_URL}verify/phone-auth-verify/create';
   static const String ACTIVE_ACCOUNT = '${BASE_URL}verify/phone-auth-verify/activate';
-static const String FORGOT_PASSWORD = '${BASE_URL}auth/forgotPassword';
+  static const String FORGOT_PASSWORD = '${BASE_URL}auth/forgotPassword';
+  static const CHANGE_PASSWORD = '${BASE_URL}auth/change-password';
 
 
 }

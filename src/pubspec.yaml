@@ -44,6 +44,7 @@ dependencies:
   babstrap_settings_screen: ^0.1.6
   image_picker: ^1.0.4
   dio: ^5.4.0
+  shared_preferences: ^2.2.2
 
 
   # The following adds the Cupertino Icons font to your application.

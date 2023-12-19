@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:src/commons/loadingOverlay.dart';
 import 'package:src/pages/SettingsPage/setting_page.dart';
 import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
@@ -14,6 +15,7 @@ import 'package:src/pages/schedulePage/schedule_page.dart';
 import 'package:src/pages/signUpPage/sign-up_page.dart';
 import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:src/providers/auth_provider.dart';
 import 'package:src/providers/schedule_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 import 'package:src/providers/user_provider.dart';
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => TutorProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleProvider()),
@@ -37,15 +40,15 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         // home: ListTeacherPage(),
-        home: Consumer<UserProvider>(
-          builder: (context, userProvider, child) {
-            return userProvider.isLoggedIn ? BottomNavBar() : LoginPage();
+        home: Consumer<AuthProvider>(
+          builder: (context, authProvider, child) {
+            return authProvider.currentUser != null ? LoadingOverlay(child: BottomNavBar()) : LoadingOverlay(child: LoginPage());
             // return SettingPage();
           },
         ),
         routes: {
           '/bottomNavBar': (context) => BottomNavBar(),
-          '/loginPage': (context) => LoginPage(),
+          '/loginPage': (context) => LoadingOverlay(child: LoginPage()),
           '/signUpPage': (context) => SignUpPage(),
           '/forgotPasswordPage': (context) => ForgotPasswordPage(),
           '/listTeacherPage': (context) => ListTeacherPage(),
@@ -72,11 +75,6 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<UserProvider>(context);
-
-    if (!userProvider.isLoggedIn) {
-      return const LoginPage();
-    }
     List<Widget> _buildScreens() {
       return [ListTeacherPage(), SchedulePage(), HistoryPage(), SettingPage()];
     }

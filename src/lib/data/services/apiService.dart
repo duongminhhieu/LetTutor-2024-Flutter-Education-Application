@@ -11,9 +11,6 @@ class BoundResource {
 class ApiService {
   Dio api = Dio();
   String? accessToken;
-  String baseUrl;
-
-  ApiService(this.baseUrl);
 
   Future<dynamic> put(
       {required String url,
@@ -21,7 +18,7 @@ class ApiService {
         Map<String, dynamic>? data,
         CancelToken? cancelToken}) async {
     try {
-      final response = await api.put("$baseUrl$url",
+      final response = await api.put(url,
           options: Options(
               headers: headers,
               contentType: Headers.jsonContentType,
@@ -47,7 +44,7 @@ class ApiService {
         Map<String, dynamic>? data,
         CancelToken? cancelToken}) async {
     try {
-      final response = await api.delete("$baseUrl$url",
+      final response = await api.delete(url,
           options: Options(
               headers: headers,
               contentType: Headers.jsonContentType,
@@ -73,7 +70,7 @@ class ApiService {
         Map<String, dynamic>? data,
         CancelToken? cancelToken}) async {
     try {
-      final response = await api.post("$baseUrl$url",
+      final response = await api.post(url,
           options: Options(
               headers: headers,
               contentType: Headers.jsonContentType,
@@ -98,7 +95,7 @@ class ApiService {
         Map<String, dynamic>? headers,
         CancelToken? cancelToken}) async {
     try {
-      final response = await api.get("$baseUrl$url",
+      final response = await api.get(url,
           options:
           Options(headers: headers, contentType: Headers.jsonContentType),
           cancelToken: cancelToken);
@@ -122,7 +119,7 @@ class ApiService {
         required Map<String, dynamic>? data,
         CancelToken? cancelToken}) async {
     try {
-      final response = await api.post("$baseUrl$url",
+      final response = await api.post(url,
           options: Options(
               headers: headers, contentType: Headers.formUrlEncodedContentType),
           data: data,
@@ -146,7 +143,7 @@ class ApiService {
         required FormData? data,
         CancelToken? cancelToken}) async {
     try {
-      final response = await api.post("$baseUrl$url",
+      final response = await api.post(url,
           options: Options(
               headers: headers,
               contentType: Headers.multipartFormDataContentType),

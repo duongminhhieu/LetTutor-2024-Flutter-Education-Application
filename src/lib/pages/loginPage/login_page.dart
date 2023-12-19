@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:src/commons/loading.dart';
 import 'package:src/providers/user_provider.dart';
 import 'package:src/utilities/validator.dart';
+
+import '../../commons/loadingOverlay.dart';
+import '../../data/model/user/user.dart';
+import '../../data/model/user/user_data.dart';
+import '../../providers/auth_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,9 +26,31 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   bool rememberUser = false;
 
+  // TODO: Add loading state
+  bool hasAuthenticated = false;
+  bool loading = true;
+
+  // Check if user has previously logged in
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (!hasAuthenticated) {
+      restorePreviousSession(authProvider);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
+    return loading ? const LoadingFilled() : _buildMainContent();
+  }
+
+
+  // build main content
+  Widget _buildMainContent() {
+    mediaSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -39,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: const CircleBorder(),
             child: ClipRRect(
               borderRadius:
-                  BorderRadius.circular(10), // Adjust the radius as needed
+              BorderRadius.circular(10), // Adjust the radius as needed
               child: SvgPicture.asset('lib/assets/images/vietnam.svg',
                   semanticsLabel: "My SVG", height: 18),
             ),
@@ -145,35 +174,9 @@ class _LoginPageState extends State<LoginPage> {
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          var userProvider = Provider.of<UserProvider>(context, listen: false);
-          // Check login status
-          if (userProvider.email == emailController.text &&
-              userProvider.password == passwordController.text) {
-            // Login successful
-            userProvider.login(emailController.text, passwordController.text);
+          var authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login successful!.'),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 2),
-              ),
-            );
-
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/bottomNavBar');
-          } else {
-            // Invalid credentials, show an error message or handle accordingly
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Invalid email or password. Please try again.'),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
+          handleLoginByAccount(authProvider);
         }
 
       },
@@ -245,5 +248,92 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void handleLoginByAccount(AuthProvider authProvider) async {
+    LoadingOverlay.of(context).show();
+    try {
+      await authProvider.authRepository.loginByAccount(
+          email: emailController.text,
+          password: passwordController.text,
+          onSuccess: (user, token) async {
+            onLoginSuccess(user, token, authProvider);
+          },
+          onFail: (e) {
+            onLoginFailed(e);
+          });
+    } finally {
+      LoadingOverlay.of(context).hide();
+    }
+  }
+
+
+
+  Future<void> onLoginSuccess(
+      User user, Tokens token, AuthProvider authProvider) async {
+    authProvider.saveLoginInfo(user, token);
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'refresh_token',
+      authProvider.token?.refresh?.token ?? "",
+    );
+
+    Future.delayed(const Duration(seconds: 0), () {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login successful!.'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/bottomNavBar');
+    });
+  }
+
+  Future<void> onLoginFailed(Object error) async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error: ${error.toString()}'),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  Future<void> restorePreviousSession(AuthProvider authProvider) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final refreshToken = prefs.getString('refresh_token') ?? "";
+
+      if (refreshToken.isNotEmpty) {
+        await authProvider.authRepository.refreshToken(
+          refreshToken: refreshToken,
+          onSuccess: (user, token) async {
+            authProvider.saveLoginInfo(user, token);
+
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString(
+              'refresh_token',
+              authProvider.token!.refresh!.token!,
+            );
+            hasAuthenticated = true;
+            if (mounted) {
+              await Future.delayed(const Duration(seconds: 1), () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/bottomNavBar');
+              });
+            }
+          },
+        );
+      }
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
   }
 }
