@@ -211,133 +211,133 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(width: 1.0, color: Colors.grey.shade300),
-            right: BorderSide(width: 1.0, color: Colors.grey.shade300),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(width: 1.0, color: Colors.grey.shade300),
+              right: BorderSide(width: 1.0, color: Colors.grey.shade300),
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Container(
-              child: ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  SizedBox(height: 40),
-                  Center(
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 4,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor),
-                              boxShadow: [
-                                BoxShadow(
-                                    spreadRadius: 2,
-                                    blurRadius: 10,
-                                    color: Colors.black.withOpacity(0.1))
-                              ],
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: _pickedFile != null
-                                      ? FileImage(File(_pickedFile!.path))
-                                          as ImageProvider<Object>
-                                      : NetworkImage(userData.user?.avatar ??
-                                          "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              changeImage();
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Container(
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 40),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
                                 border: Border.all(
-                                  width: 4,
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor),
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      color: Colors.black.withOpacity(0.1))
+                                ],
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: _pickedFile != null
+                                        ? FileImage(File(_pickedFile!.path))
+                                            as ImageProvider<Object>
+                                        : NetworkImage(userData.user?.avatar ??
+                                            "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                changeImage();
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color:
+                                        Theme.of(context).scaffoldBackgroundColor,
+                                  ),
+                                  color: Colors.blue.shade700,
                                 ),
-                                color: Colors.blue.shade700,
-                              ),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.white,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      userData.user?.name ?? "Anonymous",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w500,
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Center(
-                      child:
-                          _buildInfo("Account ID: ", userData.user!.id! ?? "")),
-                  SizedBox(height: 10),
-                  Center(
-                      child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                        child: Text(
-                      "Others review you",
-                      style: TextStyle(fontSize: 14, color: Colors.blue),
-                    )),
-                  )),
-                  SizedBox(height: 10),
-                  Center(
-                      child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                        child: Text(
-                      "Change Password",
-                      style: TextStyle(fontSize: 14, color: Colors.blue),
-                    )),
-                  )),
-                  SizedBox(height: 40),
-                  Container(
-                    color: Colors.grey.shade200,
-                    padding: EdgeInsets.all(15),
-                    child: Text(
-                      "Account",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
+                    SizedBox(height: 10),
+                    Center(
+                      child: Text(
+                        userData.user?.name ?? "Anonymous",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  _buildForm(userData),
-                ],
+                    SizedBox(height: 10),
+                    Center(
+                        child:
+                            _buildInfo("Account ID: ", userData.user!.id! ?? "")),
+                    SizedBox(height: 10),
+                    Center(
+                        child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          child: Text(
+                        "Others review you",
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
+                      )),
+                    )),
+                    SizedBox(height: 10),
+                    Center(
+                        child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          child: Text(
+                        "Change Password",
+                        style: TextStyle(fontSize: 14, color: Colors.blue),
+                      )),
+                    )),
+                    SizedBox(height: 40),
+                    Container(
+                      color: Colors.grey.shade200,
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        "Account",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    _buildForm(userData),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
     );
   }
 

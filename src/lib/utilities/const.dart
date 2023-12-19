@@ -41,6 +41,7 @@ class ConstValue {
     "IELTS",
     "TOEFL"
   ];
+  static const String BASE_URL = 'https://sandbox.api.lettutor.com/';
 }
 
 class ButtonType {
