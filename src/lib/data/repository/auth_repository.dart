@@ -153,4 +153,27 @@ class AuthRepository extends BaseRepository {
 
     await onSuccess();
   }
+
+  // forgot password
+  Future<void> forgotPassword({
+    required String email,
+    required Function(String) showMessage,
+  }) async {
+    var response = await service.post(url: APIAuthentication.FORGOT_PASSWORD, headers: {
+      "origin": "https://sandbox.app.lettutor.com",
+      "referer": "https://sandbox.app.lettutor.com/",
+    }, data: {
+      "email": email
+    }) as BoundResource;
+
+    switch (response.statusCode) {
+      case 200:
+      case 201:
+        showMessage(response.response['message']);
+        break;
+      default:
+        showMessage(response.errorMsg.toString());
+        break;
+    }
+  }
 }
