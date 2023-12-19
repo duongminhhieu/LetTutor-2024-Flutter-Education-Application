@@ -49,9 +49,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/bottomNavBar': (context) => BottomNavBar(),
           '/loginPage': (context) => LoadingOverlay(child: LoginPage()),
-          '/signUpPage': (context) => SignUpPage(),
-          '/forgotPasswordPage': (context) => ForgotPasswordPage(),
-          '/listTeacherPage': (context) => ListTeacherPage(),
+          '/signUpPage': (context) => LoadingOverlay(child: SignUpPage()),
+          '/forgotPasswordPage': (context) => LoadingOverlay(child: ForgotPasswordPage()),
+          '/listTeacherPage': (context) => LoadingOverlay(child: ListTeacherPage()),
           '/detailATeacher': (context) => DetailATeacherPage(),
           '/schedulePage': (context) => SchedulePage(),
           '/historyPage': (context) => HistoryPage(),

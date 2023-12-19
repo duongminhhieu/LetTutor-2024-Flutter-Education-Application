@@ -33,18 +33,33 @@ dependencies:
   expandable_text: ^2.3.0
   flutter_rating_bar: ^4.0.1
   multiselect:
-  syncfusion_flutter_pdfviewer: ^23.1.43
-  flutter_svg: ^2.0.5
   persistent_bottom_nav_bar: ^5.0.2
   provider: ^6.1.1
   chewie: ^1.7.1
-  video_player: ^2.8.1
   syncfusion_flutter_calendar: ^23.1.44
   intl: ^0.18.1
   babstrap_settings_screen: ^0.1.6
   image_picker: ^1.0.4
+
+  #Media
+  syncfusion_flutter_pdfviewer: ^23.1.43
+  flutter_svg: ^2.0.5
+  video_player: ^2.8.1
+
+  # API
+  json_serializable: ^6.6.1
+  json_annotation: ^4.8.0
+  build_runner: ^2.3.3
   dio: ^5.4.0
+
+  # Storage
   shared_preferences: ^2.2.2
+
+  # #3rd party
+  google_sign_in: ^6.1.6
+  flutter_facebook_auth: ^6.0.3
+
+
 
 
   # The following adds the Cupertino Icons font to your application.

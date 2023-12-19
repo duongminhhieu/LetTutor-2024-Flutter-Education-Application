@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:src/providers/user_provider.dart';
 import 'package:src/utilities/validator.dart';
+
+import '../../commons/loadingOverlay.dart';
+import '../../providers/auth_provider.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   bool rememberUser = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,27 +142,11 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildSignUpButton() {
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-
-          var userProvider = Provider.of<UserProvider>(context, listen: false);
-          userProvider.setCredentials(emailController.text, passwordController.text);
-
-          // Show a success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registration successful!'),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
-          // Delay the navigation to give time for the user to see the success message
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.pop(context); // Go back to the previous screen
-            Navigator.pushNamed(context, '/loginPage'); // Navigate to the login page
-          });
+          handleCreateAccount(authProvider);
         }
       },
       style: ElevatedButton.styleFrom(
@@ -229,5 +216,39 @@ class _SignUpPageState extends State<SignUpPage> {
         ],
       ),
     );
+  }
+
+  void handleCreateAccount(AuthProvider authProvider) async {
+    LoadingOverlay.of(context).show();
+    try {
+      await authProvider.authRepository.signUpByAccount(
+          email: emailController.text,
+          password: passwordController.text,
+          onSuccess: (user, token) async {
+
+            // Show a success message
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Registration successful!.\n Please check your email to verify your account.'),
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+              ),
+            );
+            // Delay the navigation to give time for the user to see the success message
+            Future.delayed(Duration(seconds: 1), () {
+              Navigator.pop(context); // Go back to the previous screen
+              Navigator.pushNamed(context, '/loginPage'); // Navigate to the login page
+            });
+
+          },
+          onFail: (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: ${e.toString()}')),
+            );
+          });
+    } finally {
+      LoadingOverlay.of(context).hide();
+    }
   }
 }
