@@ -13,6 +13,7 @@ import 'package:src/pages/loginPage/login_page.dart';
 import 'package:src/pages/profilePage/profile_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
 import 'package:src/pages/signUpPage/sign-up_page.dart';
+import 'package:src/pages/videoCallPage/join-meeting_page.dart';
 import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:src/providers/auth_provider.dart';

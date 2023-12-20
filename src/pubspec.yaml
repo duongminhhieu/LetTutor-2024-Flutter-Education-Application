@@ -40,12 +40,19 @@ dependencies:
   intl: ^0.18.1
   babstrap_settings_screen: ^0.1.6
   image_picker: ^1.0.4
-  flutter_pagination: ^0.0.8
+  number_paginator: ^0.4.0
+  jwt_decoder: ^2.0.1
+  chat_bubbles: ^1.4.1
+  flutter_countdown_timer: ^4.1.0
+
 
   #Media
   syncfusion_flutter_pdfviewer: ^23.1.43
   flutter_svg: ^2.0.5
   video_player: ^2.8.1
+  jitsi_meet_wrapper: ^0.2.0+1
+  cached_network_image: ^3.2.3
+
 
   # API
   json_serializable: ^6.6.1

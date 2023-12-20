@@ -109,7 +109,7 @@ class Tutor {
       name: json['name'] as String?,
       country: json['country'] as String?,
       phone: json['phone'] as String?,
-      language: json['language'],
+      language: json['language'] as String?,
       birthday: json['birthday'],
       requestPassword: json['requestPassword'],
       isActivated: json['isActivated'],
@@ -127,9 +127,11 @@ class Tutor {
       updatedAt: json['updatedAt'],
       deletedAt: json['deletedAt'],
       studentGroupId: json['studentGroupId'],
-      feedbacks: (json['feedbacks'] as List<dynamic>?)
-          ?.map((e) => FeedbackTutor.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      feedbacks: json['feedbacks'] == null
+          ? null
+          : (json['feedbacks'] as List<dynamic>?)
+              ?.map((e) => FeedbackTutor.fromJson(e as Map<String, dynamic>))
+              .toList(),
       userId: json['userId'],
       video: json['video'],
       bio: json['bio'],

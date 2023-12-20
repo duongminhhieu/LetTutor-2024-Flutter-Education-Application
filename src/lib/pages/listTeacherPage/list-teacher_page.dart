@@ -32,23 +32,27 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
     var authProvider = Provider.of<AuthProvider>(context);
     var tutorProvider = Provider.of<TutorProvider>(context);
     var bookingProvider = Provider.of<BookingProvider>(context);
-    
-    //Fetch API
+
+    // Fetch API
     if (!_hasFetched) {
       await Future.wait([
         tutorProvider.callAPIGetTutorList(1, authProvider),
         bookingProvider.callApiGetListBooked(authProvider)
       ]).whenComplete(() {
-        if (tutorProvider.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(tutorProvider.errorMessage!),
-              backgroundColor: Colors.red,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
+        // Use addPostFrameCallback to ensure that the widget tree is built
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          if (tutorProvider.errorMessage != null || bookingProvider.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(tutorProvider.errorMessage ?? bookingProvider.errorMessage ?? ""),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        });
+
         if (mounted) {
           setState(() {
             _hasFetched = true;
@@ -58,6 +62,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
       });
     }
   }
+
 
   Future<void> refreshHomePage() async {
     TutorProvider tutorProvider = context.read<TutorProvider>();

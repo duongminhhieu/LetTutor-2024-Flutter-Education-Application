@@ -17,7 +17,6 @@ class User {
   String? birthday;
   bool? isActivated;
   WalletInfo? walletInfo;
-  List<String>? courses;
   String? requireNote;
   String? level;
   List<LearnTopic>? learnTopics;
@@ -39,7 +38,6 @@ class User {
     this.birthday,
     this.isActivated,
     this.walletInfo,
-    this.courses,
     this.requireNote,
     this.level,
     this.learnTopics,
@@ -66,8 +64,6 @@ class User {
       walletInfo: json['walletInfo'] == null
           ? null
           : WalletInfo.fromJson(json['walletInfo'] as Map<String, dynamic>),
-      courses:
-          json['courses'] == null ? null : List<String>.from(json['courses']),
       requireNote: json['requireNote'] as String?,
       level: json['level'] as String?,
       learnTopics: json['learnTopics'] == null

@@ -20,7 +20,7 @@ ListTutorResponse _$ListTutorResponseFromJson(Map<String, dynamic> json) =>
       tutors: json['tutors'] == null
           ? null
           : TutorPagination.fromJson(json['tutors'] as Map<String, dynamic>),
-      favoriteTutor: (json['favoriteTutor'] as List<dynamic>?)
+      favoriteTutor: json['favoriteTutor'] == null ? null : (json['favoriteTutor'] as List<dynamic>?)
           ?.map((e) => FavoriteTutor.fromJson(e as Map<String, dynamic>))
           .toList(),
     );

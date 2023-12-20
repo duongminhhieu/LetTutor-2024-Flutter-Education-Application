@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:number_paginator/number_paginator.dart';
 import 'package:provider/provider.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 import 'package:src/providers/tutor_provider.dart';
@@ -14,6 +15,13 @@ class ListTeacherComponent extends StatefulWidget {
 }
 
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
+  late int _currentPage;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPage = 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,26 +69,27 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
                       .checkIfTutorIsFavored(tutorProvider.tutors[index]),
                   onClickFavorite: () {
                     tutorProvider.callApiManageFavoriteTutor(
-                        tutorProvider.tutors[index],
-                        authProvider,
-                        index,
+                        tutorProvider.tutors[index], authProvider, index,
                         (message, unfavored) async {
-                          setState(() {
-                            if (unfavored) {
-                              tutorProvider.favTutorSecondId.remove(tutorProvider.tutors[index].userId);
-                            } else {
-                              tutorProvider.favTutorSecondId.add(tutorProvider.tutors[index].userId!);
-                              tutorProvider.favTutorSecondId = tutorProvider.favTutorSecondId.toSet().toList();
-                            }
-                          });
+                      setState(() {
+                        if (unfavored) {
+                          tutorProvider.favTutorSecondId
+                              .remove(tutorProvider.tutors[index].userId);
+                        } else {
+                          tutorProvider.favTutorSecondId
+                              .add(tutorProvider.tutors[index].userId!);
+                          tutorProvider.favTutorSecondId =
+                              tutorProvider.favTutorSecondId.toSet().toList();
+                        }
+                      });
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(message),
-                              duration: const Duration(seconds: 1),
-                            ),
-                          );
-                        }, (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(message),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    }, (error) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(error),
@@ -94,6 +103,19 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
                 ),
               );
             },
+          ),
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(16),
+              child: NumberPaginator(
+                // by default, the paginator shows numbers as center content
+                numberPages: 100,
+                onPageChange: (int index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+              )
           )
         ],
       ),

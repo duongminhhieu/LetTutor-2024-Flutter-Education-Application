@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:src/pages/videoCallPage/join-meeting_page.dart';
 import 'package:src/providers/booking_provider.dart';
 
 class BannerComponent extends StatelessWidget {
@@ -37,21 +40,7 @@ class BannerComponent extends StatelessWidget {
                   children: [
                     SizedBox(width: 10),
                     Expanded(
-                      child: Container(
-                        child: Text(
-                          DateTime.fromMillisecondsSinceEpoch(bookingProvider
-                                  .upcomingLesson!
-                                  .scheduleDetailInfo!
-                                  .startPeriodTimestamp!)
-                              .toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      child: buildTimer(context),
                     ),
                     SizedBox(width: 10), // Adjusted this SizedBox
                     Expanded(
@@ -61,7 +50,7 @@ class BannerComponent extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/videoCallPage");
+                            joinUpcomingMeeting(context);
                           },
                           style: ButtonStyle(
                             backgroundColor:
@@ -127,5 +116,76 @@ class BannerComponent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // Widget build Timer
+  Widget buildTimer(BuildContext context) {
+    BookingProvider bookingProvider = context.watch<BookingProvider>();
+
+    return Column(
+      children: [
+        Text(
+          DateFormat('E, d MMM y').format(DateTime.fromMillisecondsSinceEpoch(
+                  bookingProvider.upcomingLesson!.scheduleDetailInfo!
+                      .startPeriodTimestamp!)) +
+              '\n' +
+              DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(
+                  bookingProvider.upcomingLesson!.scheduleDetailInfo!
+                      .startPeriodTimestamp!)) +
+              ' - ' +
+              DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(
+                  bookingProvider.upcomingLesson!.scheduleDetailInfo!
+                      .endPeriodTimestamp!)),
+          style: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 16,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '(starts in: ',
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                color: Colors.yellow,
+              ),
+            ),
+            CountdownTimer(
+              endTime: DateTime.fromMillisecondsSinceEpoch(bookingProvider
+                  .upcomingLesson!.scheduleDetailInfo!.startPeriodTimestamp!)
+                  .millisecondsSinceEpoch,
+              textStyle: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 12,
+                color: Colors.yellow,
+              ),
+            ),
+            Text(
+              ')',
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                color: Colors.yellow,
+              ),
+            ),
+          ],
+        ),
+
+      ],
+    );
+  }
+
+  void joinUpcomingMeeting(BuildContext context) {
+    BookingProvider bookingProvider = context.read<BookingProvider>();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              JoinMeetingPage(upcomingClass: bookingProvider.upcomingLesson!),
+        ));
   }
 }

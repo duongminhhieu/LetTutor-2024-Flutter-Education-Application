@@ -35,7 +35,7 @@ class FeedbackTutor {
       content: json['content'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      firstInfo: TutorInfo.fromJson(json['firstInfo']),
+      firstInfo: json['firstInfo'] == null ? null : TutorInfo.fromJson(json['firstInfo']),
     );
   }
 }

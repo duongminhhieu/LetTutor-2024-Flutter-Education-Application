@@ -44,7 +44,7 @@ ScheduleDetail _$ScheduleDetailFromJson(Map<String, dynamic> json) =>
       endPeriod: json['endPeriod'] as String?,
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
-      bookingInfo: (json['bookingInfo'] as List<dynamic>?)
+      bookingInfo: json['bookingInfo'] == null ? null :(json['bookingInfo'] as List<dynamic>?)
           ?.map((e) => BookingInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
       isBooked: json['isBooked'] as bool?,

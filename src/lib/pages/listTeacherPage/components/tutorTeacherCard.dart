@@ -57,10 +57,14 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: widget.tutor?.avatar == null
-                          ? Image.network(
-                              "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1686033849227.jpeg")
-                          : Image.network(widget.tutor!.avatar!),
+                      child: Image.network(
+                        widget.tutor?.avatar ??
+                            "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.network(
+                              "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg");
+                        },
+                      ),
                     ),
                   ),
                   Positioned(

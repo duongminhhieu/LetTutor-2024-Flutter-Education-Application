@@ -52,7 +52,7 @@ Schedule _$ScheduleFromJson(Map<String, dynamic> json) => Schedule(
   createdAt: json['createdAt'] as String?,
   isBooked: json['isBooked'] as bool?,
   isDeleted: json['isDeleted'] as bool?,
-  scheduleDetails: (json['scheduleDetails'] as List<dynamic>?)
+  scheduleDetails:json['scheduleDetails'] == null ? null : (json['scheduleDetails'] as List<dynamic>?)
       ?.map((e) => ScheduleDetail.fromJson(e as Map<String, dynamic>))
       .toList(),
   tutorInfo: json['tutorInfo'] == null
