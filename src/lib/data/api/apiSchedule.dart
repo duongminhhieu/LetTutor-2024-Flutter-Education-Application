@@ -9,6 +9,15 @@ class APISchedule{
   static String getBookedClass(int page, int perPage, String dateTimeLte, String orderBy, String sortBy){
     return '${BASE_URL}booking/list/student?dateTimeLte=$dateTimeLte&page=$page&perPage=$perPage&orderBy=$orderBy&sortBy=$sortBy';
   }
+
+  static String getIncomingBookedClass(int page, int perPage, String dateTimeLte, String orderBy, String sortBy){
+    return '${BASE_URL}booking/list/student?dateTimeGte=$dateTimeLte&page=$page&perPage=$perPage&orderBy=$orderBy&sortBy=$sortBy';
+  }
+
+  static String getUpcomingBookedClass(int now){
+    return '${BASE_URL}booking/next?dateTime=$now';
+  }
+
   static const String BOOK_CLASS = '${BASE_URL}booking';
 
   static String updateStudentRequest(String bookedId){

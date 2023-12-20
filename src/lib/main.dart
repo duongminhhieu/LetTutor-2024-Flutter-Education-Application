@@ -16,6 +16,7 @@ import 'package:src/pages/signUpPage/sign-up_page.dart';
 import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:src/providers/auth_provider.dart';
+import 'package:src/providers/booking_provider.dart';
 import 'package:src/providers/schedule_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 import 'package:src/providers/user_provider.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => TutorProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleProvider()),
+        ChangeNotifierProvider(create: (context) => BookingProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,5 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:src/data/model/tutor/tutor_info.dart';
 
+@JsonSerializable()
 class FeedbackTutor {
   final String? id;
   final String? bookingId;

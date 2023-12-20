@@ -6,6 +6,8 @@ import 'package:src/commons/loading.dart';
 import 'package:src/pages/listTeacherPage/components/banner_component.dart';
 import 'package:src/pages/listTeacherPage/components/filter_component.dart';
 import 'package:src/pages/listTeacherPage/components/listTeacher_component.dart';
+import 'package:src/providers/booking_provider.dart';
+import 'package:src/providers/schedule_provider.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../providers/tutor_provider.dart';
@@ -29,12 +31,13 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
     super.didChangeDependencies();
     var authProvider = Provider.of<AuthProvider>(context);
     var tutorProvider = Provider.of<TutorProvider>(context);
-
+    var bookingProvider = Provider.of<BookingProvider>(context);
+    
     //Fetch API
     if (!_hasFetched) {
       await Future.wait([
-        tutorProvider.callAPIGetTutorList(1, authProvider)
-        //callApiGetListSchedules(BookingRepository(), authProvider)
+        tutorProvider.callAPIGetTutorList(1, authProvider),
+        bookingProvider.callApiGetListBooked(authProvider)
       ]).whenComplete(() {
         if (tutorProvider.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -58,16 +61,18 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
 
   Future<void> refreshHomePage() async {
     TutorProvider tutorProvider = context.read<TutorProvider>();
+    BookingProvider bookingProvider = context.read<BookingProvider>();
     AuthProvider authProvider = context.read<AuthProvider>();
+
     setState(() {
       tutorProvider.tutors = [];
+      bookingProvider.lessonList = [];
       tutorProvider.favTutorSecondId = [];
-      tutorProvider.lessonList = [];
       _isLoading = true;
     });
     await Future.wait([
       tutorProvider.callAPIGetTutorList(1, authProvider),
-      //callApiGetListSchedules(BookingRepository(), authProvider)
+      bookingProvider.callApiGetListBooked(authProvider)
     ]).whenComplete(() {
       setState(() {
         _isLoading = false;

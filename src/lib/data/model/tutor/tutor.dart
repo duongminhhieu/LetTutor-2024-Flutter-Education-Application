@@ -127,10 +127,9 @@ class Tutor {
       updatedAt: json['updatedAt'],
       deletedAt: json['deletedAt'],
       studentGroupId: json['studentGroupId'],
-      feedbacks: List<FeedbackTutor>.from(
-        json['feedbacks']
-            .map((feedbackJson) => FeedbackTutor.fromJson(feedbackJson)),
-      ),
+      feedbacks: (json['feedbacks'] as List<dynamic>?)
+          ?.map((e) => FeedbackTutor.fromJson(e as Map<String, dynamic>))
+          .toList(),
       userId: json['userId'],
       video: json['video'],
       bio: json['bio'],
