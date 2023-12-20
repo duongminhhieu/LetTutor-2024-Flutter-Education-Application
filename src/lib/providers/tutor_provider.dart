@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:src/data/responses/list-tutor_response.dart';
 
+import '../data/model/schedule/booking_info.dart';
 import '../data/model/tutor/tutor.dart';
 import '../data/repository/tutor_repository.dart';
 import 'auth_provider.dart';
 
 class TutorProvider extends ChangeNotifier {
   final TutorRepository _repository = TutorRepository();
-  List<Tutor> _tutors = [];
+  List<Tutor> tutors = [];
   List<String> favTutorSecondId = [];
+  List<BookingInfo> lessonList = [];
 
-  List<Tutor> get tutors => _tutors;
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
@@ -85,7 +86,7 @@ class TutorProvider extends ChangeNotifier {
   Future<void> searchTutor(
       {String? filterStr, String? tutorName, String? tutorNation}) async {
     try {
-      _tutors = await _repository.searchTutor(
+      tutors = await _repository.searchTutor(
           filterStr: filterStr, tutorName: tutorName, tutorNation: tutorNation);
       notifyListeners();
     } catch (error) {

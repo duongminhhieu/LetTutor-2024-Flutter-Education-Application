@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:src/commons/loading.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 import 'package:src/providers/tutor_provider.dart';
 
@@ -15,41 +14,6 @@ class ListTeacherComponent extends StatefulWidget {
 }
 
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
-  //Fetch API
-  bool _hasFetched = false;
-  bool _isLoading = true;
-
-  @override
-  Future<void> didChangeDependencies() async {
-    super.didChangeDependencies();
-    var authProvider = Provider.of<AuthProvider>(context);
-    var tutorProvider = Provider.of<TutorProvider>(context);
-
-    //Fetch API
-    if (!_hasFetched) {
-      await Future.wait([
-        tutorProvider.callAPIGetTutorList(1, authProvider)
-        //callApiGetListSchedules(BookingRepository(), authProvider)
-      ]).whenComplete(() {
-        if (tutorProvider.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(tutorProvider.errorMessage!),
-              backgroundColor: Colors.red,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
-        if (mounted) {
-          setState(() {
-            _hasFetched = true;
-            _isLoading = false;
-          });
-        }
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
