@@ -14,6 +14,7 @@ class BookingProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<void> callApiGetListBooked(AuthProvider authProvider) async {
+    lessonList = [];
     await _repository.getIncomingLessons(
         accessToken: authProvider.token?.access?.token ?? "",
         page: 1,

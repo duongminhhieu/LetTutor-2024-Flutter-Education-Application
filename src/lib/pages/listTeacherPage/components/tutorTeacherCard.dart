@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,13 +58,17 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: Image.network(
-                        widget.tutor?.avatar ??
+                      child: CachedNetworkImage(
+                        width: double.maxFinite,
+                        fit: BoxFit.fill,
+                        imageUrl: widget.tutor.avatar ??
                             "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.network(
-                              "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg");
-                        },
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) => Image.network(
+                            "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
                       ),
                     ),
                   ),

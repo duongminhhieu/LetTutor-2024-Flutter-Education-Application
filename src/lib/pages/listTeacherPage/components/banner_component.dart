@@ -156,7 +156,9 @@ class BannerComponent extends StatelessWidget {
             ),
             CountdownTimer(
               endTime: DateTime.fromMillisecondsSinceEpoch(bookingProvider
-                  .upcomingLesson!.scheduleDetailInfo!.startPeriodTimestamp!)
+                      .upcomingLesson!
+                      .scheduleDetailInfo!
+                      .startPeriodTimestamp!)
                   .millisecondsSinceEpoch,
               textStyle: TextStyle(
                 fontWeight: FontWeight.normal,
@@ -174,7 +176,6 @@ class BannerComponent extends StatelessWidget {
             ),
           ],
         ),
-
       ],
     );
   }

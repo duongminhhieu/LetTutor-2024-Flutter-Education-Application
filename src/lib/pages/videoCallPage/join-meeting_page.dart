@@ -94,18 +94,14 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                 ),
                 endWidget: ElevatedButton(
                   onPressed: () {
-                    if (canJoinMeeting) {
-                      _joinMeeting();
-                    }
+                    _joinMeeting();
                   },
                   child: Text('Join Meeting'),
                 ),
               ),
               ElevatedButton(
                 onPressed: () {
-                  if (canJoinMeeting) {
-                    _joinMeeting();
-                  }
+                  _joinMeeting();
                 },
                 child: Text('Join Meeting'),
               ),

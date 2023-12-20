@@ -130,7 +130,7 @@ class ApiService {
         case 201:
           return BoundResource(response: response.data, statusCode: 201);
       }
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       return BoundResource(
           errorMsg: err.response?.data['message'] ?? err.message,
           statusCode: err.response?.statusCode ?? 500);

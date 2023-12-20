@@ -8,16 +8,20 @@ class TutorProvider extends ChangeNotifier {
   final TutorRepository _repository = TutorRepository();
   List<Tutor> tutors = [];
   List<String> favTutorSecondId = [];
+  int totalPage = 100;
+  int perPage = 8;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
   Future<void> callAPIGetTutorList(int page, AuthProvider authProvider) async {
+    tutors = [];
+    favTutorSecondId = [];
     try {
       await _repository.getListTutor(
           accessToken: authProvider.token?.access?.token ?? "",
           page: page,
-          perPage: 10,
+          perPage: perPage,
           onSuccess: (response) async {
             _handleTutorListDataFromAPI(response);
             _errorMessage = null;
@@ -58,6 +62,9 @@ class TutorProvider extends ChangeNotifier {
     //Add to final list
     tutors.addAll(favoredList);
     tutors.addAll(notFavoredList);
+
+    // set total page
+    totalPage = (response.tutors?.count ?? 0) ~/ perPage;
   }
 
   bool checkIfTutorIsFavored(Tutor tutor) {

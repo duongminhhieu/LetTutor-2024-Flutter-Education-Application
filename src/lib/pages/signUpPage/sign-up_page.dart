@@ -225,7 +225,6 @@ class _SignUpPageState extends State<SignUpPage> {
           email: emailController.text,
           password: passwordController.text,
           onSuccess: (user, token) async {
-
             // Show a success message
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

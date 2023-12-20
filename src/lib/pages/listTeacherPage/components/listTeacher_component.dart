@@ -15,12 +15,10 @@ class ListTeacherComponent extends StatefulWidget {
 }
 
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
-  late int _currentPage;
 
   @override
   void initState() {
     super.initState();
-    _currentPage = 1;
   }
 
   @override
@@ -104,19 +102,6 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
               );
             },
           ),
-          Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(16),
-              child: NumberPaginator(
-                // by default, the paginator shows numbers as center content
-                numberPages: 100,
-                onPageChange: (int index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-              )
-          )
         ],
       ),
     );
