@@ -1,30 +1,92 @@
 import 'package:flutter/material.dart';
+import 'package:src/data/responses/list-tutor_response.dart';
 
 import '../data/model/tutor/tutor.dart';
 import '../data/repository/tutor_repository.dart';
+import 'auth_provider.dart';
 
 class TutorProvider extends ChangeNotifier {
   final TutorRepository _repository = TutorRepository();
   List<Tutor> _tutors = [];
-
-  TutorProvider()  {
-    getTutors();
-  }
+  List<String> favTutorSecondId = [];
 
   List<Tutor> get tutors => _tutors;
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
 
-  Future<void> getTutors() async {
+  Future<void> callAPIGetTutorList(int page, AuthProvider authProvider) async {
     try {
-      _tutors = await _repository.getTutors();
+      await _repository.getListTutor(
+          accessToken: authProvider.token?.access?.token ?? "",
+          page: page,
+          perPage: 10,
+          onSuccess: (response) async {
+            _handleTutorListDataFromAPI(response);
+            _errorMessage = null;
+            notifyListeners();
+          },
+          onFail: (error) {
+            _errorMessage = error.toString(); // Set the error message
+            notifyListeners();
+          });
+    } catch (e) {
+      _errorMessage = e.toString(); // Set the error message
       notifyListeners();
-    } catch (error) {
-      debugPrint(error.toString());
     }
   }
 
-  Future<void> searchTutor({String? filterStr, String? tutorName, String? tutorNation}) async {
+  void _handleTutorListDataFromAPI(ListTutorResponse response) {
+    response.favoriteTutor?.forEach((element) {
+      if (element.secondId != null) {
+        favTutorSecondId.add(element.secondId!);
+      }
+    });
+
+    //Separate list
+    List<Tutor> notFavoredList = [];
+    List<Tutor> favoredList = [];
+    response.tutors?.rows?.forEach((element) {
+      if (checkIfTutorIsFavored(element)) {
+        favoredList.add(element);
+      } else {
+        notFavoredList.add(element);
+      }
+    });
+
+    //Sort by score
+    favoredList.sort((b, a) => (a.rating ?? 0).compareTo((b.rating ?? 0)));
+    notFavoredList.sort((b, a) => (a.rating ?? 0).compareTo((b.rating ?? 0)));
+
+    //Add to final list
+    tutors.addAll(favoredList);
+    tutors.addAll(notFavoredList);
+  }
+
+  bool checkIfTutorIsFavored(Tutor tutor) {
+    for (var element in favTutorSecondId) {
+      if (element == tutor.userId) return true;
+    }
+    return false;
+  }
+
+  Future<void> callApiManageFavoriteTutor(
+      Tutor tutorClicked,
+      AuthProvider authProvider,
+      int index,
+      Function(String, bool) onSuccess,
+      Function(String) onFail) async {
+    await _repository.manageFavoriteTutor(
+        accessToken: authProvider.token?.access?.token ?? "",
+        tutorId: tutorClicked.userId!,
+        onSuccess: onSuccess,
+        onFail: onFail);
+  }
+
+  Future<void> searchTutor(
+      {String? filterStr, String? tutorName, String? tutorNation}) async {
     try {
-      _tutors = await _repository.searchTutor(filterStr: filterStr, tutorName: tutorName,tutorNation: tutorNation);
+      _tutors = await _repository.searchTutor(
+          filterStr: filterStr, tutorName: tutorName, tutorNation: tutorNation);
       notifyListeners();
     } catch (error) {
       debugPrint(error.toString());

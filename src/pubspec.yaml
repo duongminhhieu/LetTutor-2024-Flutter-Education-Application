@@ -40,6 +40,7 @@ dependencies:
   intl: ^0.18.1
   babstrap_settings_screen: ^0.1.6
   image_picker: ^1.0.4
+  flutter_pagination: ^0.0.8
 
   #Media
   syncfusion_flutter_pdfviewer: ^23.1.43

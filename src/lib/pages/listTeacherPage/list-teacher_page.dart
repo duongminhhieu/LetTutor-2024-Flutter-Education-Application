@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:src/commons/appBar.dart';
 import 'package:src/commons/drawer.dart';
 import 'package:src/pages/listTeacherPage/components/banner_component.dart';
