@@ -14,7 +14,7 @@ class ListCommentComponent extends StatefulWidget {
 
 class _ListCommentComponentState extends State<ListCommentComponent> {
   late List<FeedbackTutor> feedbacks;
-  late int _currentPage = 1;
+  late int _currentPage = 0;
   late int _totalPage = 1;
   late final int _pageSize = 5;
 

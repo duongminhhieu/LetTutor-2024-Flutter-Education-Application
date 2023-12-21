@@ -11,6 +11,8 @@ import 'base_repository.dart';
 
 class TutorRepository extends BaseRepository{
 
+  TutorRepository() : super();
+
   Future<List<Tutor>> getTutors() async {
     String data = await rootBundle.loadString('lib/assets/tutor-mock-data.json');
     List<dynamic> jsonData = json.decode(data);

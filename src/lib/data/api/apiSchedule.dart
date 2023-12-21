@@ -24,5 +24,8 @@ class APISchedule{
     return '${BASE_URL}booking/student-request/$bookedId';
   }
 
+  static String getSchedulesByTutorId(String tutorId, int startTime, int endTime){
+    return '${BASE_URL}schedule?tutorId=$tutorId&startTimestamp=$startTime&endTimestamp=$endTime';
+  }
 
 }
