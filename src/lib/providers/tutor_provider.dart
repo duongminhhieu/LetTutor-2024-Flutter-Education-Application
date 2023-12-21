@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/data/model/tutor/tutor_info.dart';
 import 'package:src/data/responses/list-tutor_response.dart';
 import '../data/model/tutor/tutor.dart';
 import '../data/repository/tutor_repository.dart';
@@ -8,8 +9,11 @@ class TutorProvider extends ChangeNotifier {
   final TutorRepository _repository = TutorRepository();
   List<Tutor> tutors = [];
   List<String> favTutorSecondId = [];
+  TutorInfo? tutorInfo;
   int totalPage = 100;
-  int perPage = 8;
+  int perPage = 10;
+  int currentPage = 1;
+  int maxPage = 10;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
@@ -77,7 +81,6 @@ class TutorProvider extends ChangeNotifier {
   Future<void> callApiManageFavoriteTutor(
       Tutor tutorClicked,
       AuthProvider authProvider,
-      int index,
       Function(String, bool) onSuccess,
       Function(String) onFail) async {
     await _repository.manageFavoriteTutor(
@@ -85,6 +88,41 @@ class TutorProvider extends ChangeNotifier {
         tutorId: tutorClicked.userId!,
         onSuccess: onSuccess,
         onFail: onFail);
+    notifyListeners();
+  }
+
+  Future<void> callAPISearchTutor(int page, String searchKey,
+      List<String> specialities, AuthProvider authProvider) async {
+    await _repository.searchTutors(
+      accessToken: authProvider.token?.access?.token ?? "",
+      searchKeys: searchKey,
+      speciality: specialities,
+      nationality: {},
+      page: page,
+      onSuccess: (response, total) async {
+        tutors = [];
+        tutors.addAll(response);
+        currentPage = page;
+        maxPage = (total / perPage).ceil();
+        _errorMessage = null;
+        notifyListeners();
+      },
+      onFail: (error) {
+        _errorMessage = error.toString(); // Set the error message
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> callAPIGetTutorById(
+      AuthProvider authProvider, String? userId) async {
+    await _repository.getTutorById(
+        accessToken: authProvider.token?.access?.token ?? "",
+        tutorId: userId ?? "",
+        onSuccess: (response) async {
+          notifyListeners();
+        },
+        onFail: (error) {});
   }
 
   Future<void> searchTutor(

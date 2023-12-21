@@ -15,7 +15,6 @@ class ListTeacherComponent extends StatefulWidget {
 }
 
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
-
   @override
   void initState() {
     super.initState();
@@ -57,7 +56,10 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
                     MaterialPageRoute(
                       builder: (context) => DetailATeacherPage(),
                       settings:
-                          RouteSettings(arguments: tutorProvider.tutors[index]),
+                          RouteSettings(arguments: {
+                            'tutor': tutorProvider.tutors[index],
+                            'index': index,
+                          },),
                     ),
                   );
                 },
@@ -67,26 +69,36 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
                       .checkIfTutorIsFavored(tutorProvider.tutors[index]),
                   onClickFavorite: () {
                     tutorProvider.callApiManageFavoriteTutor(
-                        tutorProvider.tutors[index], authProvider, index,
+                        tutorProvider.tutors[index], authProvider,
                         (message, unfavored) async {
                       setState(() {
                         if (unfavored) {
                           tutorProvider.favTutorSecondId
                               .remove(tutorProvider.tutors[index].userId);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Unfavored tutor successfully!"),
+                              duration: Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.green,
+                            ),
+                          );
                         } else {
                           tutorProvider.favTutorSecondId
                               .add(tutorProvider.tutors[index].userId!);
                           tutorProvider.favTutorSecondId =
                               tutorProvider.favTutorSecondId.toSet().toList();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Favored tutor successfully!"),
+                              duration: Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.green,
+                            ),
+                          );
                         }
                       });
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(message),
-                          duration: const Duration(seconds: 1),
-                        ),
-                      );
                     }, (error) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

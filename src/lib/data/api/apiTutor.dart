@@ -14,9 +14,7 @@ class APITutor{
   }
 
   //Search tutor
-  static String searchTutor(String keyword, int perPage, int page){
-    return '${BASE_URL}tutor/search?keyword=$keyword&perPage=$perPage&page=$page';
-  }
+  static const String SEARCH_TUTOR = '${BASE_URL}tutor/search';
 
   // Add a tutor to favourite list
   static const String ADD_FAVOURITE_TUTOR = '${BASE_URL}user/manageFavoriteTutor';

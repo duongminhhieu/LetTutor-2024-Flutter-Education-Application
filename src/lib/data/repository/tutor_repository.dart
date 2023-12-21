@@ -5,7 +5,6 @@ import 'package:src/data/api/apiTutor.dart';
 import 'package:src/data/api/apiUser.dart';
 import 'package:src/data/responses/list-tutor_response.dart';
 
-import '../model/tutor/favorite_tutor.dart';
 import '../model/tutor/tutor.dart';
 import '../services/apiService.dart';
 import 'base_repository.dart';
@@ -20,6 +19,39 @@ class TutorRepository extends BaseRepository{
 
     return tutors;
   }
+
+  Future<void> writeReviewAfterClass({
+    required Function() onSuccess,
+    required Function(String) onFail,
+  }) async {
+    final response = await service.post(
+      url: APITutor.FEEDBACK_TUTOR,
+    );
+
+    await onSuccess();
+  }
+
+  Future<void> getTutorById({
+    required String accessToken,
+    required String tutorId,
+    required Function(Tutor) onSuccess,
+    required Function(String) onFail,
+  }) async {
+    final response = await service.get(
+        url: APITutor.getTutorById(tutorId),
+        headers: {"Authorization": "Bearer $accessToken"}) as BoundResource;
+
+    switch (response.statusCode) {
+      case 200:
+      case 201:
+        onSuccess(Tutor.fromJson(response.response));
+        break;
+      default:
+        onFail(response.errorMsg.toString());
+        break;
+    }
+  }
+
 
   Future<void> manageFavoriteTutor({
     required String accessToken,
@@ -67,13 +99,45 @@ class TutorRepository extends BaseRepository{
     }
   }
 
-  Future<List<FavoriteTutor>> getFavoriteTutors() async {
-    String data = await rootBundle.loadString('lib/assets/favorite_tutor-mock-data.json');
-    List<dynamic> jsonData = json.decode(data);
 
-    List<FavoriteTutor> tutors = jsonData.map((json) => FavoriteTutor.fromJson(json)).toList();
+  Future<void> searchTutors({
+    required String accessToken,
+    required String searchKeys,
+    required int page,
+    required List<String> speciality,
+    required Map<String, dynamic> nationality,
+    required Function(List<Tutor>, int) onSuccess,
+    required Function(String) onFail,
+  }) async {
 
-    return tutors;
+    speciality.forEach((element) {
+      element = element.toLowerCase();
+    });
+
+    final response = await service.post(url: APITutor.SEARCH_TUTOR, data: {
+      "filters": {
+        "specialties": speciality,
+        "nationality": nationality,
+        "date": null,
+        "tutoringTimeAvailable": [null, null]
+      },
+      "search": searchKeys,
+      "page": "$page",
+      "perPage": 10
+    }, headers: {
+      "Authorization": "Bearer $accessToken"
+    }) as BoundResource;
+
+    switch (response.statusCode) {
+      case 200:
+      case 201:
+        var result = TutorPagination.fromJson(response.response);
+        onSuccess(result.rows ?? [], result.count ?? 0);
+        break;
+      default:
+        onFail(response.errorMsg.toString());
+        break;
+    }
   }
 
   Future<List<Tutor>> searchTutor({String? filterStr, String? tutorName, String? tutorNation}) async {

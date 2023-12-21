@@ -1,11 +1,32 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:number_paginator/number_paginator.dart';
 import 'package:src/data/model/tutor/tutor.dart';
 import 'package:src/data/model/tutor/tutor_feedback.dart';
 
-
-class ListCommentComponent extends StatelessWidget {
+class ListCommentComponent extends StatefulWidget {
   const ListCommentComponent({Key? key, required this.tutor}) : super(key: key);
   final Tutor tutor;
+
+  @override
+  State<ListCommentComponent> createState() => _ListCommentComponentState();
+}
+
+class _ListCommentComponentState extends State<ListCommentComponent> {
+  late List<FeedbackTutor> feedbacks;
+  late int _currentPage = 1;
+  late int _totalPage = 1;
+  late final int _pageSize = 5;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    feedbacks = widget.tutor.feedbacks!
+        .getRange(_currentPage * _pageSize, (_currentPage + 1) * _pageSize)
+        .toList();
+    _totalPage = widget.tutor.feedbacks!.length ~/ _pageSize;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +42,23 @@ class ListCommentComponent extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       color: Colors.black))),
           SizedBox(height: 20),
-          _buildInfoCommentItems()
+          _buildInfoCommentItems(),
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(16),
+              child: NumberPaginator(
+                // by default, the paginator shows numbers as center content
+                numberPages: _totalPage,
+                onPageChange: (int index) {
+                  setState(() {
+                    _currentPage = index;
+                    feedbacks = widget.tutor.feedbacks!
+                        .getRange(_currentPage * _pageSize,
+                            (_currentPage + 1) * _pageSize)
+                        .toList();
+                  });
+                },
+              ))
         ],
       ),
     );
@@ -29,9 +66,10 @@ class ListCommentComponent extends StatelessWidget {
 
   Widget _buildInfoCommentItems() {
     return Column(
-      children: tutor.feedbacks?.map((feedback) {
-        return _buildInfoCommentItem(feedback);
-      }).toList() ?? [],
+      children: feedbacks?.map((feedback) {
+            return _buildInfoCommentItem(feedback);
+          }).toList() ??
+          [],
     );
   }
 
@@ -54,7 +92,18 @@ class ListCommentComponent extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.network(feedback.firstInfo!.avatar!),
+              child: CachedNetworkImage(
+                width: double.maxFinite,
+                fit: BoxFit.fill,
+                imageUrl: feedback.firstInfo!.avatar ??
+                    "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Image.network(
+                    "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+              ),
             ),
           ),
           SizedBox(width: 10),
@@ -83,7 +132,9 @@ class ListCommentComponent extends StatelessWidget {
                 children: <Widget>[
                   for (int i = 0; i < 5; i++)
                     Icon(
-                      i < (feedback.rating ?? 0) ? Icons.star : Icons.star_border,
+                      i < (feedback.rating ?? 0)
+                          ? Icons.star
+                          : Icons.star_border,
                       color: Colors.yellow,
                       size: 16,
                     ),

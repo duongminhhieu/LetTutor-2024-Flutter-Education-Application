@@ -1,14 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../data/model/tutor/tutor.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/tutor_provider.dart';
 
 class InfoComponent extends StatefulWidget {
-  const InfoComponent({Key? key, required this.tutor}) : super(key: key);
+  const InfoComponent({Key? key, required this.tutor, required this.index})
+      : super(key: key);
   final Tutor tutor;
+  final int index;
 
   @override
   State<InfoComponent> createState() => _InfoComponentState();
@@ -20,6 +26,8 @@ class _InfoComponentState extends State<InfoComponent> {
   @override
   void initState() {
     super.initState();
+    final tutorProvider = context.read<TutorProvider>();
+    isFavorite = tutorProvider.checkIfTutorIsFavored(widget.tutor);
   }
 
   @override
@@ -75,7 +83,18 @@ class _InfoComponentState extends State<InfoComponent> {
             shape: BoxShape.circle,
           ),
           child: ClipOval(
-            child: Image.network(widget.tutor.avatar!),
+            child: CachedNetworkImage(
+              width: double.maxFinite,
+              fit: BoxFit.fill,
+              imageUrl: widget.tutor.avatar ??
+                  "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress)),
+              errorWidget: (context, url, error) => Image.network(
+                  "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+            ),
           ),
         ),
         const SizedBox(width: 20),
@@ -125,12 +144,6 @@ class _InfoComponentState extends State<InfoComponent> {
             Container(
               child: Row(
                 children: [
-                  SvgPicture.asset(
-                    'lib/assets/images/vietnam.svg',
-                    semanticsLabel: "My SVG",
-                    height: 20,
-                  ),
-                  SizedBox(width: 5),
                   Text(
                     widget.tutor.country!,
                     style: TextStyle(
@@ -156,7 +169,45 @@ class _InfoComponentState extends State<InfoComponent> {
         children: [
           GestureDetector(
             onTap: () {
-              // Handle the favorite icon tap
+              final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
+              final authProvider = context.read<AuthProvider>();
+              tutorProvider.callApiManageFavoriteTutor(
+                  widget.tutor, authProvider, (message, unfavored) async {
+                setState(() {
+                  if (unfavored) {
+                    tutorProvider.favTutorSecondId.remove(widget.tutor.userId);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Unfavored tutor successfully!"),
+                        duration: Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  } else {
+                    tutorProvider.favTutorSecondId.add(widget.tutor.userId!);
+                    tutorProvider.favTutorSecondId =
+                        tutorProvider.favTutorSecondId.toSet().toList();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Favored tutor successfully!"),
+                        duration: Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                });
+              }, (error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Error"),
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              });
               setState(() {
                 isFavorite = !isFavorite;
               });
@@ -509,11 +560,11 @@ class _ChewieDemoState extends State<ChewieDemo> {
       child: _chewieController != null &&
               _chewieController!.videoPlayerController.value.isInitialized
           ? Container(
-            height: 280,
-            child: Chewie(
+              height: 280,
+              child: Chewie(
                 controller: _chewieController!,
               ),
-          )
+            )
           : const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
