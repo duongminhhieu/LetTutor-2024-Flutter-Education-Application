@@ -12,24 +12,57 @@ class ScheduleRepository extends BaseRepository {
 
   ScheduleRepository() : super();
 
-  Future<List<Schedule>> bookSchedule(List<Schedule> schedules,
-      List<String> scheduleDetailIds, String notes) async {
+  Future<Result<String>> bookLesson({
+    required String accessToken,
+    required String notes,
+    required List<String> scheduleDetailIds,
+  }) async {
+
     try {
-      for (var element in scheduleDetailIds) {
-        for (var schedule in schedules) {
-          if (element == schedule.id) {
-            schedule.isBooked = true;
-            schedule.scheduleDetails!.forEach((e) {
-              e.isBooked = true;
-            });
-          }
-        }
+      final response = await service.post(
+          url: APISchedule.BOOK_CLASS,
+          data: {"note": notes, "scheduleDetailIds": scheduleDetailIds},
+          headers: {"Authorization": "Bearer $accessToken"}) as BoundResource;
+
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          return Result(data: response.response['message']);
+        default:
+          return Result(error: response.errorMsg.toString());
       }
-    } catch (error) {
+    }catch(error) {
       debugPrint(error.toString());
+      return Result(error: error.toString());
     }
-    return schedules;
   }
+
+  Future<Result<String>> cancelALesson({
+    required String accessToken,
+    required String scheduleDetailIds,
+    required int cancelReasonId,
+    required String? notes
+  }) async {
+    try {
+      final response = await service.delete(url: APISchedule.BOOK_CLASS, data: {
+        "scheduleDetailIds": [scheduleDetailIds],
+        "cancelInfo": {"cancelReasonId": cancelReasonId, "note": notes}
+      }, headers: {
+        "Authorization": "Bearer $accessToken"
+      }) as BoundResource;
+
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          return Result(data: response.response['message']);
+        default:
+          return Result(error: response.errorMsg.toString());
+      }
+    } catch (e) {
+      return Result(error: e.toString());
+    }
+  }
+
 
   Future<Result<List<Schedule>>> getScheduleById({
     required String accessToken,

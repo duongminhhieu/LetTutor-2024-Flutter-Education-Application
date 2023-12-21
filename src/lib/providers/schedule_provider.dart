@@ -39,13 +39,27 @@ class ScheduleProvider extends ChangeNotifier {
   }
 
   Future<void> bookSchedule(
-      List<String> scheduleDetailIds, String notes) async {
+      List<String> scheduleDetailIds,
+      String notes,
+      AuthProvider authProvider,
+      Function(String) onSuccess,
+      Function(String) onFail) async {
     try {
-      _schedules =
-          await _repository.bookSchedule(_schedules, scheduleDetailIds, notes);
-      notifyListeners();
+      Result result = await _repository.bookLesson(
+          accessToken: authProvider.token?.access?.token ?? "",
+          scheduleDetailIds: scheduleDetailIds,
+          notes: notes);
+
+      if (result.data != null) {
+        onSuccess(result.data as String);
+      }
+      if (result.error != null) {
+        onFail(result.error.toString());
+      }
+
     } catch (error) {
       debugPrint(error.toString());
+      onFail(error.toString());
     }
   }
 }

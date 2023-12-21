@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:src/pages/videoCallPage/join-meeting_page.dart';
 import 'package:src/providers/booking_provider.dart';
 
-class BannerComponent extends StatelessWidget {
+class BannerComponent extends StatefulWidget {
   final Color myColor;
 
   const BannerComponent({
@@ -13,6 +13,11 @@ class BannerComponent extends StatelessWidget {
     required this.myColor,
   });
 
+  @override
+  State<BannerComponent> createState() => _BannerComponentState();
+}
+
+class _BannerComponentState extends State<BannerComponent> {
   @override
   Widget build(BuildContext context) {
     BookingProvider bookingProvider = context.watch<BookingProvider>();
@@ -62,14 +67,14 @@ class BannerComponent extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.ondemand_video,
-                                color: myColor,
+                                color: widget.myColor,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 "Enter lesson room",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: myColor,
+                                  color: widget.myColor,
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
@@ -122,12 +127,14 @@ class BannerComponent extends StatelessWidget {
   Widget buildTimer(BuildContext context) {
     BookingProvider bookingProvider = context.watch<BookingProvider>();
 
+    bool isExpired = false;
+
     return Column(
       children: [
         Text(
           DateFormat('E, d MMM y').format(DateTime.fromMillisecondsSinceEpoch(
-                  bookingProvider.upcomingLesson!.scheduleDetailInfo!
-                      .startPeriodTimestamp!)) +
+              bookingProvider.upcomingLesson!.scheduleDetailInfo!
+                  .startPeriodTimestamp!)) +
               '\n' +
               DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(
                   bookingProvider.upcomingLesson!.scheduleDetailInfo!
@@ -155,23 +162,27 @@ class BannerComponent extends StatelessWidget {
               ),
             ),
             CountdownTimer(
-              endTime: DateTime.fromMillisecondsSinceEpoch(bookingProvider
-                      .upcomingLesson!
-                      .scheduleDetailInfo!
+              endTime: DateTime.fromMillisecondsSinceEpoch(
+                  bookingProvider.upcomingLesson!.scheduleDetailInfo!
                       .startPeriodTimestamp!)
                   .millisecondsSinceEpoch,
+              onEnd: () {
+                setState(() {
+                  isExpired = true;
+                });
+              },
               textStyle: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 12,
-                color: Colors.yellow,
+                color: isExpired ? Colors.red : Colors.yellow,
               ),
             ),
             Text(
-              ')',
+              isExpired ? 'Expired time' : ')',
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
-                color: Colors.yellow,
+                color: isExpired ? Colors.red : Colors.yellow,
               ),
             ),
           ],

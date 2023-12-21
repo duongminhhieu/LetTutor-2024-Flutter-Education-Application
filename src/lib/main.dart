@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           '/signUpPage': (context) => LoadingOverlay(child: SignUpPage()),
           '/forgotPasswordPage': (context) => LoadingOverlay(child: ForgotPasswordPage()),
           '/listTeacherPage': (context) => LoadingOverlay(child: ListTeacherPage()),
-          '/detailATeacher': (context) => DetailATeacherPage(),
+          '/detailATeacher': (context) => LoadingOverlay(child: DetailATeacherPage()),
           '/schedulePage': (context) => SchedulePage(),
           '/historyPage': (context) => HistoryPage(),
           '/coursesPage': (context) => CoursesPage(),
