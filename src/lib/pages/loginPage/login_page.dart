@@ -45,6 +45,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    // Dispose of resources here
+    super.dispose();
+  }
+
+
+
+  @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
     return loading ? const LoadingFilled() : _buildMainContent();

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -85,7 +84,7 @@ class _InfoComponentState extends State<InfoComponent> {
           child: ClipOval(
             child: CachedNetworkImage(
               width: double.maxFinite,
-              fit: BoxFit.fill,
+              fit: BoxFit.fitHeight,
               imageUrl: widget.tutor.avatar ??
                   "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
               progressIndicatorBuilder: (context, url, downloadProgress) =>

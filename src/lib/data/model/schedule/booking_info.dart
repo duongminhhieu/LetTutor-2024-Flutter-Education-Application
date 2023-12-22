@@ -24,7 +24,7 @@ class BookingInfo {
   ClassReview? classReview;
   //new
   int? cancelReasonId;
-  String? lessonPlanId;
+  int? lessonPlanId;
   String? cancelNote;
   String? calendarId;
   bool? showRecordUrl;
@@ -85,7 +85,7 @@ BookingInfo _$BookingInfoFromJson(Map<String, dynamic> json) => BookingInfo(
       ? null
       : ClassReview.fromJson(json['classReview'] as Map<String, dynamic>),
   cancelReasonId: json['cancelReasonId'] as int?,
-  lessonPlanId: json['lessonPlanId'] as String?,
+  lessonPlanId: json['lessonPlanId'] as int?,
   cancelNote: json['cancelNote'] as String?,
   calendarId: json['calendarId'] as String?,
   showRecordUrl: json['showRecordUrl'] as bool?,

@@ -1,7 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:src/data/api/apiSchedule.dart';
 import 'package:src/data/model/schedule/schedule.dart';
+import 'package:src/data/responses/list-booking_response.dart';
 
 import '../responses/list-schedule_response.dart';
 import '../responses/result_response.dart';
@@ -9,7 +9,6 @@ import '../services/apiService.dart';
 import 'base_repository.dart';
 
 class ScheduleRepository extends BaseRepository {
-
   ScheduleRepository() : super();
 
   Future<Result<String>> bookLesson({
@@ -17,7 +16,6 @@ class ScheduleRepository extends BaseRepository {
     required String notes,
     required List<String> scheduleDetailIds,
   }) async {
-
     try {
       final response = await service.post(
           url: APISchedule.BOOK_CLASS,
@@ -31,18 +29,42 @@ class ScheduleRepository extends BaseRepository {
         default:
           return Result(error: response.errorMsg.toString());
       }
-    }catch(error) {
+    } catch (error) {
       debugPrint(error.toString());
       return Result(error: error.toString());
     }
   }
 
-  Future<Result<String>> cancelALesson({
-    required String accessToken,
-    required String scheduleDetailIds,
-    required int cancelReasonId,
-    required String? notes
-  }) async {
+  Future<Result<BookingPagination>> getIncomingLessons(
+      {required String accessToken,
+      required String now,
+      required int page,
+      required int perPage}) async {
+    try {
+      final response = await service.get(
+          url: APISchedule.getIncomingBookedClass(
+              page, perPage, now, "meeting", "desc"),
+          headers: {"Authorization": "Bearer $accessToken"}) as BoundResource;
+
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          var result = ListBookingResponse.fromJson(response.response).data;
+          return Result(data: result);
+        default:
+          return Result(error: response.errorMsg.toString());
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      return Result(error: error.toString());
+    }
+  }
+
+  Future<Result<String>> cancelALesson(
+      {required String accessToken,
+      required String scheduleDetailIds,
+      required int cancelReasonId,
+      required String? notes}) async {
     try {
       final response = await service.delete(url: APISchedule.BOOK_CLASS, data: {
         "scheduleDetailIds": [scheduleDetailIds],
@@ -62,7 +84,6 @@ class ScheduleRepository extends BaseRepository {
       return Result(error: e.toString());
     }
   }
-
 
   Future<Result<List<Schedule>>> getScheduleById({
     required String accessToken,

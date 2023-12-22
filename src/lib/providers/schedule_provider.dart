@@ -4,9 +4,18 @@ import 'package:src/data/repository/schedule_repository.dart';
 import 'package:src/data/responses/result_response.dart';
 import 'package:src/providers/auth_provider.dart';
 
+import '../data/responses/list-booking_response.dart';
+
 class ScheduleProvider extends ChangeNotifier {
   final ScheduleRepository _repository = ScheduleRepository();
   List<Schedule> _schedules = [];
+
+  //Pagination
+  int totalPage = 100;
+  int perPage = 10;
+  int currentPage = 1;
+
+
 
   List<Schedule> get schedules => _schedules;
 
@@ -56,7 +65,27 @@ class ScheduleProvider extends ChangeNotifier {
       if (result.error != null) {
         onFail(result.error.toString());
       }
+    } catch (error) {
+      debugPrint(error.toString());
+      onFail(error.toString());
+    }
+  }
 
+  Future<void> callApiGetListSchedules(int page, AuthProvider authProvider,
+      Function(BookingPagination) onSuccess, Function(String) onFail) async {
+    try {
+      Result result = await _repository.getIncomingLessons(
+          accessToken: authProvider.token?.access?.token ?? "",
+          page: page,
+          perPage: perPage,
+          now: DateTime.now().millisecondsSinceEpoch.toString());
+
+      if (result.data != null) {
+        onSuccess(result.data as BookingPagination);
+      }
+      if (result.error != null) {
+        onFail(result.error.toString());
+      }
     } catch (error) {
       debugPrint(error.toString());
       onFail(error.toString());

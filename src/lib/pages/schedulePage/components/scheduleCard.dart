@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:src/data/model/schedule/schedule.dart';
+import 'package:intl/intl.dart';
+import '../../../data/model/schedule/booking_info.dart';
 
 class ScheduleCard extends StatefulWidget {
-  const ScheduleCard({Key? key, required this.schedule}) : super(key: key);
-  final Schedule schedule;
+  const ScheduleCard({Key? key, required this.bookingInfo}) : super(key: key);
+  final BookingInfo bookingInfo;
 
   @override
   State<ScheduleCard> createState() => _ScheduleCardState();
@@ -42,8 +43,10 @@ class _ScheduleCardState extends State<ScheduleCard> {
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child:  Text(
-              formatDate(DateTime.fromMillisecondsSinceEpoch(widget.schedule!.startTimestamp!)),
+            child: Text(
+              DateFormat('E, d MMM y').format(
+                  DateTime.fromMillisecondsSinceEpoch(widget
+                      .bookingInfo!.scheduleDetailInfo!.startPeriodTimestamp!)),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,
@@ -68,30 +71,6 @@ class _ScheduleCardState extends State<ScheduleCard> {
     );
   }
 
-  String formatDate(DateTime dateTime) {
-    // Danh sách tên thứ
-    List<String> daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-    // Danh sách tên tháng
-    List<String> months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-
-    // Lấy các thông tin về ngày, tháng, và năm từ DateTime
-    int day = dateTime.day;
-    int month = dateTime.month;
-    int year = dateTime.year % 100;
-
-    // Lấy tên thứ và tháng dựa vào index
-    String dayOfWeek = daysOfWeek[dateTime.weekday - 1];
-    String monthName = months[month - 1];
-
-    // Tạo chuỗi định dạng
-    String formattedDate = '$dayOfWeek, $day $monthName $year';
-
-    return formattedDate;
-  }
-
   Widget _buildCardInfo() {
     return Container(
       color: Colors.white,
@@ -99,13 +78,25 @@ class _ScheduleCardState extends State<ScheduleCard> {
       child: Row(
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.asset('lib/assets/images/loginImage.png'),
+              child: CachedNetworkImage(
+                width: double.maxFinite,
+                fit: BoxFit.fitHeight,
+                imageUrl: widget.bookingInfo.scheduleDetailInfo?.scheduleInfo
+                        ?.tutorInfo?.avatar ??
+                    "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Image.network(
+                    "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -115,8 +106,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Keegan",
+                child: Text(
+                  "${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.name}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -128,14 +119,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
               Container(
                 child: Row(
                   children: [
-                    SvgPicture.asset(
-                      'lib/assets/images/vietnam.svg',
-                      semanticsLabel: "My SVG",
-                      height: 16,
-                    ),
-                    SizedBox(width: 5),
-                    const Text(
-                      'Vietnam',
+                    Text(
+                      '${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.country}',
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.grey,
@@ -186,7 +171,13 @@ class _ScheduleCardState extends State<ScheduleCard> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      "${widget.schedule!.startTime!} - ${widget.schedule!.endTime!}",
+                      DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(
+                          widget.bookingInfo!.scheduleDetailInfo!
+                              .startPeriodTimestamp!)) +
+                          ' - ' +
+                          DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(
+                              widget.bookingInfo!.scheduleDetailInfo!
+                                  .endPeriodTimestamp!)),
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -220,10 +211,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
           SizedBox(height: 16),
           Card(
             shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(2.0),
-              side: BorderSide(
-                  color: Colors.grey.shade100, width: 1.0),
+              borderRadius: BorderRadius.circular(2.0),
+              side: BorderSide(color: Colors.grey.shade100, width: 1.0),
             ),
             child: ExpansionTile(
               title: const Row(
@@ -231,7 +220,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   Expanded(
                       child: Text(
                     "Request for lesson",
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 12),
                   )),
                   Expanded(
                     child: TextButton(
@@ -240,7 +229,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                           "Edit Request",
                           style: TextStyle(
                             color: Colors.blue,
-                            fontSize: 14,
+                            fontSize: 12,
                           ),
                         )),
                   )
@@ -248,10 +237,14 @@ class _ScheduleCardState extends State<ScheduleCard> {
               ),
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 14, left: 14, right: 14, bottom: 24),
-                  child: const Text(
-                      "Currently there are no requests for this class. Please write down any requests for the teacher.",
-                      style: TextStyle(color: Colors.grey, fontSize: 14, height: 1.5)),
+                  alignment: Alignment.centerLeft,
+                  padding:
+                      EdgeInsets.only(top: 14, left: 14, right: 14, bottom: 24),
+                  child: Text(
+                      widget.bookingInfo.studentRequest ??
+                          "Currently there are no requests for this class. Please write down any requests for the teacher.",
+                      style: TextStyle(
+                          color: Colors.grey, fontSize: 14, height: 1.5)),
                 )
               ],
             ),
@@ -261,7 +254,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
     );
   }
 
-  Widget _buildButton(){
+  Widget _buildButton() {
     return Container(
       alignment: Alignment.centerRight,
       child: ElevatedButton(
@@ -270,9 +263,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
             backgroundColor: Colors.blue,
             shape: RoundedRectangleBorder(
               side: const BorderSide(
-                  width: 1,
-                  style: BorderStyle.solid,
-                  color: Colors.blue),
+                  width: 1, style: BorderStyle.solid, color: Colors.blue),
               borderRadius: BorderRadius.circular(4.0),
             ),
           ),
@@ -280,7 +271,9 @@ class _ScheduleCardState extends State<ScheduleCard> {
             'Go to meeting',
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontWeight: FontWeight.normal, color: Colors.white, fontSize: 16),
+                fontWeight: FontWeight.normal,
+                color: Colors.white,
+                fontSize: 16),
           )),
     );
   }

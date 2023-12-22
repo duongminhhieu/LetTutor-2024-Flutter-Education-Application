@@ -61,27 +61,6 @@ class BookingRepository extends BaseRepository {
     }
   }
 
-  Future<void> getUpcomingLessonAtHomePage({
-    required String accessToken,
-    required int now,
-    required Function(List<BookingInfo>) onSuccess,
-    required Function(String) onFail,
-  }) async {
-    final response = await service.get(
-        url: APISchedule.getUpcomingBookedClass(now),
-        headers: {"Authorization": "Bearer $accessToken"}) as BoundResource;
-
-    switch (response.statusCode) {
-      case 200:
-      case 201:
-        onSuccess(
-            NextBookingInfoResponse.fromJson(response.response).data ?? []);
-        break;
-      default:
-        onFail(response.errorMsg.toString());
-        break;
-    }
-  }
 
   Future<void> bookLesson({
     required String accessToken,

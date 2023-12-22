@@ -13,7 +13,6 @@ class TutorProvider extends ChangeNotifier {
   int totalPage = 100;
   int perPage = 10;
   int currentPage = 1;
-  int maxPage = 10;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
@@ -103,7 +102,7 @@ class TutorProvider extends ChangeNotifier {
         tutors = [];
         tutors.addAll(response);
         currentPage = page;
-        maxPage = (total / perPage).ceil();
+        totalPage = (total / perPage).ceil();
         _errorMessage = null;
         notifyListeners();
       },

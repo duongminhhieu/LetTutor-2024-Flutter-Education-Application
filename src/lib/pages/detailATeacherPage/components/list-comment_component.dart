@@ -94,7 +94,7 @@ class _ListCommentComponentState extends State<ListCommentComponent> {
             child: ClipOval(
               child: CachedNetworkImage(
                 width: double.maxFinite,
-                fit: BoxFit.fill,
+                fit: BoxFit.fitHeight,
                 imageUrl: feedback.firstInfo!.avatar ??
                     "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
                 progressIndicatorBuilder: (context, url, downloadProgress) =>

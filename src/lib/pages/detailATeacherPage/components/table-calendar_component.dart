@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:src/providers/schedule_provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
-import '../../../commons/loadingOverlay.dart';
 import '../../../data/model/schedule/schedule.dart';
 import '../../../data/model/tutor/tutor.dart';
 import '../../../providers/auth_provider.dart';

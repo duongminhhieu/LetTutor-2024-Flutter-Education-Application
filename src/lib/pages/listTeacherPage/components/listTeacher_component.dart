@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:number_paginator/number_paginator.dart';
 import 'package:provider/provider.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 import 'package:src/providers/tutor_provider.dart';
