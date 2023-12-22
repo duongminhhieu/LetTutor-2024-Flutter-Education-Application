@@ -170,6 +170,14 @@ class _BannerComponentState extends State<BannerComponent> {
                 fontSize: 14,
                 color: Colors.yellow,
               ),
+              endWidget: Text(
+                'Started',
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                  color: Colors.yellow,
+                ),
+              ),
             ),
             Text(
               ')',

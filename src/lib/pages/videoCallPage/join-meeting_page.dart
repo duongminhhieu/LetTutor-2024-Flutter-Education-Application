@@ -19,7 +19,6 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
   //Join meeting
   late BookingInfo upcomingClass = widget.upcomingClass;
   late DateTime endTime;
-  bool canJoinMeeting = false;
 
   @override
   void initState() {
@@ -29,11 +28,6 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
         upcomingClass.scheduleDetailInfo!.startPeriodTimestamp!);
   }
 
-  void onEnd() {
-    setState(() {
-      canJoinMeeting = true;
-    });
-  }
 
   void _joinMeeting() async {
     final String meetingToken =
@@ -118,7 +112,6 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
               ),
               SizedBox(height: 16),
               CountdownTimer(
-                onEnd: onEnd,
                 endTime: endTime.millisecondsSinceEpoch,
                 textStyle: TextStyle(
                   fontSize: 24,
