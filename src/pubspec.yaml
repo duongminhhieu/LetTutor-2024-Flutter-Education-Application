@@ -44,7 +44,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   chat_bubbles: ^1.4.1
   flutter_countdown_timer: ^4.1.0
-
+  country_picker: ^2.0.23
 
   #Media
   syncfusion_flutter_pdfviewer: ^23.1.43
@@ -101,9 +101,6 @@ flutter:
     - lib/assets/GiaoTrinhDanGuitar.pdf
     - lib/assets/NoiLongNguoiDi.pdf
     - lib/assets/tutor-mock-data.json
-    - lib/assets/favorite_tutor-mock-data.json
-    - lib/assets/schedule_tutor-mock-data.json
-    - lib/assets/user-mock-data.json
 
 
   #     - images/a_dot_ham.jpeg

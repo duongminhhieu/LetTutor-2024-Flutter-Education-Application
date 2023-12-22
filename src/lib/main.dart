@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         // home: ListTeacherPage(),
         home: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
-            return authProvider.currentUser != null ? LoadingOverlay(child: BottomNavBar()) : LoadingOverlay(child: LoginPage());
+            return authProvider.currentUser != null ? BottomNavBar() : LoadingOverlay(child: LoginPage());
             // return SettingPage();
           },
         ),

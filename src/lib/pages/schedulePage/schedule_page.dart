@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:src/pages/schedulePage/components/info-page_component.dart';
 import 'package:src/pages/schedulePage/components/latest-book_component.dart';

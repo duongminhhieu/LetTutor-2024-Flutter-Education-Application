@@ -1,70 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:src/data/model/user/user.dart';
-import 'package:src/data/model/user/user_data.dart';
 import 'package:src/data/repository/user_repository.dart';
+import 'package:src/data/responses/result_response.dart';
+
+import 'auth_provider.dart';
 
 class UserProvider extends ChangeNotifier {
   final UserRepository _repository = UserRepository();
 
-  UserData _userData = UserData();
-  UserData get userData => _userData;
+  Future<void> callAPIUpdateProfile(AuthProvider authProvider, User input,
+      Function(User) onSuccess, Function(String) onFail) async {
 
-  UserProvider()  {
-    getUserData();
-  }
-
-  Future<void> getUserData() async {
     try {
-      _userData = await _repository.getUserData();
+      Result result = await _repository.updateUserInfo(
+          accessToken: authProvider.token?.access?.token ?? "", input: input);
+
+      if (result.data != null) {
+        onSuccess(result.data as User);
+      }
+
+      if (result.error != null) {
+        onFail(result.error.toString());
+      }
+
       notifyListeners();
+
     } catch (error) {
       debugPrint(error.toString());
+      onFail(error.toString());
     }
   }
 
-  Future<void> updateData(User updatedUser) async {
+  Future<void> callAPIUpdateAvatar(AuthProvider authProvider, String avatar, Function(User) onSuccess, Function(String) onFail) async {
+
     try {
-      _userData.user = updatedUser;
+      Result result = await _repository.uploadAvatar(
+          accessToken: authProvider.token?.access?.token ?? "", imagePath: avatar);
+
+      if (result.data != null) {
+        onSuccess(result.data as User);
+      }
+
+      if (result.error != null) {
+        onFail(result.error.toString());
+      }
+
       notifyListeners();
+
     } catch (error) {
       debugPrint(error.toString());
+      onFail(error.toString());
     }
+
   }
 
-  String _email = '';
-  String get email => _email;
-
-  String _password ='';
-  String get password => _password;
-
-  bool _isRegistered = false;
-  bool get isRegistered => _isRegistered;
-
-  bool _isLoggedIn   = false;
-  bool get isLoggedIn  => _isLoggedIn ;
-
-
-  void login(String email, String password) {
-    _email = email;
-    _password = password;
-    _isRegistered = false;
-    _isLoggedIn  = true;
-
-    notifyListeners();
-  }
-
-  void logout() {
-    _isRegistered = false;
-    _isLoggedIn  = false;
-
-    notifyListeners();
-  }
-
-  void setCredentials(String email, String password) {
-    _email = email;
-    _password = password;
-    _isRegistered = true;
-
-    notifyListeners();
-  }
 }

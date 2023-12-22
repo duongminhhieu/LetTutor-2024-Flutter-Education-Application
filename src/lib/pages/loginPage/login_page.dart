@@ -137,12 +137,6 @@ class _LoginPageState extends State<LoginPage> {
               child: _buildPrimaryColorText('Forgot Password?')),
           const SizedBox(height: 12),
           _buildLoginButton(),
-          const SizedBox(height: 16),
-          if (userProvider.isRegistered)
-            const Text(
-              'Registration successful! Please log in.',
-              style: TextStyle(color: Colors.green, fontSize: 14),
-            ),
           const SizedBox(height: 24),
           _buildOtherLogin(),
         ],

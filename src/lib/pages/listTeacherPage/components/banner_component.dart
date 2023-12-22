@@ -127,8 +127,6 @@ class _BannerComponentState extends State<BannerComponent> {
   Widget buildTimer(BuildContext context) {
     BookingProvider bookingProvider = context.watch<BookingProvider>();
 
-    bool isExpired = false;
-
     return Column(
       children: [
         Text(
@@ -162,27 +160,23 @@ class _BannerComponentState extends State<BannerComponent> {
               ),
             ),
             CountdownTimer(
-              endTime: DateTime.fromMillisecondsSinceEpoch(
-                  bookingProvider.upcomingLesson!.scheduleDetailInfo!
-                      .startPeriodTimestamp!)
+              endTime: DateTime.fromMillisecondsSinceEpoch(bookingProvider
+                  .upcomingLesson!
+                  .scheduleDetailInfo!
+                  .startPeriodTimestamp!)
                   .millisecondsSinceEpoch,
-              onEnd: () {
-                setState(() {
-                  isExpired = true;
-                });
-              },
               textStyle: TextStyle(
                 fontWeight: FontWeight.normal,
-                fontSize: 12,
-                color: isExpired ? Colors.red : Colors.yellow,
+                fontSize: 14,
+                color: Colors.yellow,
               ),
             ),
             Text(
-              isExpired ? 'Expired time' : ')',
+              ')',
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
-                color: isExpired ? Colors.red : Colors.yellow,
+                color: Colors.yellow,
               ),
             ),
           ],

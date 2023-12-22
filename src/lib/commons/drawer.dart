@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,8 +18,8 @@ class CustomDrawer extends StatelessWidget {
         children: [
           ListTile(
             title: Container(
-              child: Consumer<UserProvider>(
-                builder: (BuildContext context, UserProvider userProvider,
+              child: Consumer<AuthProvider>(
+                builder: (BuildContext context, AuthProvider authProvider,
                     Widget? child) {
                   return Row(
                     children: [
@@ -30,16 +31,23 @@ class CustomDrawer extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: ClipOval(
-                          child: Image.network(
-                            userProvider.userData?.user!.avatar ??
-                                "https://yt3.googleusercontent.com/mm2-5anuZ6ghmK2zL6QM7wciD6kuupOfOagiAh5vZE1hx9tRhKEXTAExZUUY4PVq2RSw9jBpBQ=s900-c-k-c0x00ffffff-no-rj",
-                            fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            width: double.maxFinite,
+                            fit: BoxFit.fitHeight,
+                            imageUrl: authProvider.currentUser?.avatar ??
+                                "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                Center(
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress)),
+                            errorWidget: (context, url, error) => Image.network(
+                                "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
                           ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        userProvider.userData?.user!.name ?? "Anonymous",
+                        authProvider.currentUser!.name ?? "Anonymous",
                         style: TextStyle(
                             color: Colors.black87,
                             fontSize: 14,
