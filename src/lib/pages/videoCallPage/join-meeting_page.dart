@@ -26,7 +26,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
     super.initState();
     // endTime = DateTime.now().add(const Duration(seconds: 10));
     endTime = DateTime.fromMillisecondsSinceEpoch(
-        upcomingClass.scheduleDetailInfo!.endPeriodTimestamp!);
+        upcomingClass.scheduleDetailInfo!.startPeriodTimestamp!);
   }
 
   void onEnd() {
