@@ -9,7 +9,10 @@ import '../../../providers/booking_provider.dart';
 import '../../../providers/schedule_provider.dart';
 
 class ListCardScheduleComponent extends StatefulWidget {
-  const ListCardScheduleComponent({Key? key}) : super(key: key);
+  const ListCardScheduleComponent({Key? key, required this.refresh}) : super(key: key);
+
+final Function refresh;
+
 
   @override
   State<ListCardScheduleComponent> createState() =>
@@ -52,6 +55,7 @@ class _ListCardScheduleComponentState extends State<ListCardScheduleComponent> {
                       padding: const EdgeInsets.only(bottom: 16.0),
                       child: ScheduleCard(
                         bookingInfo: lessonList[index],
+                        refresh: widget.refresh,
                       ),
                     );
                   },

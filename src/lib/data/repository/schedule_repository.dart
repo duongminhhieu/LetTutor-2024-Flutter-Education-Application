@@ -35,15 +35,15 @@ class ScheduleRepository extends BaseRepository {
     }
   }
 
-  Future<Result<BookingPagination>> getIncomingLessons(
+  Future<Result<BookingPagination>> getHistorySchedule(
       {required String accessToken,
-      required String now,
       required int page,
-      required int perPage}) async {
+      required int perPage,
+      required int inFuture}) async {
     try {
       final response = await service.get(
-          url: APISchedule.getIncomingBookedClass(
-              page, perPage, now, "meeting", "desc"),
+          url: APISchedule.getHistorySchedule(
+              page, perPage, inFuture, 'meeting', 'desc'),
           headers: {"Authorization": "Bearer $accessToken"}) as BoundResource;
 
       switch (response.statusCode) {
@@ -57,31 +57,6 @@ class ScheduleRepository extends BaseRepository {
     } catch (error) {
       debugPrint(error.toString());
       return Result(error: error.toString());
-    }
-  }
-
-  Future<Result<String>> cancelALesson(
-      {required String accessToken,
-      required String scheduleDetailIds,
-      required int cancelReasonId,
-      required String? notes}) async {
-    try {
-      final response = await service.delete(url: APISchedule.BOOK_CLASS, data: {
-        "scheduleDetailIds": [scheduleDetailIds],
-        "cancelInfo": {"cancelReasonId": cancelReasonId, "note": notes}
-      }, headers: {
-        "Authorization": "Bearer $accessToken"
-      }) as BoundResource;
-
-      switch (response.statusCode) {
-        case 200:
-        case 201:
-          return Result(data: response.response['message']);
-        default:
-          return Result(error: response.errorMsg.toString());
-      }
-    } catch (e) {
-      return Result(error: e.toString());
     }
   }
 

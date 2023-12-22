@@ -28,4 +28,8 @@ class APISchedule{
     return '${BASE_URL}schedule?tutorId=$tutorId&startTimestamp=$startTime&endTimestamp=$endTime';
   }
 
+  static String getHistorySchedule(int page , int perPage, int inFuture, String orderBy, String sortBy){
+    return '${BASE_URL}booking/list/student?inFuture=$inFuture&page=$page&perPage=$perPage&orderBy=$orderBy&sortBy=$sortBy';
+  }
+
 }

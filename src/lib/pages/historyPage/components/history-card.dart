@@ -1,9 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+
+import '../../../data/model/schedule/booking_info.dart';
 
 class HistoryCard extends StatefulWidget {
-  const HistoryCard({Key? key}) : super(key: key);
+  const HistoryCard({Key? key, required this.bookingInfo}) : super(key: key);
+  final BookingInfo bookingInfo;
 
   @override
   State<HistoryCard> createState() => _HistoryCardState();
@@ -41,8 +46,10 @@ class _HistoryCardState extends State<HistoryCard> {
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
-              'Thu, 24 Oct 23',
+            child: Text(
+              DateFormat('E, d MMM y').format(
+                  DateTime.fromMillisecondsSinceEpoch(widget
+                      .bookingInfo!.scheduleDetailInfo!.startPeriodTimestamp!)),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,
@@ -74,13 +81,25 @@ class _HistoryCardState extends State<HistoryCard> {
       child: Row(
         children: [
           Container(
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
             child: ClipOval(
-              child: Image.asset('lib/assets/images/loginImage.png'),
+              child: CachedNetworkImage(
+                width: double.maxFinite,
+                fit: BoxFit.fitHeight,
+                imageUrl: widget.bookingInfo.scheduleDetailInfo?.scheduleInfo
+                        ?.tutorInfo?.avatar ??
+                    "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Image.network(
+                    "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -90,8 +109,8 @@ class _HistoryCardState extends State<HistoryCard> {
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Hieu Duong",
+                child: Text(
+                  "${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.name}",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -103,14 +122,8 @@ class _HistoryCardState extends State<HistoryCard> {
               Container(
                 child: Row(
                   children: [
-                    SvgPicture.asset(
-                      'lib/assets/images/vietnam.svg',
-                      semanticsLabel: "My SVG",
-                      height: 16,
-                    ),
-                    SizedBox(width: 5),
-                    const Text(
-                      'Viet nam',
+                    Text(
+                      "${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.country}",
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.grey,
@@ -160,8 +173,19 @@ class _HistoryCardState extends State<HistoryCard> {
               children: [
                 Expanded(
                   child: Container(
-                    child: const Text(
-                      'Lesson time: 19:30 - 19:55',
+                    child: Text(
+                      'Lessson Time: ' +
+                          DateFormat('HH:mm').format(
+                              DateTime.fromMillisecondsSinceEpoch(widget
+                                  .bookingInfo!
+                                  .scheduleDetailInfo!
+                                  .startPeriodTimestamp!)) +
+                          ' - ' +
+                          DateFormat('HH:mm').format(
+                              DateTime.fromMillisecondsSinceEpoch(widget
+                                  .bookingInfo!
+                                  .scheduleDetailInfo!
+                                  .endPeriodTimestamp!)),
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -205,10 +229,12 @@ class _HistoryCardState extends State<HistoryCard> {
                     ),
                     children: [
                       Container(
+                        alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(
                             top: 14, left: 14, right: 14, bottom: 24),
-                        child: const Text(
-                            "Currently there are no requests for this class. Please write down any requests for the teacher.",
+                        child: Text(
+                            widget.bookingInfo.studentRequest ??
+                                "Currently there are no requests for this class. Please write down any requests for the teacher.",
                             style: TextStyle(
                                 color: Colors.grey, fontSize: 14, height: 1.5)),
                       )
@@ -232,6 +258,7 @@ class _HistoryCardState extends State<HistoryCard> {
                     ),
                     children: [
                       Container(
+                        alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(
                             top: 14, left: 14, right: 14, bottom: 24),
                         child: const Text(
@@ -295,19 +322,31 @@ class _HistoryCardState extends State<HistoryCard> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  width: 80,
-                  height: 80,
+                  width: 60,
+                  height: 60,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: Image.asset('lib/assets/images/loginImage.png'),
+                    child: CachedNetworkImage(
+                      width: double.maxFinite,
+                      fit: BoxFit.fitHeight,
+                      imageUrl: widget.bookingInfo.scheduleDetailInfo
+                              ?.scheduleInfo?.tutorInfo?.avatar ??
+                          "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress)),
+                      errorWidget: (context, url, error) => Image.network(
+                          "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+                    ),
                   ),
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: const Text(
-                    "Keegan",
+                  child: Text(
+                    "${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.name}",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 28,
@@ -329,20 +368,39 @@ class _HistoryCardState extends State<HistoryCard> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: const Text(
-                    "Mon, 23 Oct 23, 00:00 - 00:25",
+                  child: Text(
+                    DateFormat('E, d MMM y').format(
+                            DateTime.fromMillisecondsSinceEpoch(widget
+                                .bookingInfo!
+                                .scheduleDetailInfo!
+                                .startPeriodTimestamp!)) +
+                        '\n' +
+                        DateFormat('HH:mm').format(
+                            DateTime.fromMillisecondsSinceEpoch(widget
+                                .bookingInfo!
+                                .scheduleDetailInfo!
+                                .startPeriodTimestamp!)) +
+                        ' - ' +
+                        DateFormat('HH:mm').format(
+                            DateTime.fromMillisecondsSinceEpoch(widget
+                                .bookingInfo!
+                                .scheduleDetailInfo!
+                                .endPeriodTimestamp!)),
                     style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 32),
+                SizedBox(height: 16),
                 Divider(height: 1, thickness: 1, color: Colors.grey.shade100),
-                SizedBox(height: 32),
-                const Text(
-                  "What is your rating for Keegan?",
+                SizedBox(height: 16),
+                Text(
+                  "What is your rating for " +
+                      "${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.name}" +
+                      "?",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -418,9 +476,7 @@ class _HistoryCardState extends State<HistoryCard> {
             ),
           ),
           insetPadding: EdgeInsets.zero,
-          actions: <Widget>[
-
-          ],
+          actions: <Widget>[],
         );
       },
     );

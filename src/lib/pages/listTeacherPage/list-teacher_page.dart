@@ -26,8 +26,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
   bool _hasFetched = false;
   bool _isLoading = true;
   bool _isLoadingPagination = false;
-  // page
-  late int _currentPage = 1;
+
 
   @override
   Future<void> didChangeDependencies() async {
@@ -140,7 +139,6 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
                           onPageChange: (int index) {
                             setState(() {
                               _isLoadingPagination = true;
-                              _currentPage = index + 1;
                             });
                             tutorProvider
                                 .callAPIGetTutorList(index + 1, authProvider)

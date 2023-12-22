@@ -39,7 +39,7 @@ class _SchedulePageState extends State<SchedulePage> {
               SizedBox(height: 32),
               LatestBookScheduleComponent(),
               SizedBox(height: 32),
-              !_isLoading ? ListCardScheduleComponent() : Center(child: CircularProgressIndicator()),
+              !_isLoading ? ListCardScheduleComponent(refresh: refresh,) : Center(child: CircularProgressIndicator()),
             ],
           ),
         ),

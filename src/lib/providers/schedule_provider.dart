@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/data/model/schedule/booking_info.dart';
 import 'package:src/data/model/schedule/schedule.dart';
 import 'package:src/data/repository/schedule_repository.dart';
 import 'package:src/data/responses/result_response.dart';
@@ -8,16 +9,13 @@ import '../data/responses/list-booking_response.dart';
 
 class ScheduleProvider extends ChangeNotifier {
   final ScheduleRepository _repository = ScheduleRepository();
-  List<Schedule> _schedules = [];
+
+  List<BookingInfo> historyList = [];
 
   //Pagination
-  int totalPage = 100;
-  int perPage = 10;
+  int totalPageHistory = 100;
+  int perPage = 5;
   int currentPage = 1;
-
-
-
-  List<Schedule> get schedules => _schedules;
 
   Future<void> getScheduleById(
       String tutorId,
@@ -71,21 +69,28 @@ class ScheduleProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> callApiGetListSchedules(int page, AuthProvider authProvider,
-      Function(BookingPagination) onSuccess, Function(String) onFail) async {
+  Future<void> callApiGetHistorySchedules(int page, AuthProvider authProvider, Function(String) onFail) async {
     try {
-      Result result = await _repository.getIncomingLessons(
+      Result result = await _repository.getHistorySchedule(
           accessToken: authProvider.token?.access?.token ?? "",
           page: page,
           perPage: perPage,
-          now: DateTime.now().millisecondsSinceEpoch.toString());
+          inFuture: 0);
 
       if (result.data != null) {
-        onSuccess(result.data as BookingPagination);
+        BookingPagination response = result.data as BookingPagination;
+
+        // set list history data
+        historyList = response?.rows ?? [];
+
+        // set total page
+        totalPageHistory = (response?.count ?? 0) ~/ perPage;
+
       }
       if (result.error != null) {
         onFail(result.error.toString());
       }
+      notifyListeners();
     } catch (error) {
       debugPrint(error.toString());
       onFail(error.toString());

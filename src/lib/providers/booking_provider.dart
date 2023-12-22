@@ -57,6 +57,29 @@ class BookingProvider extends ChangeNotifier {
     }
   }
 
+
+  void callApiCancelLesson(AuthProvider authProvider,
+      String id, String? additionalReason, int selectedReason, Function(String message) onSuccess , Function(String error) onFail) async {
+    try {
+      await _repository.cancelALesson(
+          accessToken: authProvider.token?.access?.token ?? "",
+          scheduleDetailIds: id,
+          cancelReasonId: selectedReason,
+          notes: additionalReason,
+          onSuccess: onSuccess,
+          onFail: onFail
+      );
+
+      await callApiGetListBooked(authProvider);
+      notifyListeners();
+
+    } catch (error) {
+      debugPrint(error.toString());
+      onFail(error.toString());
+    }
+  }
+
+
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));

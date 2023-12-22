@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -84,21 +85,48 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(ImagesPath.video),
+              Text("Upcoming lesson", style: TextStyle(color: Colors.blue, fontSize: 36, fontWeight: FontWeight.w500,)),
+              SizedBox(height: 16),
+              Column(
+                children: [
+                  Text(
+                    DateFormat('E, d MMM y').format(
+                            DateTime.fromMillisecondsSinceEpoch(widget
+                                .upcomingClass!
+                                .scheduleDetailInfo!
+                                .startPeriodTimestamp!)) +
+                        ' ' +
+                        DateFormat('HH:mm').format(
+                            DateTime.fromMillisecondsSinceEpoch(widget
+                                .upcomingClass!
+                                .scheduleDetailInfo!
+                                .startPeriodTimestamp!)) +
+                        ' - ' +
+                        DateFormat('HH:mm').format(
+                            DateTime.fromMillisecondsSinceEpoch(widget
+                                .upcomingClass!
+                                .scheduleDetailInfo!
+                                .endPeriodTimestamp!)),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
               CountdownTimer(
                 onEnd: onEnd,
                 endTime: endTime.millisecondsSinceEpoch,
                 textStyle: TextStyle(
-                  fontSize: 30,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
-                endWidget: ElevatedButton(
-                  onPressed: () {
-                    _joinMeeting();
-                  },
-                  child: Text('Join Meeting'),
-                ),
               ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   _joinMeeting();
