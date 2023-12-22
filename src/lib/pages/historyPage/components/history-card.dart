@@ -61,8 +61,9 @@ class _HistoryCardState extends State<HistoryCard> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
-              '1 week ago',
+            child: Text(
+              formatTimeAgo(widget
+                  .bookingInfo!.scheduleDetailInfo!.startPeriodTimestamp!),
               style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -73,6 +74,29 @@ class _HistoryCardState extends State<HistoryCard> {
       ),
     );
   }
+
+  String formatTimeAgo(int startPeriodTimestamp) {
+    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(startPeriodTimestamp);
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(startTime);
+
+    if (difference.inDays > 365) {
+      int years = (difference.inDays / 365).floor();
+      return '$years ${years == 1 ? 'year' : 'years'} ago';
+    } else if (difference.inDays >= 7) {
+      int weeks = (difference.inDays / 7).floor();
+      return '$weeks ${weeks == 1 ? 'week' : 'weeks'} ago';
+    } else if (difference.inDays >= 1) {
+      return '${difference.inDays} ${difference.inDays == 1 ? 'day' : 'days'} ago';
+    } else if (difference.inHours >= 1) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour' : 'hours'} ago';
+    } else if (difference.inMinutes >= 1) {
+      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute' : 'minutes'} ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
 
   Widget _buildCardInfo() {
     return Container(

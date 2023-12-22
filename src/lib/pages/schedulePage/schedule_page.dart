@@ -23,6 +23,13 @@ class _SchedulePageState extends State<SchedulePage> {
   late bool _isLoading = false;
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    refresh();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
