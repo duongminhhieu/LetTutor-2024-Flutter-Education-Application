@@ -125,6 +125,11 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
+                endWidget: Text("Meeting is ready..." , style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),),
               ),
               SizedBox(height: 20),
               ElevatedButton(
