@@ -86,7 +86,7 @@ class UserRepository extends BaseRepository {
         ),
       });
       final response = await service.postFormData(
-          url: APIUser.USER_INFO,
+          url: APIUser.USER_UPLOAD_AVATAR,
           headers: {"Authorization": "Bearer $accessToken"},
           data: formDataImage) as BoundResource;
       switch (response.statusCode) {

@@ -33,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late DateTime selectedDate;
   late bool hasInitValue = false;
   XFile? _pickedFile;
+  late bool _isLoading = false;
 
   Future<void> changeImage() async {
     // Show options for image source (camera or gallery)
@@ -399,96 +400,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildSaveButton() {
     return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          // Update user info
-          AuthProvider authProvider =
-              Provider.of<AuthProvider>(context, listen: false);
-          UserProvider userProvider =
-              Provider.of<UserProvider>(context, listen: false);
+      onPressed: () async {
+        setState(() {
+          _isLoading = true;
+        });
 
-          User updatedUser = authProvider.currentUser!;
-          updatedUser?.name = nameController.text;
-          updatedUser?.email = emailController.text;
-          updatedUser?.phone = phoneController.text;
-          updatedUser?.country = countryController.text;
-          updatedUser?.birthday =
-              "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-          updatedUser?.level = selectedLevel.toUpperCase();
-          updatedUser?.studySchedule = studyScheduleController.text;
+        await handleSaveProfile();
 
-          // Clear existing data
-          updatedUser.learnTopics = [];
-          updatedUser.testPreparations = [];
-
-          for (var element in selectedCategory) {
-            for (var speciality in Specialities.specialities) {
-              if (speciality.name == element) {
-                updatedUser.testPreparations?.add(speciality);
-              }
-            }
-
-            for (var topic in Specialities.topics) {
-              if (topic.name == element) {
-                updatedUser.learnTopics?.add(topic);
-              }
-            }
-          }
-
-          if (_pickedFile != null) {
-            userProvider.callAPIUpdateAvatar(
-                authProvider,
-                _pickedFile!.path,
-                (userUpdate) => {
-                      authProvider.saveLoginInfo(
-                          userUpdate, authProvider.token!),
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Update Avatar successful!.'),
-                          backgroundColor: Colors.green,
-                          behavior: SnackBarBehavior.floating,
-                          duration: Duration(seconds: 2),
-                        ),
-                      )
-                    },
-                (err) => {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Update Avatar failed!.'),
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                          duration: Duration(seconds: 2),
-                        ),
-                      )
-                    });
-          }
-
-          userProvider.callAPIUpdateProfile(
-              authProvider,
-              updatedUser,
-              (updatedUser) => {
-                    authProvider.saveLoginInfo(
-                        updatedUser, authProvider.token!),
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Update successful!.'),
-                        backgroundColor: Colors.green,
-                        behavior: SnackBarBehavior.floating,
-                        duration: Duration(seconds: 2),
-                      ),
-                    )
-                  },
-              (err) => {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Update failed!.'),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
-                        duration: Duration(seconds: 2),
-                      ),
-                    )
-                  });
-        }
+        setState(() {
+          _isLoading = false;
+        });
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -497,10 +418,20 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(46),
       ),
-      child: const Text(
-        "Save changes",
-        style: TextStyle(fontSize: 16),
-      ),
+      child: !_isLoading
+          ? Text(
+              "Save changes",
+              style: TextStyle(fontSize: 16),
+            )
+          : Container(
+              height: 20,
+              width: 20,
+            child: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+          ),
     );
   }
 
@@ -630,5 +561,95 @@ class _ProfilePageState extends State<ProfilePage> {
             }).toList(),
           )),
     );
+  }
+
+  Future<void> handleSaveProfile() async {
+    if (_formKey.currentState!.validate()) {
+      // Update user info
+      AuthProvider authProvider =
+          Provider.of<AuthProvider>(context, listen: false);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+
+      User updatedUser = authProvider.currentUser!;
+      updatedUser?.name = nameController.text;
+      updatedUser?.email = emailController.text;
+      updatedUser?.phone = phoneController.text;
+      updatedUser?.country = countryController.text;
+      updatedUser?.birthday =
+          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+      updatedUser?.level = selectedLevel.toUpperCase();
+      updatedUser?.studySchedule = studyScheduleController.text;
+
+      // Clear existing data
+      updatedUser.learnTopics = [];
+      updatedUser.testPreparations = [];
+
+      for (var element in selectedCategory) {
+        for (var speciality in Specialities.specialities) {
+          if (speciality.name == element) {
+            updatedUser.testPreparations?.add(speciality);
+          }
+        }
+
+        for (var topic in Specialities.topics) {
+          if (topic.name == element) {
+            updatedUser.learnTopics?.add(topic);
+          }
+        }
+      }
+
+      if (_pickedFile != null) {
+        userProvider.callAPIUpdateAvatar(
+            authProvider,
+            _pickedFile!.path,
+            (userUpdate) => {
+                  authProvider.saveLoginInfo(userUpdate, authProvider.token!),
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Update Avatar successful!.'),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 2),
+                    ),
+                  )
+                },
+            (err) => {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Update Avatar failed!: $err'),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 2),
+                    ),
+                  )
+                });
+      }
+
+      userProvider.callAPIUpdateProfile(
+          authProvider,
+          updatedUser,
+          (updatedUser) => {
+                authProvider.saveLoginInfo(updatedUser, authProvider.token!),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Update successful!.'),
+                    backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                )
+              },
+          (err) => {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Update failed!.'),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                )
+              });
+    }
   }
 }
