@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 import 'package:src/providers/tutor_provider.dart';
 
+import '../../../providers/auth_provider.dart';
 import '../../detailATeacherPage/detail-a-teacher_page.dart';
 
 class ListTeacherComponent extends StatefulWidget {
@@ -14,8 +15,14 @@ class ListTeacherComponent extends StatefulWidget {
 
 class _ListTeacherComponentState extends State<ListTeacherComponent> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     TutorProvider tutorProvider = context.watch<TutorProvider>();
+    var authProvider = Provider.of<AuthProvider>(context);
 
     return Container(
       padding: const EdgeInsets.only(top: 32, left: 16, right: 16),
@@ -41,52 +48,73 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  debugPrint("Tutor info: " + tutorProvider.tutors[index].name.toString());
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => DetailATeacherPage(),
-                    settings: RouteSettings(arguments: tutorProvider.tutors[index]),
-                  ),);
+                  debugPrint("Tutor info: " +
+                      tutorProvider.tutors[index].name.toString());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailATeacherPage(),
+                      settings:
+                          RouteSettings(arguments: {
+                            'tutor': tutorProvider.tutors[index],
+                            'index': index,
+                          },),
+                    ),
+                  );
                 },
                 child: TutorTeacherCard(
-                  imageAsset: tutorProvider.tutors[index].avatar,
-                  name: tutorProvider.tutors[index].name,
-                  rating: tutorProvider.tutors[index].rating,
-                  subtitle: tutorProvider.tutors[index].bio,
-                  isFavorite: false,
-                  country: tutorProvider.tutors[index].country,
-                  filterLabels: convertStringToFilterLabels(
-                      tutorProvider.tutors[index].specialties),
+                  tutor: tutorProvider.tutors[index],
+                  isFavorite: tutorProvider
+                      .checkIfTutorIsFavored(tutorProvider.tutors[index]),
+                  onClickFavorite: () {
+                    tutorProvider.callApiManageFavoriteTutor(
+                        tutorProvider.tutors[index], authProvider,
+                        (message, unfavored) async {
+                      setState(() {
+                        if (unfavored) {
+                          tutorProvider.favTutorSecondId
+                              .remove(tutorProvider.tutors[index].userId);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Unfavored tutor successfully!"),
+                              duration: Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else {
+                          tutorProvider.favTutorSecondId
+                              .add(tutorProvider.tutors[index].userId!);
+                          tutorProvider.favTutorSecondId =
+                              tutorProvider.favTutorSecondId.toSet().toList();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Favored tutor successfully!"),
+                              duration: Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                      });
+                    }, (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(error),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    });
+                  },
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );
-  }
-
-  List<String>? convertStringToFilterLabels(String? inputString) {
-    List<String>? labels = inputString?.split(',');
-
-    // Một mapping giữa các từ khóa trong chuỗi và nhãn tương ứng
-    Map<String, String> keywordToLabel = {
-      'business-english': 'English for Business',
-      'conversational-english': 'Conversational',
-      'english-for-kids': 'English for Kids',
-      'ielts': 'IELTS',
-      'starters': 'STARTERS',
-      'movers': 'MOVERS',
-      'flyers': 'FLYERS',
-      'ket': 'KET',
-      'pet': 'PET',
-      'toefl': 'TOEFL',
-      'toeic': 'TOEIC',
-    };
-
-    List<String>? filterLabels = labels?.map((label) {
-      return keywordToLabel[label] ?? label;
-    }).toList();
-
-    return filterLabels;
   }
 }

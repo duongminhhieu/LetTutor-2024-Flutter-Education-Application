@@ -2,8 +2,11 @@ import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:src/commons/appBar.dart';
+import 'package:src/providers/auth_provider.dart';
 
+import '../../commons/loadingOverlay.dart';
 import '../../providers/user_provider.dart';
 import '../loginPage/login_page.dart';
 class SettingPage extends StatefulWidget {
@@ -27,13 +30,13 @@ class _SettingPageState extends State<SettingPage> {
         child: ListView(
           children: [
             // User card
-            Consumer<UserProvider>(
-              builder: (BuildContext context, UserProvider userProvider, Widget? child) {
+            Consumer<AuthProvider>(
+              builder: (BuildContext context, AuthProvider authProvider, Widget? child) {
                 return BigUserCard(
                   backgroundColor: Colors.blue,
-                  userName: userProvider.userData?.user!.name ?? "Anonymous",
-                  userProfilePic: NetworkImage(userProvider.userData?.user!.avatar ?? "https://yt3.googleusercontent.com/mm2-5anuZ6ghmK2zL6QM7wciD6kuupOfOagiAh5vZE1hx9tRhKEXTAExZUUY4PVq2RSw9jBpBQ=s900-c-k-c0x00ffffff-no-rj"
-                  ,scale:1),
+                  userName: authProvider.currentUser?.name ?? "Anonymous",
+                  userProfilePic: NetworkImage(authProvider.currentUser?.avatar ??
+                      "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg", scale: 1.0),
                   cardActionWidget: SettingsItem(
                     icons: Icons.edit,
                     iconStyle: IconStyle(
@@ -149,17 +152,9 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 SettingsItem(
                   onTap: () {
-                    final userProvider = Provider.of<UserProvider>(context, listen: false);
-                    userProvider.logout();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Log out successful!.'),
-                        backgroundColor: Colors.green,
-                        behavior: SnackBarBehavior.floating,
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                    var authProvider =
+                    Provider.of<AuthProvider>(context, listen: false);
+                    handleLogout(context, authProvider);
 
                   },
                   icons: Icons.logout,
@@ -175,6 +170,44 @@ class _SettingPageState extends State<SettingPage> {
         ),
       ),
     );
+  }
+
+  void handleLogout(BuildContext context, AuthProvider authProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Log out"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                logOut(authProvider);
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoadingOverlay(child: LoginPage()),
+                  ),
+                );
+              },
+              child: const Text("Log out"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> logOut(AuthProvider authProvider) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    authProvider.clearUserInfo();
   }
 
 

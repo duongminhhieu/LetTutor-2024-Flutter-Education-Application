@@ -10,6 +10,7 @@ class InfoPageHistoryComponent extends StatelessWidget {
     return Container(
       child: Column(
         children: [
+          SizedBox(height: 16),
           _buildImage(),
           SizedBox(height: 16),
           _buildTitleText(),

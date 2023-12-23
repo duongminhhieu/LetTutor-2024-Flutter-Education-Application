@@ -6,25 +6,28 @@ class FavoriteTutor {
   String? secondId;
   String? createdAt;
   String? updatedAt;
-  TutorExtractedInfo secondInfo;
+  TutorExtractedInfo? secondInfo;
 
   FavoriteTutor({
-    required this.id,
-    required this.firstId,
-    required this.secondId,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.secondInfo,
+    this.id,
+     this.firstId,
+     this.secondId,
+     this.createdAt,
+     this.updatedAt,
+     this.secondInfo,
   });
 
   factory FavoriteTutor.fromJson(Map<String, dynamic> json) {
     return FavoriteTutor(
-      id: json['id'],
-      firstId: json['firstId'],
-      secondId: json['secondId'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      secondInfo: TutorExtractedInfo.fromJson(json['secondInfo']),
+      id: json['id'] as String?,
+      firstId: json['firstId'] as String?,
+      secondId: json['secondId'] as String?,
+      createdAt: json['createdAt'] as String?,
+      updatedAt: json['updatedAt'] as String?,
+      secondInfo: json['secondInfo'] == null
+          ? null
+          : TutorExtractedInfo.fromJson(
+          json['secondInfo'] as Map<String, dynamic>),
     );
   }
 }

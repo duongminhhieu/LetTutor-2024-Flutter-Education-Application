@@ -1,7 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:src/commons/loadingOverlay.dart';
 
 import '../pages/loginPage/login_page.dart';
+import '../providers/auth_provider.dart';
 import '../providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -14,9 +18,9 @@ class CustomDrawer extends StatelessWidget {
         children: [
           ListTile(
             title: Container(
-              child: Consumer<UserProvider>(
-
-                builder: (BuildContext context, UserProvider userProvider, Widget? child) {
+              child: Consumer<AuthProvider>(
+                builder: (BuildContext context, AuthProvider authProvider,
+                    Widget? child) {
                   return Row(
                     children: [
                       Container(
@@ -27,13 +31,23 @@ class CustomDrawer extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                         child: ClipOval(
-                          child: Image.network(userProvider.userData?.user!.avatar ?? "https://yt3.googleusercontent.com/mm2-5anuZ6ghmK2zL6QM7wciD6kuupOfOagiAh5vZE1hx9tRhKEXTAExZUUY4PVq2RSw9jBpBQ=s900-c-k-c0x00ffffff-no-rj",
-                            fit: BoxFit.cover,),
+                          child: CachedNetworkImage(
+                            width: double.maxFinite,
+                            fit: BoxFit.fitHeight,
+                            imageUrl: authProvider.currentUser?.avatar ??
+                                "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                Center(
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress)),
+                            errorWidget: (context, url, error) => Image.network(
+                                "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        userProvider.userData?.user!.name ?? "Anonymous",
+                        authProvider.currentUser!.name ?? "Anonymous",
                         style: TextStyle(
                             color: Colors.black87,
                             fontSize: 14,
@@ -55,8 +69,11 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               child: const Row(
                 children: [
-                  Icon(Icons.calendar_month_rounded, size: 36,
-                    color: Colors.blue,),
+                  Icon(
+                    Icons.calendar_month_rounded,
+                    size: 36,
+                    color: Colors.blue,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     "Recurring Lesson Schedule",
@@ -78,7 +95,11 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               child: const Row(
                 children: [
-                  Icon(Icons.co_present, size: 36, color: Colors.blue,),
+                  Icon(
+                    Icons.co_present,
+                    size: 36,
+                    color: Colors.blue,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     "Tutor",
@@ -101,7 +122,10 @@ class CustomDrawer extends StatelessWidget {
               child: const Row(
                 children: [
                   Icon(
-                    Icons.school, size: 36, color: Colors.blue,),
+                    Icons.school,
+                    size: 36,
+                    color: Colors.blue,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     "Courses",
@@ -124,7 +148,11 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               child: const Row(
                 children: [
-                  Icon(Icons.people_alt, size: 36, color: Colors.blue,),
+                  Icon(
+                    Icons.people_alt,
+                    size: 36,
+                    color: Colors.blue,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     "Become a tutor",
@@ -146,7 +174,11 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               child: const Row(
                 children: [
-                  Icon(Icons.logout, size: 36, color: Colors.blue,),
+                  Icon(
+                    Icons.logout,
+                    size: 36,
+                    color: Colors.blue,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     "Log out",
@@ -161,12 +193,53 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               // Update the state of the app
               // Then close the drawer
-              userProvider.logout();
-              Navigator.pop(context);
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));            },
+              var authProvider =
+                  Provider.of<AuthProvider>(context, listen: false);
+              handleLogout(context, authProvider);
+            },
           ),
         ],
       ),
     );
   }
+
+  void handleLogout(BuildContext context, AuthProvider authProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Log out"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                logOut(authProvider);
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoadingOverlay(child: LoginPage()),
+                  ),
+                );
+              },
+              child: const Text("Log out"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> logOut(AuthProvider authProvider) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    authProvider.clearUserInfo();
+  }
+
 }

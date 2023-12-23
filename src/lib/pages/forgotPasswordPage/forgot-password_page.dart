@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../commons/loadingOverlay.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utilities/validator.dart';
 
@@ -131,34 +133,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Widget _buildResetButton() {
+    var authProvider = Provider.of<AuthProvider>(context);
     return ElevatedButton(
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          var userProvider = Provider.of<UserProvider>(context, listen: false);
-          // Check login status
-          if (userProvider.email == emailController.text) {
-            // Login successful
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Your password: ${userProvider.password}'),
-                backgroundColor: Colors.blue,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 2),
-              ),
-            );
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/loginPage');
-          } else {
-            // Invalid credentials, show an error message or handle accordingly
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Invalid email or password. Please try again.'),
-                backgroundColor: Colors.red,
-                behavior: SnackBarBehavior.floating,
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
+          handleResetPassword(authProvider);
         }
 
       },
@@ -247,6 +226,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ],
       ),
     );
+  }
+
+  // handle forgot password
+  void handleResetPassword(AuthProvider authProvider) async {
+    LoadingOverlay.of(context).show();
+    try {
+      await authProvider.authRepository.forgotPassword(
+          email: emailController.text,
+          showMessage: (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(e.toString())),
+            );
+          }
+      );
+    }
+    finally {
+      LoadingOverlay.of(context).hide();
+    }
   }
 }
 

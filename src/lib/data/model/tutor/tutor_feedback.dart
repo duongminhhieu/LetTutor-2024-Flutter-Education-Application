@@ -1,5 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:src/data/model/tutor/tutor_info.dart';
 
+@JsonSerializable()
 class FeedbackTutor {
   final String? id;
   final String? bookingId;
@@ -33,7 +35,7 @@ class FeedbackTutor {
       content: json['content'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      firstInfo: TutorInfo.fromJson(json['firstInfo']),
+      firstInfo: json['firstInfo'] == null ? null : TutorInfo.fromJson(json['firstInfo']),
     );
   }
 }

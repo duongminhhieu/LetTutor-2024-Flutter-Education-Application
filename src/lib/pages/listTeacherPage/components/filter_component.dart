@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:src/data/model/tutor/tutor.dart';
+import 'package:src/providers/auth_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 
 import '../../../commons/dateSelection.dart';
@@ -184,6 +184,9 @@ class _FilterWidgetState extends State<FilterWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+   var authProvider = Provider.of<AuthProvider>(context);
+
     return Column(
       children: [
         Wrap(
@@ -205,7 +208,10 @@ class _FilterWidgetState extends State<FilterWidget> {
                     setState(() {
                       if (isSelected) {
                         widget.selectedFilter = option;
-                        tutorProvider.searchTutor(filterStr: widget.selectedFilter, tutorName: widget.tutorNameController.text, tutorNation: widget.tutorNationController.text);
+                        List<String> specialities = [];
+                        specialities.add(option);
+                        tutorProvider.callAPISearchTutor(1, widget.tutorNameController.text, specialities, authProvider);
+                        //tutorProvider.searchTutor(filterStr: widget.selectedFilter, tutorName: widget.tutorNameController.text, tutorNation: widget.tutorNationController.text);
                       } else {
                         widget.selectedFilter = 'All';
                       }

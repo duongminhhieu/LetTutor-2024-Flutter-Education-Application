@@ -1,16 +1,17 @@
 import 'dart:io';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
 import 'package:src/data/model/user/user.dart';
-import 'package:src/data/model/user/user_data.dart';
 import 'package:src/pages/profilePage/components/birthday-select.dart';
 import 'package:src/pages/profilePage/components/text-area.dart';
 import 'package:src/providers/user_provider.dart';
+import 'package:src/utilities/const.dart';
+import '../../providers/auth_provider.dart';
 import '../../utilities/validator.dart';
-import 'components/country-select.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -25,39 +26,14 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController studyScheduleController = TextEditingController();
-  // Define the list of countries
-  List<String> countries = ['Vietnam', 'United States', 'Canada', 'Other'];
-  String selectedCountry = "Vietnam";
-  List<String> itemsLevel = [
-    "Beginner",
-    "Upper-Beginner",
-    "Pre-Intermediate",
-    "Intermediate",
-    "Upper-Intermediate",
-    "Pre-Advanced",
-    "Advanced",
-    "Very Advanced"
-  ];
-  List<String> itemsCategory = [
-    'All',
-    'English-For-Kids',
-    'Business-English',
-    'TOEIC',
-    'Conversational',
-    "TOEFL",
-    'PET',
-    "KET",
-    'IELTS',
-    'TOEFL',
-    "STARTERS",
-    "MOVERS",
-    "FLYERS",
-  ];
+  final countryController = TextEditingController();
   String selectedLevel = "Beginner";
+  List<String> itemsCategory = [];
   List<String> selectedCategory = [];
   late DateTime selectedDate;
   late bool hasInitValue = false;
   XFile? _pickedFile;
+  late bool _isLoading = false;
 
   Future<void> changeImage() async {
     // Show options for image source (camera or gallery)
@@ -121,60 +97,49 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void initValues(UserData userData) {
+  void initValues(User userData) {
     setState(() {
-      nameController.text = userData.user?.name ?? "";
-      emailController.text = userData.user?.email ?? "";
-      phoneController.text = userData.user?.phone ?? "";
-      studyScheduleController.text = userData.user?.studySchedule ?? "";
-      String country = userData.user?.country ?? "Others";
-      bool check = false;
-      for (var element in countries) {
-        if (element.toLowerCase() == country.toLowerCase()) {
-          check = true;
-          selectedCountry = element;
-          break;
-        }
-      }
-      if (check == false) {
-        setState(() {
-          countries.add(country);
-        });
-      }
-      selectedDate =
-          DateTime.parse(userData.user?.birthday ?? DateTime.now().toString());
+      nameController.text = userData?.name ?? "";
+      emailController.text = userData?.email ?? "";
+      phoneController.text = userData?.phone ?? "";
+      studyScheduleController.text = userData?.studySchedule ?? "";
+      countryController.text = userData?.country ?? "";
+      if (userData?.birthday != null) {
+        List<String> dateParts = userData!.birthday!.split('-');
 
-      String level = userData.user?.level ?? "Beginner";
-      check = false;
-      for (var element in itemsLevel) {
+        if (dateParts.length == 3) {
+          int year = int.parse(dateParts[0]);
+          int month = int.parse(dateParts[1]);
+          int day = int.parse(dateParts[2]);
+
+          selectedDate = DateTime(year, month, day);
+        } else {
+          // Handle invalid date format
+          selectedDate = DateTime.now();
+        }
+      } else {
+        selectedDate = DateTime.now();
+      }
+      String level = userData?.level ?? "BEGINNER";
+      for (var element in ConstValue.levelList) {
         if (element.toLowerCase().compareTo(level.toLowerCase()) == 0) {
-          check = true;
           selectedLevel = element;
           break;
         }
       }
-      if (check == false) {
-        setState(() {
-          itemsLevel.add(level);
-        });
+      for (var element in Specialities.specialities) {
+        itemsCategory.add(element.name!);
+      }
+      for (var element in Specialities.topics) {
+        itemsCategory.add(element.name!);
       }
 
-      // check = false;
-      // userData.user?.learnTopics?.forEach((element) {
-      //   selectedCategory.add(element.key!.toUpperCase());
-      // });
-      // for(var element in itemsCategory){
-      //   userData.user?.learnTopics?.forEach((e) {
-      //     if(e.key?.toString().compareTo(element.toLowerCase()) != null){
-      //       check == true;
-      //
-      //       setState(() {
-      //         itemsCategory.add(e.key!.toUpperCase().toString());
-      //       });
-      //     }
-      //   });
-      // }
-
+      for (var element in userData?.learnTopics ?? []) {
+        selectedCategory.add(element.name!);
+      }
+      for (var element in userData?.testPreparations ?? []) {
+        selectedCategory.add(element.name!);
+      }
 
       hasInitValue = true;
     });
@@ -182,11 +147,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    UserData userData = context.select<UserProvider, UserData>(
-        (userProvider) => userProvider.userData);
+    final authProvider = Provider.of<AuthProvider>(context);
 
     if (hasInitValue == false) {
-      initValues(userData);
+      initValues(authProvider.currentUser!);
     }
     return Scaffold(
       appBar: AppBar(
@@ -211,15 +175,15 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.only(left: 10, right: 10),
-        decoration: BoxDecoration(
-          border: Border(
-            left: BorderSide(width: 1.0, color: Colors.grey.shade300),
-            right: BorderSide(width: 1.0, color: Colors.grey.shade300),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(width: 1.0, color: Colors.grey.shade300),
+              right: BorderSide(width: 1.0, color: Colors.grey.shade300),
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
           child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -253,7 +217,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   image: _pickedFile != null
                                       ? FileImage(File(_pickedFile!.path))
                                           as ImageProvider<Object>
-                                      : NetworkImage(userData.user?.avatar ??
+                                      : NetworkImage(authProvider
+                                              .currentUser?.avatar ??
                                           "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"))),
                         ),
                         Positioned(
@@ -288,7 +253,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 10),
                   Center(
                     child: Text(
-                      userData.user?.name ?? "Anonymous",
+                      authProvider.currentUser?.name ?? "Anonymous",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
@@ -297,8 +262,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10),
                   Center(
-                      child:
-                          _buildInfo("Account ID: ", userData.user!.id! ?? "")),
+                      child: _buildInfo(
+                          "Account ID: ", authProvider.currentUser!.id! ?? "")),
                   SizedBox(height: 10),
                   Center(
                       child: GestureDetector(
@@ -331,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  _buildForm(userData),
+                  _buildForm(authProvider.currentUser!),
                 ],
               ),
             ),
@@ -341,7 +306,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildForm(UserData userData) {
+  Widget _buildForm(User userData) {
     return Container(
       margin: EdgeInsets.all(20),
       child: Form(
@@ -353,29 +318,50 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildGreyText("Name"),
             const SizedBox(height: 8),
-            _buildInputField(nameController, 'Enter your name',
+            _buildInputField(nameController, 'Enter your name', true,
                 validator: Validator.validateName),
             const SizedBox(height: 16),
             _buildGreyText("Email Address"),
             const SizedBox(height: 8),
-            _buildInputField(emailController, "Enter your email",
+            _buildInputField(emailController, "Enter your email", false,
                 validator: Validator.validateEmail),
             const SizedBox(height: 16),
             _buildGreyText("Country"),
             const SizedBox(height: 8),
-            CountrySelect(
-              countries: countries,
-              selectedCountry: selectedCountry,
-              onCountryChanged: (String newCountry) {
-                setState(() {
-                  selectedCountry = newCountry;
-                });
+            TextFormField(
+              readOnly: true,
+              onTap: () {
+                showCountryPicker(
+                  context: context,
+                  showPhoneCode: false,
+                  onSelect: (Country country) {
+                    countryController.text = country.name!;
+                  },
+                );
               },
+              controller: countryController,
+              style: TextStyle(
+                fontSize: 14,
+              ),
+              decoration: InputDecoration(
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors
+                          .grey.shade400), // Set the color for disabled state
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                ),
+                border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                hintText: "Country",
+                hintStyle: TextStyle(color: Colors.grey.shade400),
+                isDense: true, // Added this
+                contentPadding: EdgeInsets.all(12),
+              ),
             ),
             const SizedBox(height: 16),
             _buildGreyText("Phone Number"),
             const SizedBox(height: 8),
-            _buildInputField(phoneController, "Enter your phone",
+            _buildInputField(phoneController, "Enter your phone", false,
                 validator: Validator.validatePhoneNumber),
             const SizedBox(height: 16),
             _buildGreyText("Birthday"),
@@ -391,11 +377,12 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
             _buildGreyText("My level"),
             const SizedBox(height: 8),
-            _buildSelectLevel("Choose your level", itemsLevel, selectedLevel),
+            _buildSelectLevel(
+                "Choose your level", ConstValue.levelList, selectedLevel),
             const SizedBox(height: 16),
             _buildGreyText("Want to learn"),
             const SizedBox(height: 8),
-            _buildSelect("Want to learn", itemsCategory, selectedCategory),
+            _buildSelect("Want to learn", itemsCategory),
             const SizedBox(height: 16),
             _buildGreyText("Study Schedule"),
             const SizedBox(height: 8),
@@ -413,29 +400,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildSaveButton() {
     return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          // Update user info
-          var userProvider = Provider.of<UserProvider>(context, listen: false);
-          User updatedUser = userProvider.userData.user!;
-          updatedUser?.name = nameController.text;
-          updatedUser?.email = emailController.text;
-          updatedUser?.phone = phoneController.text;
-          updatedUser?.country = selectedCountry;
-          updatedUser?.birthday = "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
-          updatedUser?.level = selectedLevel;
-          updatedUser?.studySchedule = studyScheduleController.text;
-          userProvider.updateData(updatedUser!);
+      onPressed: () async {
+        setState(() {
+          _isLoading = true;
+        });
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Update successful!.'),
-              backgroundColor: Colors.green,
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
+        await handleSaveProfile();
+
+        setState(() {
+          _isLoading = false;
+        });
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -444,10 +418,20 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(46),
       ),
-      child: const Text(
-        "Save changes",
-        style: TextStyle(fontSize: 16),
-      ),
+      child: !_isLoading
+          ? Text(
+              "Save changes",
+              style: TextStyle(fontSize: 16),
+            )
+          : Container(
+              height: 20,
+              width: 20,
+            child: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+          ),
     );
   }
 
@@ -473,17 +457,25 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller, String hintText,
+  Widget _buildInputField(
+      TextEditingController controller, String hintText, bool isEnable,
       {isPassword = false, Function? validator}) {
     return TextFormField(
       validator: (value) {
         return validator!(value ?? "");
       },
+      enabled: isEnable,
+      readOnly: !isEnable,
       controller: controller,
       style: TextStyle(
         fontSize: 14,
       ),
       decoration: InputDecoration(
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.grey.shade400), // Set the color for disabled state
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8.0))),
         hintText: hintText,
@@ -503,8 +495,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildSelect(
-      String title, List<String> selects, List<String> selected) {
+  Widget _buildSelect(String title, List<String> selects) {
     return Container(
       width: double.infinity, // Set width to match parent
       height: 42.0, // Set height to match TextInput
@@ -519,11 +510,11 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         onChanged: (List<String> x) {
           setState(() {
-            selected = x;
+            selectedCategory = x;
           });
         },
         options: selects,
-        selectedValues: selected,
+        selectedValues: selectedCategory,
         whenEmpty: title,
       ),
     );
@@ -536,39 +527,129 @@ class _ProfilePageState extends State<ProfilePage> {
       height: 42.0, // Set height to match TextInput
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0), // Match the TextInput border radius
+        borderRadius:
+            BorderRadius.circular(8.0), // Match the TextInput border radius
         border: Border.all(
           color: Colors.grey.shade400,
           width: 1.0,
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child:  DropdownButton<String>(
-          underline: Container(),
-          isDense: true,
-          isExpanded: true,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.black,
-          ),
-          value: selected,
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              setState(() {
-                selectedLevel = newValue;
-
-              });
-            }
-          },
-          items:itemsLevel.map<DropdownMenuItem<String>>((String level) {
-            return DropdownMenuItem<String>(
-              value: level,
-              child: Text(level),
-            );
-          }).toList(),
-        )
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: DropdownButton<String>(
+            underline: Container(),
+            isDense: true,
+            isExpanded: true,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+            value: selected,
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  selectedLevel = newValue;
+                });
+              }
+            },
+            items: ConstValue.levelList
+                .map<DropdownMenuItem<String>>((String level) {
+              return DropdownMenuItem<String>(
+                value: level,
+                child: Text(level),
+              );
+            }).toList(),
+          )),
     );
+  }
+
+  Future<void> handleSaveProfile() async {
+    if (_formKey.currentState!.validate()) {
+      // Update user info
+      AuthProvider authProvider =
+          Provider.of<AuthProvider>(context, listen: false);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+
+      User updatedUser = authProvider.currentUser!;
+      updatedUser?.name = nameController.text;
+      updatedUser?.email = emailController.text;
+      updatedUser?.phone = phoneController.text;
+      updatedUser?.country = countryController.text;
+      updatedUser?.birthday =
+          "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
+      updatedUser?.level = selectedLevel.toUpperCase();
+      updatedUser?.studySchedule = studyScheduleController.text;
+
+      // Clear existing data
+      updatedUser.learnTopics = [];
+      updatedUser.testPreparations = [];
+
+      for (var element in selectedCategory) {
+        for (var speciality in Specialities.specialities) {
+          if (speciality.name == element) {
+            updatedUser.testPreparations?.add(speciality);
+          }
+        }
+
+        for (var topic in Specialities.topics) {
+          if (topic.name == element) {
+            updatedUser.learnTopics?.add(topic);
+          }
+        }
+      }
+
+      if (_pickedFile != null) {
+        userProvider.callAPIUpdateAvatar(
+            authProvider,
+            _pickedFile!.path,
+            (userUpdate) => {
+                  authProvider.saveLoginInfo(userUpdate, authProvider.token!),
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Update Avatar successful!.'),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 2),
+                    ),
+                  )
+                },
+            (err) => {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Update Avatar failed!: $err'),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 2),
+                    ),
+                  )
+                });
+      }
+
+      userProvider.callAPIUpdateProfile(
+          authProvider,
+          updatedUser,
+          (updatedUser) => {
+                authProvider.saveLoginInfo(updatedUser, authProvider.token!),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Update successful!.'),
+                    backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                )
+              },
+          (err) => {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Update failed!.'),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 2),
+                  ),
+                )
+              });
+    }
   }
 }

@@ -1,40 +1,40 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
+import '../../../data/model/tutor/tutor.dart';
+import '../../../data/model/user/learn_topic.dart';
+import '../../../data/model/user/test_preparation.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/tutor_provider.dart';
+import '../../../utilities/const.dart';
 
 class TutorTeacherCard extends StatefulWidget {
-  final String? imageAsset;
-  final String? name;
-  final double? rating;
-  final String? subtitle;
-  final String? country;
-  final bool? isFavorite;
-  final List<String>? filterLabels; // Danh sách các nhãn cho FilterChips
+  final Tutor tutor;
+  final bool isFavorite;
+  final VoidCallback onClickFavorite;
 
-  TutorTeacherCard({
-     this.imageAsset,
-     this.name,
-     this.rating,
-     this.subtitle,
-      this.country,
-     this.isFavorite,
-     this.filterLabels, // Thêm danh sách nhãn
-  });
+  TutorTeacherCard(
+      {required this.tutor,
+      required this.isFavorite,
+      required this.onClickFavorite});
 
   @override
   _TutorTeacherCardState createState() => _TutorTeacherCardState();
 }
 
 class _TutorTeacherCardState extends State<TutorTeacherCard> {
-  late bool _isFavorite;
-
+  late bool _isFavored;
   @override
   void initState() {
     super.initState();
-    _isFavorite = widget.isFavorite!;
+    _isFavored = widget.isFavorite;
   }
 
   @override
   Widget build(BuildContext context) {
+    TutorProvider tutorProvider = context.watch<TutorProvider>();
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -58,8 +58,18 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                       shape: BoxShape.circle,
                     ),
                     child: ClipOval(
-                      child: widget.imageAsset == null ? Image.network("https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1686033849227.jpeg") : 
-                      Image.network(widget.imageAsset!),
+                      child: CachedNetworkImage(
+                        width: double.maxFinite,
+                        fit: BoxFit.fitHeight,
+                        imageUrl: widget.tutor.avatar ??
+                            "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) => Image.network(
+                            "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -67,12 +77,18 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                     right: 0,
                     child: IconButton(
                       icon: Icon(
-                        _isFavorite ? Icons.favorite : Icons.favorite_border_rounded,
-                        color: _isFavorite ? Colors.red : null,
+                        tutorProvider.checkIfTutorIsFavored(widget.tutor!)
+                            ? Icons.favorite
+                            : Icons.favorite_border_rounded,
+                        color:
+                            tutorProvider.checkIfTutorIsFavored(widget.tutor!)
+                                ? Colors.red
+                                : null,
                       ),
                       onPressed: () {
+                        widget.onClickFavorite();
                         setState(() {
-                          _isFavorite = !_isFavorite;
+                          _isFavored = !_isFavored;
                         });
                       },
                       color: Colors.blueAccent,
@@ -86,7 +102,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.name ?? '',
+                    widget.tutor.name ?? '',
                     style: const TextStyle(
                       fontSize: 24,
                       color: Colors.black,
@@ -97,11 +113,11 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    SvgPicture.asset('lib/assets/images/vietnam.svg',
-                        semanticsLabel: "My SVG", height: 20),
-                    SizedBox(width: 5),
-                     Text(
-                     widget.country ?? "",
+                    // SvgPicture.asset('lib/assets/images/vietnam.svg',
+                    //     semanticsLabel: "My SVG", height: 20),
+                    // SizedBox(width: 5),
+                    Text(
+                      widget.tutor.country ?? "",
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey,
@@ -117,7 +133,9 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               children: <Widget>[
                 for (int i = 0; i < 5; i++)
                   Icon(
-                    i < (widget.rating == null ? 0 : widget.rating!) ? Icons.star : Icons.star_border,
+                    i < (widget.tutor.rating == null ? 0 : widget.tutor.rating!)
+                        ? Icons.star
+                        : Icons.star_border,
                     color: Colors.yellow,
                     size: 16,
                   ),
@@ -127,7 +145,8 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
               alignment: Alignment.centerLeft,
               child: Wrap(
                 spacing: 8.0,
-                children: widget.filterLabels!.map((label) {
+                children:
+                    convertKeysToNames(widget.tutor.specialties!)!.map((label) {
                   return FilterChip(
                     backgroundColor: Colors.lightBlue.shade100,
                     label: Text(
@@ -148,7 +167,7 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                widget.subtitle!,
+                widget.tutor.bio!,
                 textAlign: TextAlign.justify,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
@@ -159,7 +178,9 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                     height: 1.3),
               ),
             ),
-            SizedBox(height: 32,),
+            SizedBox(
+              height: 32,
+            ),
             ElevatedButton(
               onPressed: () {
                 //Navigator.pushNamed(context, '/schedulePage');
@@ -182,7 +203,8 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                     Icons.add_card_rounded, // Use the book icon
                     color: Colors.blue, // Icon color
                   ),
-                  SizedBox(width: 8), // Create a space between the icon and the text
+                  SizedBox(
+                      width: 8), // Create a space between the icon and the text
                   Text(
                     'Book',
                     textAlign: TextAlign.center,
@@ -194,10 +216,32 @@ class _TutorTeacherCardState extends State<TutorTeacherCard> {
                 ],
               ),
             )
-
           ],
         ),
       ),
     );
+  }
+
+  List<String> convertKeysToNames(String keys) {
+    List<String> keyList = keys.split(',');
+    List<String> result = [];
+
+    for (String key in keyList) {
+      for (TestPreparation speciality in Specialities.specialities) {
+        if (key == speciality.key) {
+          result.add(speciality.name!);
+          break;
+        }
+      }
+
+      for (LearnTopic topic in Specialities.topics) {
+        if (key == topic.key) {
+          result.add(topic.name!);
+          break;
+        }
+      }
+    }
+
+    return result;
   }
 }
