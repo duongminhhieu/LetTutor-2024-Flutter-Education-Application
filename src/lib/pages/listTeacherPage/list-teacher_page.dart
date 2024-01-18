@@ -93,6 +93,44 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
       return Future<void>.delayed(const Duration(seconds: 0));
     });
   }
+  
+  // call api search
+  Future<void> callApiSearch(String searchTutor, List<String> specialities, Map<String, bool> nationality) async {
+    TutorProvider tutorProvider = Provider.of<TutorProvider>(context, listen: false);
+    AuthProvider authProvider = context.read<AuthProvider>();
+    setState(() {
+      _isLoadingPagination = true;
+    });
+    await tutorProvider.callAPISearchTutor(1, searchTutor, specialities, nationality, authProvider, (tutorLst, count) => {
+
+      tutorProvider.tutors = tutorLst,
+      tutorProvider.totalPage = (count ?? 0) ~/ tutorProvider.perPage + 1,
+      setState(() {
+        _isLoadingPagination = false;
+      }),
+
+    }, (error) =>
+    {
+      setState(() {
+        _isLoadingPagination = false;
+
+        // show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+      })
+    }).whenComplete(() => {
+      setState(() {
+        _isLoadingPagination = false;
+      })
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +152,7 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
                     BannerComponent(
                       myColor: myColor,
                     ),
-                    FilterComponent(),
+                    FilterComponent( onSearch: callApiSearch,),
                     Container(
                       padding:
                           const EdgeInsets.only(top: 12, left: 16, right: 16),

@@ -3,6 +3,7 @@ import 'package:src/data/model/tutor/tutor_info.dart';
 import 'package:src/data/responses/list-tutor_response.dart';
 import '../data/model/tutor/tutor.dart';
 import '../data/repository/tutor_repository.dart';
+import '../data/responses/result_response.dart';
 import 'auth_provider.dart';
 
 class TutorProvider extends ChangeNotifier {
@@ -67,7 +68,7 @@ class TutorProvider extends ChangeNotifier {
     tutors.addAll(notFavoredList);
 
     // set total page
-    totalPage = (response.tutors?.count ?? 0) ~/ perPage;
+    totalPage = (response.tutors?.count ?? 0) ~/ perPage + 1;
   }
 
   bool checkIfTutorIsFavored(Tutor tutor) {
@@ -91,26 +92,32 @@ class TutorProvider extends ChangeNotifier {
   }
 
   Future<void> callAPISearchTutor(int page, String searchKey,
-      List<String> specialities, AuthProvider authProvider) async {
-    await _repository.searchTutors(
-      accessToken: authProvider.token?.access?.token ?? "",
-      searchKeys: searchKey,
-      speciality: specialities,
-      nationality: {},
-      page: page,
-      onSuccess: (response, total) async {
-        tutors = [];
-        tutors.addAll(response);
-        currentPage = page;
-        totalPage = (total / perPage).ceil();
-        _errorMessage = null;
-        notifyListeners();
-      },
-      onFail: (error) {
-        _errorMessage = error.toString(); // Set the error message
-        notifyListeners();
-      },
-    );
+      List<String> specialities,
+      Map<String, bool> nationality,
+      AuthProvider authProvider,
+      Function(List<Tutor>, int) onSuccess,
+      Function(String) onFail) async {
+    try {
+      Result result = await _repository.searchTutors(
+        accessToken: authProvider.token?.access?.token ?? "",
+        searchKeys: searchKey,
+        speciality: specialities,
+        nationality: nationality,
+        page: page,
+        perPage: perPage,);
+
+      if (result.data != null) {
+        onSuccess(result.data.rows ?? [], result.data.count ?? 0);
+      }
+      if (result.error != null) {
+        onFail(result.error.toString());
+      }
+
+      notifyListeners();
+    } catch (error) {
+      debugPrint(error.toString());
+      onFail(error.toString());
+    }
   }
 
   Future<void> callAPIGetTutorById(
@@ -124,14 +131,4 @@ class TutorProvider extends ChangeNotifier {
         onFail: (error) {});
   }
 
-  Future<void> searchTutor(
-      {String? filterStr, String? tutorName, String? tutorNation}) async {
-    try {
-      tutors = await _repository.searchTutor(
-          filterStr: filterStr, tutorName: tutorName, tutorNation: tutorNation);
-      notifyListeners();
-    } catch (error) {
-      debugPrint(error.toString());
-    }
-  }
 }

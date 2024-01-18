@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
 import 'package:src/providers/auth_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 
 import '../../../commons/dateSelection.dart';
 import '../../../commons/timeRange.dart';
+import '../../../utilities/const.dart';
 
 class FilterComponent extends StatefulWidget {
-  const FilterComponent({Key? key}) : super(key: key);
+  final Function(String, List<String>, Map<String, bool>) onSearch;
+
+  const FilterComponent({Key? key, required this.onSearch}) : super(key: key);
 
   @override
   State<FilterComponent> createState() => _FilterComponentState();
@@ -17,6 +21,31 @@ class _FilterComponentState extends State<FilterComponent> {
   TextEditingController tutorNameController = TextEditingController();
   TextEditingController tutorNationController = TextEditingController();
   String selectedFilter = 'All';
+
+  // list of string options
+  late List<String> specialities;
+  List<String> nationalities = [
+    'Foreign Tutor',
+    'Vietnamese Tutor',
+    'Native English Tutor'
+  ];
+
+  List<String> selectedNationalities = [];
+
+
+  @override
+  void initState() {
+    specialities = ['All categories'];
+    for (var element in Specialities.specialities) {
+      specialities.add(element.name!);
+    }
+    for (var element in Specialities.topics) {
+      specialities.add(element.name!);
+    }
+
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,55 +66,57 @@ class _FilterComponentState extends State<FilterComponent> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 16),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: Container(
-                    child: Consumer<TutorProvider>(
-                      builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
-                        return TextField(
-                          controller: tutorNameController,
-                          onChanged: (text){
-                            tutorProvider.searchTutor(filterStr: selectedFilter,tutorName: tutorNameController.text, tutorNation: tutorNationController.text);
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            hintText: 'Enter tutor name...',
-                            hintStyle: TextStyle(
-                                fontSize: 14, color: Colors.grey.shade400),
-                            isDense: true, // Added this
-                            contentPadding: EdgeInsets.all(8),
+                Container(
+                  child: Consumer<TutorProvider>(
+                    builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
+                      return TextField(
+                        controller: tutorNameController,
+                        onChanged: (text){
+                          widget.onSearch(text, [], convertNation(selectedNationalities));
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
                           ),
-                        );
-                      },
-                    ),
+                          hintText: 'Enter tutor name...',
+                          hintStyle: TextStyle(
+                              fontSize: 14, color: Colors.grey.shade400),
+                          isDense: true, // Added this
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                      );
+                    },
                   ),
                 ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Container(
-                    child: Consumer<TutorProvider>(
-                      builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
-                        return TextField(
-                          controller: tutorNationController,
-                          onChanged: (text){
-                            tutorProvider.searchTutor(filterStr: selectedFilter,tutorName: tutorNameController.text, tutorNation: tutorNationController.text);
-                          },
+                const SizedBox(height: 12,),
+                Container(
+                  child: Consumer<TutorProvider>(
+                    builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
+                      return Container(
+                        width: double.infinity, // Set width to match parent
+                        height: 42.0, // Set height to match TextInput
+                        alignment: Alignment.center,
+                        child: DropDownMultiSelect(
+                          isDense: true,
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            hintText: 'Select tutor nation',
-                            hintStyle: TextStyle(
-                                fontSize: 14, color: Colors.grey.shade400),
+                            border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(40.0))),
                             isDense: true, // Added this
-                            contentPadding: EdgeInsets.all(8),
+                            contentPadding: EdgeInsets.all(12),
                           ),
-                        );
-                      },
-                    ),
+                          onChanged: (List<String> selected) {
+                            setState(() {
+                              widget.onSearch(tutorNameController.text, [], convertNation(selected));
+                            });
+                          },
+                          options: nationalities,
+                          selectedValues: selectedNationalities,
+                          whenEmpty: "Select tutor nationality",
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -127,7 +158,6 @@ class _FilterComponentState extends State<FilterComponent> {
             child: ElevatedButton(
                 onPressed: () {
                   tutorNameController.text = '';
-                  tutorNationController.text = '';
                   selectedFilter = 'All';
                 },
                 style: ElevatedButton.styleFrom(
@@ -149,6 +179,21 @@ class _FilterComponentState extends State<FilterComponent> {
       ),
     );
   }
+  
+  Map<String, bool> convertNation(List<String> selectedNationalities) {
+    Map<String, bool> result = {};
+    for (var element in selectedNationalities) {
+      if (element == 'Foreign Tutor') {
+        result['isForeign'] = true;
+      } else if (element == 'Vietnamese Tutor') {
+        result['isVietnamese'] = true;
+      } else if (element == 'Native English Tutor') {
+        result['isNative'] = true;
+      }
+    }
+    return result;
+  }
+  
 }
 
 class FilterWidget extends StatefulWidget {
@@ -210,7 +255,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                         widget.selectedFilter = option;
                         List<String> specialities = [];
                         specialities.add(option);
-                        tutorProvider.callAPISearchTutor(1, widget.tutorNameController.text, specialities, authProvider);
+                        //tutorProvider.callAPISearchTutor(1, widget.tutorNameController.text, specialities, authProvider);
                         //tutorProvider.searchTutor(filterStr: widget.selectedFilter, tutorName: widget.tutorNameController.text, tutorNation: widget.tutorNationController.text);
                       } else {
                         widget.selectedFilter = 'All';
