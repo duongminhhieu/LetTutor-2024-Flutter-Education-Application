@@ -2,7 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:provider/provider.dart';
 import 'package:src/pages/coursesPage/components/course-card.dart';
+import 'package:src/providers/courses_provider.dart';
+
+import '../../../providers/auth_provider.dart';
+import '../../../utilities/const.dart';
 
 class CoursesMainInfoComponent extends StatefulWidget {
   const CoursesMainInfoComponent({Key? key}) : super(key: key);
@@ -13,21 +18,8 @@ class CoursesMainInfoComponent extends StatefulWidget {
 }
 
 class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
-  List<String> itemsLevel = [
-    "Beginner",
-    "Upper-Beginner",
-    "Pre-Intermediate",
-    "Intermediate",
-    "Upper-Intermediate",
-    "Pre-Advanced",
-    "Advanced",
-    "Very Advanced"
-  ];
-  List<String> itemsCategory = [
-    "For Studying Abroad",
-    "English for traveling",
-    "STARTERS"
-  ];
+  List<String> itemsLevel = [];
+  List<String> itemsCategory = [];
   List<String> itemsSort = ["Level decreasing", "Level ascending"];
 
   List<String> selectedLevel = [];
@@ -35,7 +27,28 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
   List<String> selectedSort = [];
 
   @override
+  void initState() {
+    // TODO: implement initState
+
+    for (var element in ConstValue.levelList) {
+      itemsLevel.add(element);
+    }
+    for (var element in Specialities.specialities) {
+      itemsCategory.add(element.name!);
+    }
+    for (var element in Specialities.topics) {
+      itemsCategory.add(element.name!);
+    }
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    final courseProvider = Provider.of<CoursesProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -51,37 +64,37 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
           SizedBox(height: 16),
           _buildSelect("Sort by level", itemsSort, selectedSort),
           SizedBox(height: 16),
-          const TabBar(
+           TabBar(
             labelColor: Colors.blue,
             unselectedLabelColor: Colors.black38,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
+            onTap: (index) {
+              if(index == 0) {
+                courseProvider.callApiGetCourses(1, null, null, null, null, null, authProvider, (error) => {
+                  // show message error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(error),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 2),
+                    ),
+                  )
+                });
+
+              }
+            },
             tabs: [
               Tab(text: 'Course'),
               Tab(text: 'Book'),
               Tab(text: 'Interactive book'),
             ],
           ),
-          Container(
-            child: ListView(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                SizedBox(height: 24),
-                CourseCard(),
-                SizedBox(height: 24),
-                CourseCard(),
-                SizedBox(height: 24),
-                CourseCard(),
-                SizedBox(height: 24),
-                CourseCard()
-              ],
-            ),
-          )
+
         ],
       ),
     );
-
   }
 
   Widget _buildSearchCourse() {
@@ -157,6 +170,7 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
   Widget _buildSelect(
       String title, List<String> selects, List<String> selected) {
     return Container(
+      height: 42,
       child: DropDownMultiSelect(
         isDense: true,
         onChanged: (List<String> x) {
@@ -170,6 +184,4 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
       ),
     );
   }
-
- 
 }

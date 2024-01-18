@@ -13,11 +13,11 @@ import 'package:src/pages/loginPage/login_page.dart';
 import 'package:src/pages/profilePage/profile_page.dart';
 import 'package:src/pages/schedulePage/schedule_page.dart';
 import 'package:src/pages/signUpPage/sign-up_page.dart';
-import 'package:src/pages/videoCallPage/join-meeting_page.dart';
 import 'package:src/pages/videoCallPage/video-call_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:src/providers/auth_provider.dart';
 import 'package:src/providers/booking_provider.dart';
+import 'package:src/providers/courses_provider.dart';
 import 'package:src/providers/schedule_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 import 'package:src/providers/user_provider.dart';
@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TutorProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleProvider()),
         ChangeNotifierProvider(create: (context) => BookingProvider()),
+        ChangeNotifierProvider(create: (context) => CoursesProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -79,7 +80,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildScreens() {
-      return [ListTeacherPage(), SchedulePage(), HistoryPage(), SettingPage()];
+      return [ListTeacherPage(), SchedulePage(), HistoryPage(), CoursesPage(),  SettingPage()];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -125,6 +126,25 @@ class BottomNavBar extends StatelessWidget {
         PersistentBottomNavBarItem(
             icon: Icon(Icons.history),
             title: ("History"),
+            activeColorPrimary: Colors.blue,
+            inactiveColorPrimary: Colors.grey,
+            routeAndNavigatorSettings: RouteAndNavigatorSettings(
+              initialRoute: "/",
+              routes: {
+                '/listTeacherPage': (context) => ListTeacherPage(),
+                '/detailATeacher': (context) => DetailATeacherPage(),
+                '/schedulePage': (context) => SchedulePage(),
+                '/historyPage': (context) => HistoryPage(),
+                '/coursesPage': (context) => CoursesPage(),
+                '/detailCoursePage': (context) => DetailCoursePage(),
+                '/detailLessonPage': (context) => DetailLessonPage(),
+                '/videoCallPage': (context) => VideoCallPage(),
+                '/profilePage': (context) => ProfilePage(),
+              },
+            )),
+        PersistentBottomNavBarItem(
+            icon: Icon(Icons.school),
+            title: ("Courses"),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:src/commons/appBar.dart';
 import 'package:src/commons/drawer.dart';
 import 'package:src/pages/coursesPage/components/courses-main-info_component.dart';
+import 'package:src/pages/coursesPage/components/list-courses_component.dart';
 
 
 class CoursesPage extends StatefulWidget {
@@ -13,6 +14,9 @@ class CoursesPage extends StatefulWidget {
 }
 
 class _CoursesPageState extends State<CoursesPage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +24,13 @@ class _CoursesPageState extends State<CoursesPage> {
       endDrawer: CustomDrawer(),
       appBar: CustomAppBar(),
       body: Container(
-        padding: EdgeInsets.all(36.0),
+        padding: EdgeInsets.only(left: 20.0, right: 20),
         child: ListView(
           children:  const [
-            CoursesMainInfoComponent()
+            SizedBox(height: 16),
+            CoursesMainInfoComponent(),
+            SizedBox(height: 16),
+            ListCoursesComponent()
           ],
         ),
       ),
