@@ -11,9 +11,9 @@
 
     <application
         tools:replace="android:label"
-        android:label="src"
+        android:label="LetTutor 2024"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
