@@ -30,6 +30,7 @@ class CoursesProvider extends ChangeNotifier {
 
         // set total page
         totalPage = (coursePagination.count ?? 0) ~/ perPage + 1;
+        currentPage = page;
 
       }
       if (result.error != null) {
@@ -42,17 +43,20 @@ class CoursesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> callApiGetEbook(int page, String orderBy, String order, String search, int level, String categoryStr, AuthProvider authProvider, Function(String) onFail) async {
+  Future<void> callApiGetEbook(int page, String? orderBy, String? order, String? search, int? level, String? categoryStr, AuthProvider authProvider, Function(String) onFail) async {
     try {
       Result result = await _repository.getEbookListWithPagination(accessToken: authProvider.token?.access?.token ?? "", size: perPage, page: page, orderBy: orderBy, order: order, level: level, search: search, categoryStr: categoryStr);
 
       if (result.data != null) {
 
+        ResponseGetListCourse responseGetListCourse = result.data as ResponseGetListCourse;
+        CoursePagination coursePagination = responseGetListCourse.data as CoursePagination;
         // set list history data
-        courseList = result.data?.rows ?? [];
+        courseList = coursePagination.rows ?? [];
 
         // set total page
-        totalPage = (result.data?.count ?? 0) ~/ perPage + 1;
+        totalPage = (coursePagination.count ?? 0) ~/ perPage + 1;
+        currentPage = page;
 
       }
       if (result.error != null) {
@@ -65,17 +69,20 @@ class CoursesProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> callApiGetInteractiveBook(int page, String orderBy, String order, String search, int level, String categoryStr, AuthProvider authProvider, Function(String) onFail) async {
+  Future<void> callApiGetInteractiveBook(int page, String? orderBy, String? order, String? search, int? level, String? categoryStr, AuthProvider authProvider, Function(String) onFail) async {
     try {
       Result result = await _repository.getInteractiveEbookListWithPagination(accessToken: authProvider.token?.access?.token ?? "", size: perPage, page: page, orderBy: orderBy, order: order, level: level, search: search, categoryStr: categoryStr);
 
       if (result.data != null) {
 
+        ResponseGetListCourse responseGetListCourse = result.data as ResponseGetListCourse;
+        CoursePagination coursePagination = responseGetListCourse.data as CoursePagination;
         // set list history data
-        courseList = result.data?.rows ?? [];
+        courseList = coursePagination.rows ?? [];
 
         // set total page
-        totalPage = (result.data?.count ?? 0) ~/ perPage + 1;
+        totalPage = (coursePagination.count ?? 0) ~/ perPage + 1;
+        currentPage = page;
 
       }
       if (result.error != null) {
@@ -87,5 +94,4 @@ class CoursesProvider extends ChangeNotifier {
       onFail(error.toString());
     }
   }
-
 }

@@ -46,9 +46,6 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
   @override
   Widget build(BuildContext context) {
 
-    final courseProvider = Provider.of<CoursesProvider>(context);
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -63,35 +60,6 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
           _buildSelect("Select category", itemsCategory, selectedCategory),
           SizedBox(height: 16),
           _buildSelect("Sort by level", itemsSort, selectedSort),
-          SizedBox(height: 16),
-           TabBar(
-            labelColor: Colors.blue,
-            unselectedLabelColor: Colors.black38,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            onTap: (index) {
-              if(index == 0) {
-                courseProvider.callApiGetCourses(1, null, null, null, null, null, authProvider, (error) => {
-                  // show message error
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(error),
-                      backgroundColor: Colors.red,
-                      behavior: SnackBarBehavior.floating,
-                      duration: Duration(seconds: 2),
-                    ),
-                  )
-                });
-
-              }
-            },
-            tabs: [
-              Tab(text: 'Course'),
-              Tab(text: 'Book'),
-              Tab(text: 'Interactive book'),
-            ],
-          ),
-
         ],
       ),
     );

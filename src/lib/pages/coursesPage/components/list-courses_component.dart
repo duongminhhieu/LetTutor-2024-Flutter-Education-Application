@@ -16,7 +16,7 @@ class _ListCoursesComponentState extends State<ListCoursesComponent> {
 
   @override
   Widget build(BuildContext context) {
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context);
+    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context, listen: true);
 
     return Container(
         child: ListView.builder(

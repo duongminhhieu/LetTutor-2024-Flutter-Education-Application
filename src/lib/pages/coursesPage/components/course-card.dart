@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:src/data/model/courses/course.dart';
 import 'package:src/utilities/const.dart';
 
-
 class CourseCard extends StatefulWidget {
   const CourseCard({Key? key, required this.course}) : super(key: key);
   final Course course;
@@ -16,8 +15,8 @@ class _CourseCardState extends State<CourseCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-          Navigator.pushNamed(context, "/detailCoursePage");
+      onTap: () {
+        Navigator.pushNamed(context, "/detailCoursePage");
       },
       child: Card(
           elevation: 4,
@@ -36,8 +35,8 @@ class _CourseCardState extends State<CourseCard> {
                     fit: BoxFit.fitHeight,
                     imageUrl: widget.course?.imageUrl ??
                         "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        Center(
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
                             child: CircularProgressIndicator(
                                 value: downloadProgress.progress)),
                     errorWidget: (context, url, error) => Image.network(
@@ -47,29 +46,39 @@ class _CourseCardState extends State<CourseCard> {
                 Container(
                   padding: EdgeInsets.only(top: 20, bottom: 20),
                   alignment: Alignment.centerLeft,
-                  child: Text("${widget.course.name}", style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight
-                        .bold,
-                  ),),
+                  child: Text(
+                    "${widget.course.name}",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Text("${widget.course.description}", style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal
-                  ),),
+                  child: Text(
+                    "${widget.course.description}",
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal),
+                  ),
                 ),
-                SizedBox(height: 12,),
+                SizedBox(
+                  height: 12,
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Text("${ ConstValue.levelList[int.parse(widget.course.level!) - 1 ]}  •  ${widget.course.topics?.length} Lessons", style: TextStyle(
+                  child: Text(
+                    "${ConstValue.levelList[int.parse(widget.course.level!) == 0 ? 0 : int.parse(widget.course.level!) - 1]}  •  ${widget.course.topics?.length ?? 0} Lessons",
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
-                      fontWeight: FontWeight.normal
-                  ),),
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+
                 ),
               ],
             ),

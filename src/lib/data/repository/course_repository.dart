@@ -1,5 +1,4 @@
 
-import 'package:src/data/model/courses/course.dart';
 import 'package:src/data/responses/list-course_response.dart';
 
 import '../api/apiCourses.dart';
@@ -46,11 +45,11 @@ class CourseRepository extends BaseRepository {
     required String accessToken,
     required int size,
     required int page,
-    required String orderBy,
-    required String order,
-    required int level,
-    required String search,
-    required String categoryStr,
+    required String? orderBy,
+    required String? order,
+    required int? level,
+    required String? search,
+    required String? categoryStr,
   }) async {
 
     try {
@@ -76,11 +75,11 @@ class CourseRepository extends BaseRepository {
     required String accessToken,
     required int size,
     required int page,
-    required String orderBy,
-    required String order,
-    required int level,
-    required String search,
-    required String categoryStr,
+    required String? orderBy,
+    required String? order,
+    required int? level,
+    required String? search,
+    required String? categoryStr,
   }) async {
 
     try {

@@ -43,14 +43,14 @@ class APICourse {
         'course', page, size, orderBy, order, level, categoryStr, search);
   }
 
-  static String getEbook(int page, int size, String orderBy, String order,
-      int level, String categoryStr, String search) {
+  static String getEbook(int page, int size, String? orderBy, String? order,
+      int? level, String? categoryStr, String? search) {
     return buildUrl(
         'e-book', page, size, orderBy, order, level, categoryStr, search);
   }
 
-  static String getInteractiveEbook(int page, int size, String orderBy,
-      String order, int level, String categoryStr, String search) {
+  static String getInteractiveEbook(int page, int size, String? orderBy, String? order,
+      int? level, String? categoryStr, String? search) {
     return buildUrl('material/interactive-e-book', page, size, orderBy, order,
         level, categoryStr, search);
   }
