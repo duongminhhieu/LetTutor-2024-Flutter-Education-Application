@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:src/data/model/courses/course.dart';
 import 'package:src/pages/detailCoursePage/detail-course_page.dart';
 import 'package:src/utilities/const.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CourseCard extends StatefulWidget {
-  const CourseCard({Key? key, required this.course}) : super(key: key);
+  const CourseCard({Key? key, required this.course, required this.tabIndex}) : super(key: key);
   final Course course;
+  final int tabIndex;
 
   @override
   State<CourseCard> createState() => _CourseCardState();
@@ -16,17 +18,34 @@ class _CourseCardState extends State<CourseCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailCoursePage(),
-            settings:
-            RouteSettings(arguments: {
-              'course': widget.course,
-            },),
-          ),
-        );
+      onTap: () async {
+        if(widget.tabIndex == 0){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailCoursePage(),
+              settings:
+              RouteSettings(arguments: {
+                'course': widget.course,
+              },),
+            ),
+          );
+        } else{
+
+          final Uri _url = Uri.parse(widget.course.fileUrl!);
+          if (!await launchUrl(_url)) {
+            // Show message error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Loading url failed"),
+                backgroundColor: Colors.red,
+                behavior: SnackBarBehavior.floating,
+                duration: Duration(seconds: 2),
+              ),
+            );
+
+          }
+        }
       },
       child: Card(
           elevation: 4,

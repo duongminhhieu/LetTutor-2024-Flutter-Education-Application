@@ -5,8 +5,9 @@ import 'package:src/providers/courses_provider.dart';
 import 'course-card.dart';
 
 class ListCoursesComponent extends StatefulWidget {
-  const ListCoursesComponent({Key? key}) : super(key: key);
+  const ListCoursesComponent({Key? key, required this.tabIndex}) : super(key: key);
 
+  final int tabIndex;
   @override
   State<ListCoursesComponent> createState() => _ListCoursesComponentState();
 }
@@ -26,6 +27,7 @@ class _ListCoursesComponentState extends State<ListCoursesComponent> {
                 padding: const EdgeInsets.only(bottom: 16),
                 child: CourseCard(
                   course: coursesProvider.courseList[index],
+                  tabIndex: widget.tabIndex,
                 ),
               );
             })

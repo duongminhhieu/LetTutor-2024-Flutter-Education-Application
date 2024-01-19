@@ -10,6 +10,7 @@ class Course {
   String? name;
   String? description;
   String? imageUrl;
+  String? fileUrl;
   String? level;
   String? reason;
   String? purpose;
@@ -27,6 +28,7 @@ class Course {
     this.name,
     this.description,
     this.imageUrl,
+    this.fileUrl,
     this.level,
     this.reason,
     this.purpose,
@@ -51,6 +53,7 @@ Course _$CourseModelFromJson(Map<String, dynamic> json) => Course(
   name: json['name'] as String?,
   description: json['description'] as String?,
   imageUrl: json['imageUrl'] as String?,
+  fileUrl: json['fileUrl'] as String?,
   level: json['level'] as String?,
   reason: json['reason'] as String?,
   purpose: json['purpose'] as String?,
@@ -74,6 +77,7 @@ Map<String, dynamic> _$CourseModelToJson(Course instance) =>
       'name': instance.name,
       'description': instance.description,
       'imageUrl': instance.imageUrl,
+      'fileUrl': instance.fileUrl,
       'level': instance.level,
       'reason': instance.reason,
       'purpose': instance.purpose,

@@ -158,7 +158,7 @@ class _CoursesPageState extends State<CoursesPage> with TickerProviderStateMixin
                       child: CircularProgressIndicator(),
                     )
                   :
-              ListCoursesComponent(),
+              ListCoursesComponent(tabIndex: _tabController.index),
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(16),

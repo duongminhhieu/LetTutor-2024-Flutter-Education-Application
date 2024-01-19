@@ -45,6 +45,7 @@ dependencies:
   chat_bubbles: ^1.4.1
   flutter_countdown_timer: ^4.1.0
   country_picker: ^2.0.23
+  url_launcher: ^6.2.3
 
   #Media
   syncfusion_flutter_pdfviewer: ^23.1.43
