@@ -3,6 +3,7 @@ import 'package:src/pages/detailLessonPage/components/list-topics-lesson_compone
 
 import '../../commons/appBar.dart';
 import '../../commons/drawer.dart';
+import '../../data/model/courses/course.dart';
 import 'components/main-info-lesson_component.dart';
 
 class DetailLessonPage extends StatefulWidget {
@@ -13,8 +14,14 @@ class DetailLessonPage extends StatefulWidget {
 }
 
 class _DetailLessonPageState extends State<DetailLessonPage> {
+
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    Course course = arguments['course'] as Course;
+    int index = arguments['index'] as int;
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar:AppBar(
@@ -24,9 +31,9 @@ class _DetailLessonPageState extends State<DetailLessonPage> {
         body: Container(
           padding: EdgeInsets.all(16.0),
           child: ListView(
-            children: const [
-              InfoLessonComponent(),
-              ListTopicsLessonComponent()
+            children:  [
+              InfoLessonComponent(course: course, index: index),
+              ListTopicsLessonComponent(course: course, index: index)
             ],
           ),
         ));

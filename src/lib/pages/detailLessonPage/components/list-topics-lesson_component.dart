@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+import '../../../data/model/courses/course.dart';
+
 class ListTopicsLessonComponent extends StatefulWidget {
-  const ListTopicsLessonComponent({Key? key}) : super(key: key);
+  const ListTopicsLessonComponent({Key? key, required this.course, required this.index}) : super(key: key);
+
+  final Course course;
+  final int index;
 
   @override
   State<ListTopicsLessonComponent> createState() => _ListTopicsLessonComponentState();
@@ -10,25 +15,12 @@ class ListTopicsLessonComponent extends StatefulWidget {
 
 class _ListTopicsLessonComponentState extends State<ListTopicsLessonComponent> {
   int selectedTopicIndex = 0;
-
-  List<String> topics = [
-    "1. The Internet",
-    "2. AI",
-    "3. Social Media",
-    "4. Internet Privacy",
-    "5. Live Streaming",
-    "6. Coding",
-    "7. Technology Transforming Healthcare",
-  ];
-
-  // Define a map that associates topic indices with their corresponding PDF asset paths.
-  final Map<int, String> topicToPdfAsset = {
-    0: "lib/assets/GiaoTrinhDanGuitar.pdf",
-    1: "lib/assets/NoiLongNguoiDi.pdf", // Change to the actual asset path for AI.
-    2: "lib/assets/GiaoTrinhDanGuitar.pdf", // Change to the actual asset path for Social Media.
-    // Add more entries for other topics.
-  };
-
+  @override
+  void initState() {
+    selectedTopicIndex = widget.index;
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,7 +53,7 @@ class _ListTopicsLessonComponentState extends State<ListTopicsLessonComponent> {
           ),
         ),
         const SizedBox(height: 12),
-        for (int index = 0; index < topics.length; index++)
+        for (int index = 0; index < widget.course.topics!.length; index++)
           InkWell(
             onTap: () {
               setState(() {
@@ -75,7 +67,7 @@ class _ListTopicsLessonComponentState extends State<ListTopicsLessonComponent> {
               ),
               child: ListTile(
                 title: Text(
-                  topics[index],
+                  "${index + 1}. ${widget.course.topics?[index].name ?? "No title"}",
                   style: TextStyle(
                     color: selectedTopicIndex == index ? Colors.white : Colors.black,
                   ),
@@ -103,14 +95,10 @@ class _ListTopicsLessonComponentState extends State<ListTopicsLessonComponent> {
         ],
       ),
       width: double.infinity,
-      height: 500.0,
-      child: SfPdfViewer.asset(
-        // Load the PDF asset based on the selected topic index.
-        topicToPdfAsset[selectedTopicIndex] ?? "lib/assets/GiaoTrinhDanGuitar.pdf",
-        scrollDirection: PdfScrollDirection.horizontal,
-        enableDoubleTapZooming: true,
-        enableTextSelection: true,
-      ),
+      height: 600.0,
+      child: SfPdfViewer.network(
+        widget.course.topics?[selectedTopicIndex].nameFile ?? "",
+      )
     );
   }
 }

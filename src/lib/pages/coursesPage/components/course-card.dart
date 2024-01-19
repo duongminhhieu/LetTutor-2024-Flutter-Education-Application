@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:src/data/model/courses/course.dart';
+import 'package:src/pages/detailCoursePage/detail-course_page.dart';
 import 'package:src/utilities/const.dart';
 
 class CourseCard extends StatefulWidget {
@@ -16,7 +17,16 @@ class _CourseCardState extends State<CourseCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/detailCoursePage");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailCoursePage(),
+            settings:
+            RouteSettings(arguments: {
+              'course': widget.course,
+            },),
+          ),
+        );
       },
       child: Card(
           elevation: 4,

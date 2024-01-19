@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../data/model/tutor/tutor.dart';
 import '../../../data/model/user/learn_topic.dart';
 import '../../../data/model/user/test_preparation.dart';
-import '../../../providers/auth_provider.dart';
 import '../../../providers/tutor_provider.dart';
 import '../../../utilities/const.dart';
 

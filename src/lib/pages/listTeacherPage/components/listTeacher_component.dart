@@ -48,8 +48,7 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  debugPrint("Tutor info: " +
-                      tutorProvider.tutors[index].name.toString());
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(

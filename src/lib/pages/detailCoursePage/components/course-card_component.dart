@@ -1,7 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:src/data/model/courses/course.dart';
+
+import '../../detailLessonPage/detail-lesson_page.dart';
 
 class CourseCardComponent extends StatelessWidget {
-  const CourseCardComponent({Key? key}) : super(key: key);
+  const CourseCardComponent({Key? key, required this.course}) : super(key: key);
+
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +23,24 @@ class CourseCardComponent extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                child: Image.asset(
-                  "lib/assets/images/loginImage.png",
-                  fit: BoxFit.cover,
+                child: CachedNetworkImage(
+                  width: double.maxFinite,
+                  fit: BoxFit.fitHeight,
+                  imageUrl: course?.imageUrl ??
+                      "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
+                  progressIndicatorBuilder:
+                      (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress)),
+                  errorWidget: (context, url, error) => Image.network(
+                      "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg"),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 32, bottom: 20),
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Life in the Internet Age",
+                child:  Text(
+                  course.name!,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -35,8 +49,8 @@ class CourseCardComponent extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Let's discuss how technology is changing the way we live",
+                child:  Text(
+                  course.description!,
                   style: TextStyle(
                       color: Colors.grey,
                       fontSize: 14,
@@ -48,7 +62,17 @@ class CourseCardComponent extends StatelessWidget {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/detailLessonPage");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLessonPage(),
+                        settings:
+                        RouteSettings(arguments: {
+                          'course': course,
+                          'index': 0
+                        },),
+                      ),
+                    );
                   },
                   child: Text("Discover"),
                   style: ElevatedButton.styleFrom(

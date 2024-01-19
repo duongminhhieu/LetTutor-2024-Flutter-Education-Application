@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:src/pages/detailLessonPage/detail-lesson_page.dart';
+
+import '../../../data/model/courses/course.dart';
+import '../../../utilities/const.dart';
 
 class OverviewCourseComponent extends StatelessWidget {
-  const OverviewCourseComponent({Key? key}) : super(key: key);
+  const OverviewCourseComponent({Key? key, required this.course})
+      : super(key: key);
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
@@ -13,26 +19,24 @@ class OverviewCourseComponent extends StatelessWidget {
         SizedBox(height: 20),
         _buildSubTitle(Icons.question_mark, "Why take this course", Colors.red),
         SizedBox(height: 8),
-        _buildSubDescription(
-            "Our world is rapidly changing thanks to new technology, and the vocabulary needed to discuss modern life is evolving almost daily. In this course you will learn the most up-to-date terminology from expertly crafted lessons as well from your native-speaking tutor."),
+        _buildSubDescription(course.reason ?? CourseOverView.takenReason),
         SizedBox(height: 20),
         _buildSubTitle(
             Icons.question_mark, "What will you be able to do", Colors.red),
         SizedBox(height: 8),
-        _buildSubDescription(
-            "You will learn vocabulary related to timely topics like remote work, artificial intelligence, online privacy, and more. In addition to discussion questions, you will practice intermediate level speaking tasks such as using data to describe trends."),
+        _buildSubDescription(course.purpose ?? CourseOverView.achievement),
         SizedBox(height: 20),
         _buildTitle("Experience Level"),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.group_add, "Intermediate", Colors.blueAccent),
+        _buildSubTitle(Icons.group_add, ConstValue.levelList[int.parse(course.level!)  - 1] , Colors.blueAccent),
         SizedBox(height: 20),
         _buildTitle("Course Length"),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.topic, "9 topics", Colors.blueAccent),
+        _buildSubTitle(Icons.topic, "${course.topics?.length ?? 0} topics", Colors.blueAccent),
         SizedBox(height: 20),
         _buildTitle("List Topics"),
         SizedBox(height: 20),
-        _buildListTopics()
+        _buildListTopics( context)
       ],
     );
   }
@@ -86,25 +90,35 @@ class OverviewCourseComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildListTopics() {
-    return ListView(
+  Widget _buildListTopics(BuildContext context) {
+    return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      children: [
-        _buildItemList(1, "The Internet"),
-        _buildItemList(2, "Artificial Intelligence"),
-        _buildItemList(3, "Social Media"),
-        _buildItemList(4, "Internet Privacy"),
-        _buildItemList(5, "Live Stream"),
-        _buildItemList(4, "Coding"),
-      ],
+      itemCount: course.topics?.length,
+      scrollDirection: Axis.vertical,
+      itemBuilder: (BuildContext context, int index) {
+        return _buildItemList(index + 1, context);
+      },
+
     );
   }
 
-  Widget _buildItemList(int index, String title) {
+  Widget _buildItemList(int index, BuildContext context) {
     return InkWell(
       onTap: () {
         // Xử lý sự kiện khi mục được nhấp vào
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailLessonPage(),
+            settings:
+            RouteSettings(arguments: {
+              'course': course,
+              'index': index - 1
+            },),
+          ),
+        );
+
       },
       child: Container(
         margin: EdgeInsets.only(top: 20, bottom: 20),
@@ -132,7 +146,7 @@ class OverviewCourseComponent extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              title,
+              course.topics?[index - 1].name ?? "No title",
               style: TextStyle(
                   color: Colors.grey.shade900,
                   fontSize: 20,
