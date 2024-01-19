@@ -10,7 +10,9 @@ import '../../../providers/auth_provider.dart';
 import '../../../utilities/const.dart';
 
 class CoursesMainInfoComponent extends StatefulWidget {
-  const CoursesMainInfoComponent({Key? key}) : super(key: key);
+  const CoursesMainInfoComponent({Key? key, required this.onSearch, required this.tabIndex}) : super(key: key);
+  final Function(int tabIndex, int page, String? orderBy, String? order, String? search, int? level, String? categoryStr) onSearch;
+  final int tabIndex;
 
   @override
   State<CoursesMainInfoComponent> createState() =>
@@ -18,6 +20,9 @@ class CoursesMainInfoComponent extends StatefulWidget {
 }
 
 class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
+  bool isSearching = false;
+  // text search controller
+  TextEditingController _textSearchController = TextEditingController();
   List<String> itemsLevel = [];
   List<String> itemsCategory = [];
   List<String> itemsSort = ["Level decreasing", "Level ascending"];
@@ -54,12 +59,12 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
           _buildSearchCourse(),
           SizedBox(height: 16),
           _buildSubTitle(),
-          SizedBox(height: 16),
-          _buildSelect("Select level", itemsLevel, selectedLevel),
-          SizedBox(height: 16),
-          _buildSelect("Select category", itemsCategory, selectedCategory),
-          SizedBox(height: 16),
-          _buildSelect("Sort by level", itemsSort, selectedSort),
+          // SizedBox(height: 16),
+          // _buildSelect("Select level", itemsLevel, selectedLevel),
+          // SizedBox(height: 16),
+          // _buildSelect("Select category", itemsCategory, selectedCategory),
+          // SizedBox(height: 16),
+          // _buildSelect("Sort by level", itemsSort, selectedSort),
         ],
       ),
     );
@@ -87,11 +92,12 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
                   children: [
                     Flexible(
                       child: TextField(
+                        controller: _textSearchController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          hintText: 'Courses',
+                          hintText: 'Search ...',
                           isDense: true,
                           hintStyle: TextStyle(
                             fontSize: 14,
@@ -106,8 +112,19 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
                       child: Container(
                         color: Colors.grey.shade100,
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
+                          onPressed: () {
+                            handleSearch();
+                          },
+                          icon: isSearching
+                              ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                            ),
+                          )
+                              : Icon(
                             Icons.search_rounded,
                             size: 24,
                             color: Colors.grey,
@@ -152,4 +169,20 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
       ),
     );
   }
+
+
+  void handleSearch() async {
+    setState(() {
+      isSearching = true;
+    });
+
+    String? search = _textSearchController.text.isEmpty ? null : _textSearchController.text;
+
+    await widget.onSearch(widget.tabIndex, 1, null, null, search, null, null);
+
+    setState(() {
+      isSearching = false;
+    });
+  }
+
 }
