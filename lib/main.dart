@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:src/commons/loadingOverlay.dart';
-import 'package:src/pages/SettingsPage/setting_page.dart';
+import 'package:src/pages/settingsPage/setting_page.dart';
 import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
 import 'package:src/pages/detailCoursePage/detail-course_page.dart';
