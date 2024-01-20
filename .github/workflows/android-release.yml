@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Unshallow clone
+        run: git fetch --unshallow
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
         with:
