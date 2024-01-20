@@ -82,6 +82,7 @@ jobs:
 
       - name: Start Android Release Build
         run: flutter build appbundle
+        run: flutter build apk --release --split-per-abi
 
       - name: Upload Android Release
         uses: actions/upload-artifact@v2
@@ -99,11 +100,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: android-release
-          path: android-release
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+
+      - name: Push to Releases
+        uses: ncipollo/release-action@v1
         with:
-          files: android-release/**
+          artifacts: "build/app/outputs/apk/release/*,build/app/outputs/bundle/release/"
+          tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
       # - name: Release Build to internal track
       #   uses: r0adkll/upload-google-play@v1
