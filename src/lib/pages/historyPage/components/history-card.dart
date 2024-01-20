@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 import '../../../data/model/schedule/booking_info.dart';
 
@@ -198,7 +199,7 @@ class _HistoryCardState extends State<HistoryCard> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      'Lessson Time: ' +
+                      '${AppLocalizations.of(context)!.lessonTime}: ' +
                           DateFormat('HH:mm').format(
                               DateTime.fromMillisecondsSinceEpoch(widget
                                   .bookingInfo!
@@ -242,11 +243,11 @@ class _HistoryCardState extends State<HistoryCard> {
                     side: BorderSide(color: Colors.grey.shade100, width: 1.0),
                   ),
                   child: ExpansionTile(
-                    title: const Row(
+                    title:  Row(
                       children: [
                         Expanded(
                             child: Text(
-                          "Request for lesson",
+                          AppLocalizations.of(context)!.requestForLesson,
                           style: TextStyle(fontSize: 14),
                         )),
                       ],
@@ -258,7 +259,8 @@ class _HistoryCardState extends State<HistoryCard> {
                             top: 14, left: 14, right: 14, bottom: 24),
                         child: Text(
                             widget.bookingInfo.studentRequest ??
-                                "Currently there are no requests for this class. Please write down any requests for the teacher.",
+                                AppLocalizations.of(context)!
+                                    .studentRequestEmpty,
                             style: TextStyle(
                                 color: Colors.grey, fontSize: 14, height: 1.5)),
                       )
@@ -271,11 +273,11 @@ class _HistoryCardState extends State<HistoryCard> {
                     side: BorderSide(color: Colors.grey.shade100, width: 1.0),
                   ),
                   child: ExpansionTile(
-                    title: const Row(
+                    title:  Row(
                       children: [
                         Expanded(
                             child: Text(
-                          "Request from tutor",
+                          AppLocalizations.of(context)!.requestForTutorial,
                           style: TextStyle(fontSize: 14),
                         )),
                       ],
@@ -285,8 +287,9 @@ class _HistoryCardState extends State<HistoryCard> {
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(
                             top: 14, left: 14, right: 14, bottom: 24),
-                        child: const Text(
-                            "Currently there are no requests for this class. Please write down any requests for the teacher.",
+                        child: Text(
+                           AppLocalizations.of(context)!
+                                    .studentRequestEmpty,
                             style: TextStyle(
                                 color: Colors.grey, fontSize: 14, height: 1.5)),
                       )
@@ -306,8 +309,8 @@ class _HistoryCardState extends State<HistoryCard> {
                               style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   alignment: Alignment.centerLeft),
-                              child: const Text(
-                                'Add a Rating',
+                              child: Text(
+                                AppLocalizations.of(context)!.addRating,
                                 style:
                                     TextStyle(color: Colors.blue, fontSize: 16),
                               ))),
@@ -317,8 +320,8 @@ class _HistoryCardState extends State<HistoryCard> {
                               style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   alignment: Alignment.centerRight),
-                              child: const Text(
-                                'Report',
+                              child:  Text(
+                                AppLocalizations.of(context)!.report,
                                 style:
                                     TextStyle(color: Colors.blue, fontSize: 16),
                               )))
@@ -381,8 +384,8 @@ class _HistoryCardState extends State<HistoryCard> {
                 const SizedBox(height: 8),
                 Container(
                   alignment: Alignment.center,
-                  child: const Text(
-                    "Lesson Time",
+                  child: Text(
+                    AppLocalizations.of(context)!.lessonTime,
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 16,
@@ -422,7 +425,7 @@ class _HistoryCardState extends State<HistoryCard> {
                 Divider(height: 1, thickness: 1, color: Colors.grey.shade100),
                 SizedBox(height: 16),
                 Text(
-                  "What is your rating for " +
+                  AppLocalizations.of(context)!.whatIsYourRating +
                       "${widget.bookingInfo.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.name}" +
                       "?",
                   textAlign: TextAlign.center,
@@ -456,7 +459,7 @@ class _HistoryCardState extends State<HistoryCard> {
                 TextFormField(
                   maxLines: 3, // Số dòng tối đa
                   minLines: 3, // Số dòng tối thiểu
-                  initialValue: "Content Review",
+                  initialValue: AppLocalizations.of(context)!.contentReview,
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -480,7 +483,7 @@ class _HistoryCardState extends State<HistoryCard> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Later'),
+                      child: Text(AppLocalizations.of(context)!.later),
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
@@ -492,7 +495,7 @@ class _HistoryCardState extends State<HistoryCard> {
                         // Xử lý khi nút "Submit" được nhấn
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Submit'),
+                      child:  Text(AppLocalizations.of(context)!.submit),
                     ),
                   ],
                 ),

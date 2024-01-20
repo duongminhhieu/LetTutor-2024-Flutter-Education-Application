@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:src/pages/videoCallPage/join-meeting_page.dart';
 import 'package:src/providers/booking_provider.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class BannerComponent extends StatefulWidget {
   final Color myColor;
 
@@ -28,8 +30,8 @@ class _BannerComponentState extends State<BannerComponent> {
       child: Column(
         children: [
           Container(
-            child: const Text(
-              'Upcoming lesson',
+            child: Text(
+              AppLocalizations.of(context)!.upComingLesson,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 32,
@@ -71,7 +73,7 @@ class _BannerComponentState extends State<BannerComponent> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                "Enter lesson room",
+                                AppLocalizations.of(context)!.enterLessonRoom,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: widget.myColor,
@@ -93,7 +95,7 @@ class _BannerComponentState extends State<BannerComponent> {
                     Expanded(
                       child: Container(
                         child: Text(
-                          'No upcoming lesson',
+                          AppLocalizations.of(context)!.noUpcomingLesson,
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 16,
@@ -109,8 +111,8 @@ class _BannerComponentState extends State<BannerComponent> {
           Container(
             child: Text(
               (bookingProvider.totalLessonTime.isEmpty)
-                  ? 'Total lesson time is 0'
-                  : 'Total lesson time is ${bookingProvider.totalLessonTime}',
+                  ? "${AppLocalizations.of(context)!.totalLessonTime} 0"
+                  : '${AppLocalizations.of(context)!.totalLessonTime} ${bookingProvider.totalLessonTime}',
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 16,
@@ -171,7 +173,7 @@ class _BannerComponentState extends State<BannerComponent> {
                 color: Colors.yellow,
               ),
               endWidget: Text(
-                'Started',
+                AppLocalizations.of(context)!.started,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 14,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class LatestBookScheduleComponent extends StatelessWidget {
   const LatestBookScheduleComponent({Key? key}) : super(key: key);
@@ -10,8 +11,8 @@ class LatestBookScheduleComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            child: const Text(
-              'Latest Book',
+            child: Text(
+              AppLocalizations.of(context)!.latestBook,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

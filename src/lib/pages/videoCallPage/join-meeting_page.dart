@@ -5,6 +5,7 @@ import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../data/model/schedule/booking_info.dart';
+import '../../l10n/app_localizations.dart';
 import '../../utilities/const.dart';
 
 class JoinMeetingPage extends StatefulWidget {
@@ -69,7 +70,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Join Meeting'),
+          title: Text(AppLocalizations.of(context)!.joinMeeting),
         ),
         body: SizedBox(
           height: size.height,
@@ -79,7 +80,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(ImagesPath.video),
-              Text("Upcoming lesson", style: TextStyle(color: Colors.blue, fontSize: 36, fontWeight: FontWeight.w500,)),
+              Text(AppLocalizations.of(context)!.upComingLesson, style: TextStyle(color: Colors.blue, fontSize: 36, fontWeight: FontWeight.w500,)),
               SizedBox(height: 16),
               Column(
                 children: [
@@ -118,7 +119,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
-                endWidget: Text("Meeting is ready..." , style: TextStyle(
+                endWidget: Text(AppLocalizations.of(context)!.meetingIsReady , style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -129,7 +130,7 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                 onPressed: () {
                   _joinMeeting();
                 },
-                child: Text('Join Meeting'),
+                child: Text(AppLocalizations.of(context)!.joinMeeting),
               ),
             ],
           ),

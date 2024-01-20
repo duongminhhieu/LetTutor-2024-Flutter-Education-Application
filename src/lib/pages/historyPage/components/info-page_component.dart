@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 
 class InfoPageHistoryComponent extends StatelessWidget {
@@ -13,11 +14,11 @@ class InfoPageHistoryComponent extends StatelessWidget {
           SizedBox(height: 16),
           _buildImage(),
           SizedBox(height: 16),
-          _buildTitleText(),
+          _buildTitleText(context),
           SizedBox(
             height: 16,
           ),
-          _buildSubTitle(),
+          _buildSubTitle(context),
         ],
       ),
     );
@@ -31,11 +32,11 @@ class InfoPageHistoryComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildTitleText() {
+  Widget _buildTitleText(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      child: const Text(
-        'History',
+      child:  Text(
+        AppLocalizations.of(context)!.history,
         style: TextStyle(
           color: Colors.black,
           fontSize: 36,
@@ -45,11 +46,10 @@ class InfoPageHistoryComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildSubTitle() {
+  Widget _buildSubTitle(BuildContext context) {
     return Container(
-      child: const Text(
-        'The following is a list of lessons you have attended.\n'
-          'You can review the details of the lessons you have attended',
+      child: Text(
+        AppLocalizations.of(context)!.historySubTitle,
         style: TextStyle(
             fontSize: 16,
             color: Colors.grey,

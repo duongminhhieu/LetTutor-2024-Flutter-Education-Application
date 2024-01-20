@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:src/commons/appBar.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/providers/auth_provider.dart';
+import 'package:src/providers/setting_provider.dart';
 
 import '../../commons/loadingOverlay.dart';
-import '../../providers/user_provider.dart';
 import '../loginPage/login_page.dart';
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -20,9 +21,16 @@ class _SettingPageState extends State<SettingPage> {
 
   String selectedLanguage = 'Automatic';
   bool isDarkMode = false;
+  bool _hasLoadedMode = false;
 
   @override
   Widget build(BuildContext context) {
+    SettingsProvider settingsProvider = Provider.of(context, listen: true);
+    if (!_hasLoadedMode) {
+      isDarkMode = settingsProvider.themeMode == ThemeMode.dark;
+      _hasLoadedMode = true;
+    }
+
     return Scaffold(
       appBar: CustomAppBar(),
       body:  Padding(
@@ -44,8 +52,8 @@ class _SettingPageState extends State<SettingPage> {
                       borderRadius: 50,
                       backgroundColor: Colors.blue[600],
                     ),
-                    title: "Profile",
-                    subtitle: "Tap to change your profile",
+                    title: AppLocalizations.of(context)!.profile,
+                    subtitle: AppLocalizations.of(context)!.tapToChangeProfile,
                     onTap: () {
                       Navigator.pushNamed(context, "/profilePage");
                     },
@@ -54,10 +62,15 @@ class _SettingPageState extends State<SettingPage> {
               },
             ),
             SettingsGroup(
-              settingsGroupTitle: "App Settings",
+              settingsGroupTitle: AppLocalizations.of(context)!.appSettings,
               items: [
                 SettingsItem(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      isDarkMode = true;
+                      settingsProvider.toggleTheme(false);
+                    });
+                  },
                   icons: Icons.dark_mode_rounded,
                   iconStyle: IconStyle(
                     iconsColor: Colors.white,
@@ -65,7 +78,6 @@ class _SettingPageState extends State<SettingPage> {
                     backgroundColor: Colors.grey,
                   ),
                   title: 'Dark mode',
-                  subtitle: "Automatic",
                   trailing: Switch.adaptive(
                     value: isDarkMode,
                     onChanged: (value) {
@@ -83,7 +95,7 @@ class _SettingPageState extends State<SettingPage> {
                     withBackground: true,
                     backgroundColor: Colors.grey,
                   ),
-                  title: 'Language',
+                  title: AppLocalizations.of(context)!.language,
                   subtitle: selectedLanguage ?? 'Automatic',
                   trailing: Container(
                     width: 120, // Set width to match parent
@@ -102,6 +114,12 @@ class _SettingPageState extends State<SettingPage> {
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedLanguage = newValue!;
+                            if(selectedLanguage == 'English') {
+                              settingsProvider.setLocale(const Locale("en"));
+                            }
+                            else if(selectedLanguage == 'Vietnamese') {
+                              settingsProvider.setLocale(const Locale("vi"));
+                            }
                           });
                         },
                         items: <String>['English', 'Vietnamese']
@@ -120,26 +138,26 @@ class _SettingPageState extends State<SettingPage> {
               ],
             ),
             SettingsGroup(
-              settingsGroupTitle: "Account",
+              settingsGroupTitle: AppLocalizations.of(context)!.account,
               items: [
                 SettingsItem(
                   onTap: () {},
                   icons: Icons.wallet,
                   iconStyle: IconStyle(),
-                  title: 'My Wallet',
-                  subtitle: "Manage your wallet",
+                  title: "Wallet",
+                  subtitle: AppLocalizations.of(context)!.manageWallet,
                 ),
                 SettingsItem(
                   onTap: () {},
                   icons: Icons.co_present,
                   iconStyle: IconStyle(),
-                  title: 'Become a tutor',
-                  subtitle: "How to become a tutor",
+                  title: AppLocalizations.of(context)!.becomeATutor,
+                  subtitle: AppLocalizations.of(context)!.howToBecomeTutor,
                 ),
               ],
             ),
             SettingsGroup(
-              settingsGroupTitle: "Overview",
+              settingsGroupTitle: AppLocalizations.of(context)!.overview,
               items: [
                 SettingsItem(
                   onTap: () {},
@@ -148,7 +166,7 @@ class _SettingPageState extends State<SettingPage> {
                     backgroundColor: Colors.purple,
                   ),
                   title: 'About',
-                  subtitle: "Learn more about LetTutor App",
+                  subtitle: AppLocalizations.of(context)!.learnAbout,
                 ),
                 SettingsItem(
                   onTap: () {
@@ -161,8 +179,8 @@ class _SettingPageState extends State<SettingPage> {
                   iconStyle: IconStyle(
                     backgroundColor: Colors.red,
                   ),
-                  title: 'Logout',
-                  subtitle: "Log out LetTutor app",
+                  title: AppLocalizations.of(context)!.logout,
+                  subtitle: AppLocalizations.of(context)!.logoutDes,
                 ),
               ],
             ),
@@ -177,14 +195,14 @@ class _SettingPageState extends State<SettingPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Log out"),
-          content: const Text("Are you sure you want to log out?"),
+          title:  Text(AppLocalizations.of(context)!.logout),
+          content:  Text(AppLocalizations.of(context)!.doYouWantLogout),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text("Cancel"),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -197,7 +215,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 );
               },
-              child: const Text("Log out"),
+              child: Text(AppLocalizations.of(context)!.logout),
             ),
           ],
         );

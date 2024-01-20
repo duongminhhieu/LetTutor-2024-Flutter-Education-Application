@@ -3,7 +3,7 @@ import '../data/model/user/learn_topic.dart';
 import '../data/model/user/test_preparation.dart';
 
 class ImagesPath {
-  static const logo = "lib/assets/images/logo.png";
+  static const logo = "lib/assets/icons/1024.png";
   static const intro = "assets/images/intro.png";
   static const facebook = "assets/images/facebook.png";
   static const google = "assets/images/google.png";

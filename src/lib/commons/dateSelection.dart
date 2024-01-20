@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class DateSelectionWidget extends StatefulWidget {
   @override
@@ -36,7 +37,10 @@ class _DateSelectionWidgetState extends State<DateSelectionWidget> {
           child: TextField(
             controller: dateController,
             decoration: InputDecoration(
-              labelText: 'Select Date',
+              labelText: AppLocalizations.of(context)!.selectDate,
+              labelStyle: TextStyle(
+                fontSize: 14,
+              ),
               isDense: true, // Added this
               contentPadding: EdgeInsets.symmetric(horizontal: 10), // Điều chỉnh khoảng cách nội dung
               border: OutlineInputBorder(

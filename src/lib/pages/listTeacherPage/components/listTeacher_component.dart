@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/pages/listTeacherPage/components/tutorTeacherCard.dart';
 import 'package:src/providers/tutor_provider.dart';
 
@@ -33,8 +34,8 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
             margin: EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.only(left: 5),
             alignment: Alignment.centerLeft,
-            child: const Text(
-              'Recommended Tutors',
+            child:  Text(
+              AppLocalizations.of(context)!.recommendTutors,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
@@ -48,8 +49,7 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  debugPrint("Tutor info: " +
-                      tutorProvider.tutors[index].name.toString());
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -76,8 +76,8 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
                               .remove(tutorProvider.tutors[index].userId);
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Unfavored tutor successfully!"),
+                             SnackBar(
+                              content: Text(AppLocalizations.of(context)!.unFavoriteMessage),
                               duration: Duration(seconds: 1),
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.green,
@@ -89,8 +89,8 @@ class _ListTeacherComponentState extends State<ListTeacherComponent> {
                           tutorProvider.favTutorSecondId =
                               tutorProvider.favTutorSecondId.toSet().toList();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Favored tutor successfully!"),
+                             SnackBar(
+                              content: Text(AppLocalizations.of(context)!.favoriteMessage),
                               duration: Duration(seconds: 1),
                               behavior: SnackBarBehavior.floating,
                               backgroundColor: Colors.green,

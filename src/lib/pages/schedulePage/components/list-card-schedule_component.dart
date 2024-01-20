@@ -11,7 +11,7 @@ import '../../../providers/schedule_provider.dart';
 class ListCardScheduleComponent extends StatefulWidget {
   const ListCardScheduleComponent({Key? key, required this.refresh}) : super(key: key);
 
-final Function refresh;
+  final Function refresh;
 
 
   @override
@@ -29,13 +29,13 @@ class _ListCardScheduleComponentState extends State<ListCardScheduleComponent> {
 
   @override
   void initState() {
-    super.initState();
     final bookingProvider = context.read<BookingProvider>();
 
-    lessonList = bookingProvider.lessonList
-        .getRange(_currentPage * _pageSize, (_currentPage + 1) * _pageSize)
+    lessonList = bookingProvider.lessonList!
+        .getRange(_currentPage * _pageSize, bookingProvider.lessonList.length > _pageSize ? (_currentPage + 1) * _pageSize : bookingProvider.lessonList.length)
         .toList();
-    _totalPage = bookingProvider.lessonList.length ~/ _pageSize;
+    _totalPage = bookingProvider.lessonList.length ~/ _pageSize + 1;
+    super.initState();
   }
 
   @override

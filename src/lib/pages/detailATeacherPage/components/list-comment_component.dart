@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:number_paginator/number_paginator.dart';
 import 'package:src/data/model/tutor/tutor.dart';
 import 'package:src/data/model/tutor/tutor_feedback.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class ListCommentComponent extends StatefulWidget {
   const ListCommentComponent({Key? key, required this.tutor}) : super(key: key);
@@ -13,7 +14,7 @@ class ListCommentComponent extends StatefulWidget {
 }
 
 class _ListCommentComponentState extends State<ListCommentComponent> {
-  late List<FeedbackTutor> feedbacks;
+  late List<FeedbackTutor> feedbacks = [];
   late int _currentPage = 0;
   late int _totalPage = 1;
   late final int _pageSize = 5;
@@ -22,10 +23,15 @@ class _ListCommentComponentState extends State<ListCommentComponent> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    feedbacks = widget.tutor.feedbacks!
-        .getRange(_currentPage * _pageSize, (_currentPage + 1) * _pageSize)
-        .toList();
-    _totalPage = widget.tutor.feedbacks!.length ~/ _pageSize;
+    if(widget.tutor.feedbacks == null || widget.tutor.feedbacks!.isEmpty) {
+      _totalPage = 1;
+    }else{
+      feedbacks = widget.tutor.feedbacks!
+          .getRange(_currentPage * _pageSize, (_currentPage + 1) * _pageSize)
+          .toList();
+      _totalPage = widget.tutor.feedbacks!.length ~/ _pageSize;
+    }
+
   }
 
   @override
@@ -36,7 +42,7 @@ class _ListCommentComponentState extends State<ListCommentComponent> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           Container(
-              child: const Text("Others review",
+              child: Text(AppLocalizations.of(context)!.reviews,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,

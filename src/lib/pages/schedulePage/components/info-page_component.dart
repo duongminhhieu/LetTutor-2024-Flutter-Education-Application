@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class InfoPageScheduleComponent extends StatelessWidget {
   const InfoPageScheduleComponent({Key? key}) : super(key: key);
@@ -10,11 +11,11 @@ class InfoPageScheduleComponent extends StatelessWidget {
         children: [
           _buildImage(),
           SizedBox(height: 16),
-          _buildTitleText(),
+          _buildTitleText(context),
           SizedBox(
             height: 16,
           ),
-          _buildSubTitle(),
+          _buildSubTitle(context),
         ],
       ),
     );
@@ -23,19 +24,18 @@ class InfoPageScheduleComponent extends StatelessWidget {
   Widget _buildImage() {
     return Container(
       alignment: Alignment.centerLeft,
-      child: Icon(
-        Icons.calendar_month_rounded,
-        color: Colors.blue,
-        size: 160,
-      ),
+      child: Image.asset(
+        'lib/assets/images/calendar.png',
+        height: 120,
+      )
     );
   }
 
-  Widget _buildTitleText() {
+  Widget _buildTitleText(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      child: const Text(
-        'Schedule',
+      child:  Text(
+        AppLocalizations.of(context)!.schedule,
         style: TextStyle(
           color: Colors.black,
           fontSize: 36,
@@ -45,11 +45,10 @@ class InfoPageScheduleComponent extends StatelessWidget {
     );
   }
 
-  Widget _buildSubTitle() {
+  Widget _buildSubTitle(BuildContext context) {
     return Container(
-      child: const Text(
-        'Here is a list of the sessions you have booked\n'
-        'You can track when the meeting starts, join the meeting with one click or can cancel the meeting before 2 hours',
+      child: Text(
+        AppLocalizations.of(context)!.hereIsAList,
         style: TextStyle(
           fontSize: 16,
           color: Colors.grey,

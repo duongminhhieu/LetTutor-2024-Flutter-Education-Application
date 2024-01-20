@@ -84,7 +84,7 @@ class ScheduleProvider extends ChangeNotifier {
         historyList = response?.rows ?? [];
 
         // set total page
-        totalPageHistory = (response?.count ?? 0) ~/ perPage;
+        totalPageHistory = (response?.count ?? 0) ~/ perPage + 1;
 
       }
       if (result.error != null) {

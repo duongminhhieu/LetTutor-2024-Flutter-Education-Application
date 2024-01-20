@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class BookingConfirmDialog extends StatefulWidget {
   const BookingConfirmDialog({Key? key, required this.start, required this.end, required this.date}) : super(key: key);
@@ -48,7 +49,7 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Booking Time',
+          AppLocalizations.of(context)!.bookingTime,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -72,7 +73,7 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Note',
+          AppLocalizations.of(context)!.notes,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 20,
@@ -92,7 +93,7 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
         minLines: 3,
         maxLines: 4,
         decoration: InputDecoration(
-          hintText: 'Your requests for the tutor',
+          hintText: AppLocalizations.of(context)!.requestForTutorial,
           hintStyle: TextStyle(fontWeight: FontWeight.w300, color: Colors.grey),
           contentPadding: EdgeInsets.all(8),
           border: OutlineInputBorder(
@@ -110,7 +111,7 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
         Navigator.pop(context, false);
       },
       child: Text(
-        'CANCEL',
+        AppLocalizations.of(context)!.cancel,
         style: TextStyle(color: Colors.red),
       ),
     );
@@ -121,7 +122,7 @@ class _BookingConfirmDialogState extends State<BookingConfirmDialog> {
       onPressed: () {
         Navigator.pop(context, [true, _controller.text]);
       },
-      child: Text('BOOK'),
+      child: Text(AppLocalizations.of(context)!.book),
     );
   }
 }
