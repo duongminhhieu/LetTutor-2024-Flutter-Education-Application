@@ -80,8 +80,9 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Start Android Release Build
+      - name: Start Android Release Build File aab
         run: flutter build appbundle
+      - name: Start Android Release Build apk
         run: flutter build apk --release --split-per-abi
 
       - name: Upload Android Release
