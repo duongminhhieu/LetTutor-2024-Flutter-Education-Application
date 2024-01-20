@@ -24,6 +24,7 @@ import 'package:src/providers/schedule_provider.dart';
 import 'package:src/providers/setting_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 import 'package:src/providers/user_provider.dart';
+import 'package:src/utilities/themes.dart';
 
 import 'l10n/app_localizations.dart';
 import 'utilities/const.dart';
@@ -49,6 +50,15 @@ class MyApp extends StatelessWidget {
       ],
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme:
+            Provider.of<SettingsProvider>(context).themeMode == ThemeMode.light
+                ? ThemeData(
+                    primarySwatch: Colors.blue,
+                    primaryColor: const Color.fromRGBO(0, 113, 240, 1.0),)
+                : ThemeData(
+                    primarySwatch: Colors.blue,
+                    primaryColor: const Color.fromRGBO(0, 113, 240, 1.0),),
+        themeMode: getDeviceThemeMode(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: Provider.of<SettingsProvider>(context, listen: true).locale,
@@ -88,9 +98,6 @@ class MyApp extends StatelessWidget {
           '/profilePage': (context) => ProfilePage(),
           '/settingPage': (context) => SettingPage(),
         },
-        theme: ThemeData(
-            primarySwatch: Colors.blue,
-            primaryColor: const Color.fromRGBO(0, 113, 240, 1.0)),
       ),
     );
   }

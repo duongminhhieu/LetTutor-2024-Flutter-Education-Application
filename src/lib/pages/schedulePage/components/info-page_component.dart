@@ -24,11 +24,10 @@ class InfoPageScheduleComponent extends StatelessWidget {
   Widget _buildImage() {
     return Container(
       alignment: Alignment.centerLeft,
-      child: Icon(
-        Icons.calendar_month_rounded,
-        color: Colors.blue,
-        size: 160,
-      ),
+      child: Image.asset(
+        'lib/assets/images/calendar.png',
+        height: 120,
+      )
     );
   }
 

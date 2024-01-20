@@ -21,10 +21,16 @@ class _SettingPageState extends State<SettingPage> {
 
   String selectedLanguage = 'Automatic';
   bool isDarkMode = false;
+  bool _hasLoadedMode = false;
 
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of(context, listen: true);
+    if (!_hasLoadedMode) {
+      isDarkMode = settingsProvider.themeMode == ThemeMode.dark;
+      _hasLoadedMode = true;
+    }
+
     return Scaffold(
       appBar: CustomAppBar(),
       body:  Padding(
@@ -59,7 +65,12 @@ class _SettingPageState extends State<SettingPage> {
               settingsGroupTitle: AppLocalizations.of(context)!.appSettings,
               items: [
                 SettingsItem(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      isDarkMode = true;
+                      settingsProvider.toggleTheme(false);
+                    });
+                  },
                   icons: Icons.dark_mode_rounded,
                   iconStyle: IconStyle(
                     iconsColor: Colors.white,

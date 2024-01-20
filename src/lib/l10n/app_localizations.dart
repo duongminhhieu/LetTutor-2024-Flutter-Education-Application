@@ -165,6 +165,12 @@ abstract class AppLocalizations {
   /// **'Upcoming lesson'**
   String get upComingLesson;
 
+  /// No description provided for @meetingIsReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting is ready...'**
+  String get meetingIsReady;
+
   /// No description provided for @noUpComingLesson.
   ///
   /// In en, this message translates to:

@@ -41,6 +41,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upComingLesson => 'Upcoming lesson';
 
   @override
+  String get meetingIsReady => 'Meeting is ready...';
+
+  @override
   String get noUpComingLesson => 'You have no upcoming lesson';
 
   @override

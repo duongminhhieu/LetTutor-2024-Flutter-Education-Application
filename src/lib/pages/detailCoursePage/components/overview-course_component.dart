@@ -18,26 +18,35 @@ class OverviewCourseComponent extends StatelessWidget {
       children: [
         _buildTitle(AppLocalizations.of(context)!.overview),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.question_mark, AppLocalizations.of(context)!.whyTakeThisCourse, Colors.red),
+        _buildSubTitle(Icons.question_mark,
+            AppLocalizations.of(context)!.whyTakeThisCourse, Colors.red),
         SizedBox(height: 8),
         _buildSubDescription(course.reason ?? CourseOverView.takenReason),
         SizedBox(height: 20),
-        _buildSubTitle(
-            Icons.question_mark, AppLocalizations.of(context)!.whatAbleToDo, Colors.red),
+        _buildSubTitle(Icons.question_mark,
+            AppLocalizations.of(context)!.whatAbleToDo, Colors.red),
         SizedBox(height: 8),
         _buildSubDescription(course.purpose ?? CourseOverView.achievement),
         SizedBox(height: 20),
         _buildTitle(AppLocalizations.of(context)!.experienceLevel),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.group_add, ConstValue.levelList[int.parse(course.level!)  - 1] , Colors.blueAccent),
+        _buildSubTitle(
+            Icons.group_add,
+            ConstValue.levelList[int.parse(course.level!) == 0
+                ? 0
+                : int.parse(course.level!) - 1],
+            Colors.blueAccent),
         SizedBox(height: 20),
         _buildTitle(AppLocalizations.of(context)!.courseLength),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.topic, "${course.topics?.length ?? 0} ${AppLocalizations.of(context)!.topics}", Colors.blueAccent),
+        _buildSubTitle(
+            Icons.topic,
+            "${course.topics?.length ?? 0} ${AppLocalizations.of(context)!.topics}",
+            Colors.blueAccent),
         SizedBox(height: 20),
         _buildTitle(AppLocalizations.of(context)!.listOfTopic),
         SizedBox(height: 20),
-        _buildListTopics( context)
+        _buildListTopics(context)
       ],
     );
   }
@@ -100,7 +109,6 @@ class OverviewCourseComponent extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return _buildItemList(index + 1, context);
       },
-
     );
   }
 
@@ -112,14 +120,11 @@ class OverviewCourseComponent extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => DetailLessonPage(),
-            settings:
-            RouteSettings(arguments: {
-              'course': course,
-              'index': index - 1
-            },),
+            settings: RouteSettings(
+              arguments: {'course': course, 'index': index - 1},
+            ),
           ),
         );
-
       },
       child: Container(
         margin: EdgeInsets.only(top: 20, bottom: 20),

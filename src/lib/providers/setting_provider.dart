@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../utilities/themes.dart';
+
 class SettingsProvider extends ChangeNotifier {
   Locale _locale = const Locale("en", "US");
   Locale get locale => _locale;
@@ -20,12 +22,4 @@ class SettingsProvider extends ChangeNotifier {
 
 }
 
-ThemeMode getDeviceThemeMode() {
-  var brightness =
-      SchedulerBinding.instance.platformDispatcher.platformBrightness;
-  if (brightness == Brightness.light) {
-    return ThemeMode.light;
-  } else {
-    return ThemeMode.dark;
-  }
-}
+

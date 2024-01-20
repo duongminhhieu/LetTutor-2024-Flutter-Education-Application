@@ -41,6 +41,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get upComingLesson => 'Lớp học sắp tới';
 
   @override
+  String get meetingIsReady => 'Lớp học đã sẵn sàng...';
+
+  @override
   String get noUpComingLesson => 'Bạn không có lớp học sắp tới';
 
   @override
