@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/pages/detailLessonPage/detail-lesson_page.dart';
 
 import '../../../data/model/courses/course.dart';
@@ -15,26 +16,26 @@ class OverviewCourseComponent extends StatelessWidget {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       children: [
-        _buildTitle("Overview"),
+        _buildTitle(AppLocalizations.of(context)!.overview),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.question_mark, "Why take this course", Colors.red),
+        _buildSubTitle(Icons.question_mark, AppLocalizations.of(context)!.whyTakeThisCourse, Colors.red),
         SizedBox(height: 8),
         _buildSubDescription(course.reason ?? CourseOverView.takenReason),
         SizedBox(height: 20),
         _buildSubTitle(
-            Icons.question_mark, "What will you be able to do", Colors.red),
+            Icons.question_mark, AppLocalizations.of(context)!.whatAbleToDo, Colors.red),
         SizedBox(height: 8),
         _buildSubDescription(course.purpose ?? CourseOverView.achievement),
         SizedBox(height: 20),
-        _buildTitle("Experience Level"),
+        _buildTitle(AppLocalizations.of(context)!.experienceLevel),
         SizedBox(height: 20),
         _buildSubTitle(Icons.group_add, ConstValue.levelList[int.parse(course.level!)  - 1] , Colors.blueAccent),
         SizedBox(height: 20),
-        _buildTitle("Course Length"),
+        _buildTitle(AppLocalizations.of(context)!.courseLength),
         SizedBox(height: 20),
-        _buildSubTitle(Icons.topic, "${course.topics?.length ?? 0} topics", Colors.blueAccent),
+        _buildSubTitle(Icons.topic, "${course.topics?.length ?? 0} ${AppLocalizations.of(context)!.topics}", Colors.blueAccent),
         SizedBox(height: 20),
-        _buildTitle("List Topics"),
+        _buildTitle(AppLocalizations.of(context)!.listOfTopic),
         SizedBox(height: 20),
         _buildListTopics( context)
       ],

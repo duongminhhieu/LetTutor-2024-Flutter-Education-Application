@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:src/data/model/courses/course.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 import '../../detailLessonPage/detail-lesson_page.dart';
 
@@ -74,7 +75,7 @@ class CourseCardComponent extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text("Discover"),
+                  child: Text(AppLocalizations.of(context)!.discover),
                   style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 40),
                       backgroundColor: Colors.blueAccent),

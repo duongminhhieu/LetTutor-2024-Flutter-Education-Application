@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
 import 'package:src/data/model/user/user.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/pages/profilePage/components/birthday-select.dart';
 import 'package:src/pages/profilePage/components/text-area.dart';
 import 'package:src/providers/user_provider.dart';
@@ -45,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.camera),
-                title: Text('Capture Photo'),
+                title: Text(AppLocalizations.of(context)!.capturePhoto),
                 onTap: () async {
                   Navigator.pop(context);
                   _captureImage();
@@ -53,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ListTile(
                 leading: Icon(Icons.photo_library),
-                title: Text('Choose from Gallery'),
+                title: Text(AppLocalizations.of(context)!.selectFromGallery),
                 onTap: () async {
                   Navigator.pop(context);
                   _pickImage();
@@ -155,7 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Profile",
+          AppLocalizations.of(context)!.profile,
           textAlign: TextAlign.center,
         ),
         leading: IconButton(
@@ -270,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () {},
                     child: Container(
                         child: Text(
-                      "Others review you",
+                      AppLocalizations.of(context)!.otherReviewYou,
                       style: TextStyle(fontSize: 14, color: Colors.blue),
                     )),
                   )),
@@ -280,7 +281,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () {},
                     child: Container(
                         child: Text(
-                      "Change Password",
+                      AppLocalizations.of(context)!.changePassword,
                       style: TextStyle(fontSize: 14, color: Colors.blue),
                     )),
                   )),
@@ -289,7 +290,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.grey.shade200,
                     padding: EdgeInsets.all(15),
                     child: Text(
-                      "Account",
+                      AppLocalizations.of(context)!.account,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -316,17 +317,19 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            _buildGreyText("Name"),
+            _buildGreyText(AppLocalizations.of(context)!.name),
             const SizedBox(height: 8),
-            _buildInputField(nameController, 'Enter your name', true,
+            _buildInputField(nameController,
+                AppLocalizations.of(context)!.enterYourName, true,
                 validator: Validator.validateName),
             const SizedBox(height: 16),
-            _buildGreyText("Email Address"),
+            _buildGreyText(AppLocalizations.of(context)!.email),
             const SizedBox(height: 8),
-            _buildInputField(emailController, "Enter your email", false,
+            _buildInputField(emailController,
+                AppLocalizations.of(context)!.enterYourEmail, false,
                 validator: Validator.validateEmail),
             const SizedBox(height: 16),
-            _buildGreyText("Country"),
+            _buildGreyText(AppLocalizations.of(context)!.country),
             const SizedBox(height: 8),
             TextFormField(
               readOnly: true,
@@ -352,19 +355,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                hintText: "Country",
+                hintText: AppLocalizations.of(context)!.country,
                 hintStyle: TextStyle(color: Colors.grey.shade400),
                 isDense: true, // Added this
                 contentPadding: EdgeInsets.all(12),
               ),
             ),
             const SizedBox(height: 16),
-            _buildGreyText("Phone Number"),
+            _buildGreyText(AppLocalizations.of(context)!.phoneNumber),
             const SizedBox(height: 8),
-            _buildInputField(phoneController, "Enter your phone", false,
+            _buildInputField(phoneController,
+                AppLocalizations.of(context)!.enterYourPhoneNumber, false,
                 validator: Validator.validatePhoneNumber),
             const SizedBox(height: 16),
-            _buildGreyText("Birthday"),
+            _buildGreyText(AppLocalizations.of(context)!.birthday),
             const SizedBox(height: 8),
             BirthdayProfileSelect(
               dateTimeData: selectedDate,
@@ -375,21 +379,22 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             ),
             const SizedBox(height: 16),
-            _buildGreyText("My level"),
+            _buildGreyText(AppLocalizations.of(context)!.myLevel),
             const SizedBox(height: 8),
             _buildSelectLevel(
                 "Choose your level", ConstValue.levelList, selectedLevel),
             const SizedBox(height: 16),
-            _buildGreyText("Want to learn"),
+            _buildGreyText(AppLocalizations.of(context)!.wantToLearn),
             const SizedBox(height: 8),
-            _buildSelect("Want to learn", itemsCategory),
+            _buildSelect(
+                AppLocalizations.of(context)!.wantToLearn, itemsCategory),
             const SizedBox(height: 16),
-            _buildGreyText("Study Schedule"),
+            _buildGreyText(AppLocalizations.of(context)!.studySchedule),
             const SizedBox(height: 8),
             CustomTextArea(
-                controller: studyScheduleController,
-                hintText:
-                    "Note the time of the week you want to study on LetTutor"),
+              controller: studyScheduleController,
+              hintText: AppLocalizations.of(context)!.noteTheTime,
+            ),
             const SizedBox(height: 12),
             _buildSaveButton(),
           ],
@@ -420,18 +425,18 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       child: !_isLoading
           ? Text(
-              "Save changes",
+              AppLocalizations.of(context)!.saveChanges,
               style: TextStyle(fontSize: 16),
             )
           : Container(
               height: 20,
               width: 20,
-            child: const Center(
+              child: const Center(
                 child: CircularProgressIndicator(
                   color: Colors.white,
                 ),
               ),
-          ),
+            ),
     );
   }
 
@@ -606,8 +611,9 @@ class _ProfilePageState extends State<ProfilePage> {
             (userUpdate) => {
                   authProvider.saveLoginInfo(userUpdate, authProvider.token!),
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Update Avatar successful!.'),
+                    SnackBar(
+                      content: Text(
+                          AppLocalizations.of(context)!.updateAvatarSuccess),
                       backgroundColor: Colors.green,
                       behavior: SnackBarBehavior.floating,
                       duration: Duration(seconds: 2),
@@ -617,7 +623,8 @@ class _ProfilePageState extends State<ProfilePage> {
             (err) => {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Update Avatar failed!: $err'),
+                      content: Text(
+                          '${AppLocalizations.of(context)!.updateAvatarFail}: $err'),
                       backgroundColor: Colors.red,
                       behavior: SnackBarBehavior.floating,
                       duration: Duration(seconds: 2),
@@ -632,8 +639,9 @@ class _ProfilePageState extends State<ProfilePage> {
           (updatedUser) => {
                 authProvider.saveLoginInfo(updatedUser, authProvider.token!),
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Update successful!.'),
+                  SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.updateProfileSuccess),
                     backgroundColor: Colors.green,
                     behavior: SnackBarBehavior.floating,
                     duration: Duration(seconds: 2),
@@ -642,8 +650,9 @@ class _ProfilePageState extends State<ProfilePage> {
               },
           (err) => {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Update failed!.'),
+                  SnackBar(
+                    content: Text(
+                        "${AppLocalizations.of(context)!.updateProfileFail}: $err"),
                     backgroundColor: Colors.red,
                     behavior: SnackBarBehavior.floating,
                     duration: Duration(seconds: 2),

@@ -1,4 +1,6 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:src/commons/loadingOverlay.dart';
 import 'package:src/pages/SettingsPage/setting_page.dart';
@@ -19,8 +21,12 @@ import 'package:src/providers/auth_provider.dart';
 import 'package:src/providers/booking_provider.dart';
 import 'package:src/providers/courses_provider.dart';
 import 'package:src/providers/schedule_provider.dart';
+import 'package:src/providers/setting_provider.dart';
 import 'package:src/providers/tutor_provider.dart';
 import 'package:src/providers/user_provider.dart';
+
+import 'l10n/app_localizations.dart';
+import 'utilities/const.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +37,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
@@ -40,13 +45,27 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ScheduleProvider()),
         ChangeNotifierProvider(create: (context) => BookingProvider()),
         ChangeNotifierProvider(create: (context) => CoursesProvider()),
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
       ],
-      child: MaterialApp(
+      builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        // home: ListTeacherPage(),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Provider.of<SettingsProvider>(context, listen: true).locale,
         home: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
-            return authProvider.currentUser != null ? BottomNavBar() : LoadingOverlay(child: LoginPage());
+            return LoadingOverlay(
+              child: AnimatedSplashScreen(
+                  duration: 1000,
+                  splash: const Image(image: AssetImage(ImagesPath.logo)),
+                  nextScreen: authProvider.currentUser != null
+                      ? BottomNavBar()
+                      : LoadingOverlay(child: LoginPage()),
+                  // nextScreen: const LoginPage(),
+                  splashTransition: SplashTransition.fadeTransition,
+                  pageTransitionType: PageTransitionType.bottomToTop,
+                  backgroundColor: Colors.white),
+            );
             // return SettingPage();
           },
         ),
@@ -54,9 +73,12 @@ class MyApp extends StatelessWidget {
           '/bottomNavBar': (context) => BottomNavBar(),
           '/loginPage': (context) => LoadingOverlay(child: LoginPage()),
           '/signUpPage': (context) => LoadingOverlay(child: SignUpPage()),
-          '/forgotPasswordPage': (context) => LoadingOverlay(child: ForgotPasswordPage()),
-          '/listTeacherPage': (context) => LoadingOverlay(child: ListTeacherPage()),
-          '/detailATeacher': (context) => LoadingOverlay(child: DetailATeacherPage()),
+          '/forgotPasswordPage': (context) =>
+              LoadingOverlay(child: ForgotPasswordPage()),
+          '/listTeacherPage': (context) =>
+              LoadingOverlay(child: ListTeacherPage()),
+          '/detailATeacher': (context) =>
+              LoadingOverlay(child: DetailATeacherPage()),
           '/schedulePage': (context) => SchedulePage(),
           '/historyPage': (context) => HistoryPage(),
           '/coursesPage': (context) => CoursesPage(),
@@ -80,7 +102,13 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> _buildScreens() {
-      return [ListTeacherPage(), SchedulePage(), HistoryPage(), CoursesPage(),  SettingPage()];
+      return [
+        ListTeacherPage(),
+        SchedulePage(),
+        HistoryPage(),
+        CoursesPage(),
+        SettingPage()
+      ];
     }
 
     List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -106,7 +134,7 @@ class BottomNavBar extends StatelessWidget {
             )),
         PersistentBottomNavBarItem(
             icon: Icon(Icons.calendar_month_rounded),
-            title: ("Schedule"),
+            title: (AppLocalizations.of(context)!.schedule),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -125,7 +153,7 @@ class BottomNavBar extends StatelessWidget {
             )),
         PersistentBottomNavBarItem(
             icon: Icon(Icons.history),
-            title: ("History"),
+            title: (AppLocalizations.of(context)!.history),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -144,7 +172,7 @@ class BottomNavBar extends StatelessWidget {
             )),
         PersistentBottomNavBarItem(
             icon: Icon(Icons.school),
-            title: ("Courses"),
+            title: (AppLocalizations.of(context)!.course),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(
@@ -163,7 +191,7 @@ class BottomNavBar extends StatelessWidget {
             )),
         PersistentBottomNavBarItem(
             icon: Icon(Icons.settings),
-            title: ("Settings"),
+            title: (AppLocalizations.of(context)!.settings),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
             routeAndNavigatorSettings: RouteAndNavigatorSettings(

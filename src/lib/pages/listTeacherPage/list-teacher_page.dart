@@ -125,11 +125,10 @@ class _ListTeacherPageState extends State<ListTeacherPage> {
         );
 
       })
-    }).whenComplete(() => {
-      setState(() {
+    }).whenComplete(() => setState(() {
         _isLoadingPagination = false;
       })
-    });
+    );
   }
 
   @override

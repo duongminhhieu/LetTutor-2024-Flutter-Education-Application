@@ -3,6 +3,7 @@ import 'package:chewie/chewie.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../data/model/tutor/tutor.dart';
@@ -168,7 +169,8 @@ class _InfoComponentState extends State<InfoComponent> {
         children: [
           GestureDetector(
             onTap: () {
-              final tutorProvider = Provider.of<TutorProvider>(context, listen: false);
+              final tutorProvider =
+                  Provider.of<TutorProvider>(context, listen: false);
               final authProvider = context.read<AuthProvider>();
               tutorProvider.callApiManageFavoriteTutor(
                   widget.tutor, authProvider, (message, unfavored) async {
@@ -177,8 +179,9 @@ class _InfoComponentState extends State<InfoComponent> {
                     tutorProvider.favTutorSecondId.remove(widget.tutor.userId);
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Unfavored tutor successfully!"),
+                      SnackBar(
+                        content: Text(
+                            AppLocalizations.of(context)!.unFavoriteMessage),
                         duration: Duration(seconds: 1),
                         behavior: SnackBarBehavior.floating,
                         backgroundColor: Colors.green,
@@ -189,8 +192,9 @@ class _InfoComponentState extends State<InfoComponent> {
                     tutorProvider.favTutorSecondId =
                         tutorProvider.favTutorSecondId.toSet().toList();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Favored tutor successfully!"),
+                      SnackBar(
+                        content:
+                            Text(AppLocalizations.of(context)!.favoriteMessage),
                         duration: Duration(seconds: 1),
                         behavior: SnackBarBehavior.floating,
                         backgroundColor: Colors.green,
@@ -200,7 +204,7 @@ class _InfoComponentState extends State<InfoComponent> {
                 });
               }, (error) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text("Error"),
                     behavior: SnackBarBehavior.floating,
                     backgroundColor: Colors.red,
@@ -219,8 +223,8 @@ class _InfoComponentState extends State<InfoComponent> {
                   size: 24,
                 ),
                 Container(
-                  child: const Text(
-                    "Favorite",
+                  child: Text(
+                    AppLocalizations.of(context)!.favorite,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.red,
@@ -240,8 +244,8 @@ class _InfoComponentState extends State<InfoComponent> {
                 size: 24,
               ),
               Container(
-                child: const Text(
-                  "Report",
+                child: Text(
+                  AppLocalizations.of(context)!.report,
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.blueAccent,
@@ -276,8 +280,8 @@ class _InfoComponentState extends State<InfoComponent> {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Education",
+                  child: Text(
+                    AppLocalizations.of(context)!.education,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -304,8 +308,8 @@ class _InfoComponentState extends State<InfoComponent> {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Languages",
+                  child: Text(
+                    AppLocalizations.of(context)!.languages,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -343,8 +347,8 @@ class _InfoComponentState extends State<InfoComponent> {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Specialties",
+                  child: Text(
+                    AppLocalizations.of(context)!.specialities,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -383,8 +387,8 @@ class _InfoComponentState extends State<InfoComponent> {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Interests",
+                  child: Text(
+                    AppLocalizations.of(context)!.interests,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -411,8 +415,8 @@ class _InfoComponentState extends State<InfoComponent> {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Teaching experience",
+                  child: Text(
+                    AppLocalizations.of(context)!.teachingExperience,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,

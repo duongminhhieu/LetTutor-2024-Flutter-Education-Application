@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class BirthdayProfileSelect extends StatefulWidget {
   const BirthdayProfileSelect({Key? key, this.dateTimeData, required this.onBirthDayChanged}) : super(key: key);
@@ -51,7 +52,7 @@ class _BirthdayProfileSelectState extends State<BirthdayProfileSelect> {
             controller: dateController,
             decoration: InputDecoration(
               isDense: true, // Added this
-              hintText: "Choose your birthday",
+              hintText:AppLocalizations.of(context)!.chooseYourBirthday,
               hintStyle: TextStyle(
                   fontSize: 14, color: Colors.grey.shade400),
               contentPadding: EdgeInsets.symmetric(horizontal: 10), // Điều chỉnh khoảng cách nội dung

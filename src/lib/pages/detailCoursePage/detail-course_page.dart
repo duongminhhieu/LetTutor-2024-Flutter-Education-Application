@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:src/data/model/courses/course.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'components/course-card_component.dart';
 import 'components/overview-course_component.dart';
 
@@ -22,7 +23,7 @@ class _DetailCoursePageState extends State<DetailCoursePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Detail Course", textAlign: TextAlign.center,),
+          title: Text(AppLocalizations.of(context)!.courseDetail, textAlign: TextAlign.center,),
         ),
         body: Container(
           padding: EdgeInsets.only(left: 20.0, right: 20),

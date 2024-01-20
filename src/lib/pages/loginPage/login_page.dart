@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:src/commons/loading.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/providers/user_provider.dart';
 import 'package:src/utilities/validator.dart';
 
@@ -12,6 +13,7 @@ import '../../commons/loadingOverlay.dart';
 import '../../data/model/user/user.dart';
 import '../../data/model/user/user_data.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/setting_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -32,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
   // TODO: Add loading state
   bool hasAuthenticated = false;
   bool loading = true;
+  bool _isLocaleVietnamese = true;
+
 
   // Check if user has previously logged in
   @override
@@ -50,17 +54,18 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
-    return loading ? const LoadingFilled() : _buildMainContent();
+    return loading ? const LoadingFilled() : _buildMainContent(context);
   }
 
   // build main content
-  Widget _buildMainContent() {
+  Widget _buildMainContent(BuildContext context) {
     mediaSize = MediaQuery.of(context).size;
+    final SettingsProvider settingsProvider = Provider.of(context, listen: true);
+    _isLocaleVietnamese = settingsProvider.locale == const Locale("vi");
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -70,7 +75,20 @@ class _LoginPageState extends State<LoginPage> {
             semanticsLabel: "My SVG", height: 36),
         actions: [
           MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              // set locale
+              setState(() {
+                _isLocaleVietnamese = !_isLocaleVietnamese;
+                if (settingsProvider.locale == const Locale("vi")) {
+                  settingsProvider.setLocale(const Locale("en"));
+                } else if (settingsProvider.locale == const Locale("en")) {
+                  settingsProvider.setLocale(const Locale("vi"));
+                }else{
+                  settingsProvider.setLocale(const Locale("vi"));
+                }
+              });
+
+            },
             minWidth: 20,
             color: Colors.grey.shade300,
             textColor: Colors.white,
@@ -79,8 +97,10 @@ class _LoginPageState extends State<LoginPage> {
             child: ClipRRect(
               borderRadius:
                   BorderRadius.circular(10), // Adjust the radius as needed
-              child: SvgPicture.asset('lib/assets/images/vietnam.svg',
-                  semanticsLabel: "My SVG", height: 18),
+              child: _isLocaleVietnamese
+                  ? SvgPicture.asset('lib/assets/images/vietnam.svg',
+                  semanticsLabel: "My SVG", height: 18)
+                  : SvgPicture.asset('lib/assets/images/united-states.svg', height: 18),
             ),
           )
         ],
@@ -107,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Say hello to your English tutors",
+            AppLocalizations.of(context)!.title,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: myColor, fontSize: 32, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Become fluent faster through one on one video chat lessons tailored to your goals.",
+          Text(
+            AppLocalizations.of(context)!.descriptionTitle,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
@@ -125,16 +145,18 @@ class _LoginPageState extends State<LoginPage> {
           _buildInputField(emailController, 'mail@example.com',
               validator: Validator.validateEmail),
           const SizedBox(height: 16),
-          _buildGreyText("PASSWORD"),
+          _buildGreyText(AppLocalizations.of(context)!.password.toUpperCase()),
           const SizedBox(height: 8),
-          _buildInputField(passwordController, "Enter your password",
+          _buildInputField(
+              passwordController, AppLocalizations.of(context)!.hintPassword,
               isPassword: true, validator: Validator.validatePassword),
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, '/forgotPasswordPage');
               },
-              child: _buildPrimaryColorText('Forgot Password?')),
+              child: _buildPrimaryColorText(
+                  AppLocalizations.of(context)!.forgotPassword)),
           const SizedBox(height: 12),
           _buildLoginButton(),
           const SizedBox(height: 24),
@@ -193,8 +215,8 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(52),
       ),
-      child: const Text(
-        "LOG IN",
+      child: Text(
+        AppLocalizations.of(context)!.login.toUpperCase(),
         style: TextStyle(fontSize: 20),
       ),
     );
@@ -205,12 +227,12 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enter Your Phone Number'),
+          title: Text(AppLocalizations.of(context)!.enterYourPhoneNumber),
           content: TextField(
             controller: phoneController,
             // Add any controller or validation as needed
             decoration: InputDecoration(
-              hintText: 'Enter your phone number',
+              hintText: AppLocalizations.of(context)!.enterYourPhoneNumber,
             ),
           ),
           actions: [
@@ -218,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -229,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                     Provider.of<AuthProvider>(context, listen: false);
                 handleLoginByPhone(authProvider);
               },
-              child: Text('Login'),
+              child: Text(AppLocalizations.of(context)!.login),
             ),
           ],
         );
@@ -242,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
     return Center(
       child: Column(
         children: [
-          _buildGreyText("Or continue with"),
+          _buildGreyText(AppLocalizations.of(context)!.orContinueWith),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -252,8 +274,8 @@ class _LoginPageState extends State<LoginPage> {
                   handleLoginFaceBook(authProvider);
                 },
                 child: Tab(
-                    icon:
-                        SvgPicture.asset("lib/assets/images/facebook-logo.svg")),
+                    icon: SvgPicture.asset(
+                        "lib/assets/images/facebook-logo.svg")),
               ),
               GestureDetector(
                   onTap: () {
@@ -296,9 +318,9 @@ class _LoginPageState extends State<LoginPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildGreyText("Not a member yet?"),
+                _buildGreyText(AppLocalizations.of(context)!.dontHaveAccount),
                 Text(
-                  "Sign up",
+                  AppLocalizations.of(context)!.signUp,
                   style: TextStyle(
                       color: myColor,
                       fontSize: 12,
@@ -311,8 +333,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-
 
   void handleLoginByAccount(AuthProvider authProvider) async {
     LoadingOverlay.of(context).show();
@@ -330,7 +350,6 @@ class _LoginPageState extends State<LoginPage> {
       LoadingOverlay.of(context).hide();
     }
   }
-
 
   handleLoginFaceBook(AuthProvider authProvider) async {
     LoadingOverlay.of(context).show();
@@ -362,8 +381,9 @@ class _LoginPageState extends State<LoginPage> {
           phone: phoneController.text,
           onSuccess: (user, token) async {
             onLoginSuccess(user, token, authProvider);
-          }, password: '123456');
-    }catch (e) {
+          },
+          password: '123456');
+    } catch (e) {
       onLoginFailed(e);
     } finally {
       LoadingOverlay.of(context).hide();

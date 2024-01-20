@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/providers/booking_provider.dart';
 import '../../../commons/confirmDialog.dart';
 import '../../../data/model/schedule/booking_info.dart';
@@ -66,8 +67,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
-              '1 lesson',
+            child: Text(
+              '1 ${AppLocalizations.of(context)!.lessons}',
               style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -218,8 +219,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                       ),
-                      child: const Text(
-                        'Cancel',
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.red),
@@ -235,20 +236,20 @@ class _ScheduleCardState extends State<ScheduleCard> {
               side: BorderSide(color: Colors.grey.shade100, width: 1.0),
             ),
             child: ExpansionTile(
-              title:  Row(
+              title: Row(
                 children: [
                   Expanded(
                       child: Text(
-                    "Request for lesson",
+                    AppLocalizations.of(context)!.requestForLesson,
                     style: TextStyle(fontSize: 14),
                   )),
                   Expanded(
                     child: TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           onPressedLeaveNote(size);
                         },
                         child: Text(
-                          "Edit Request",
+                          AppLocalizations.of(context)!.editRequest,
                           style: TextStyle(
                             color: Colors.blue,
                             fontSize: 14,
@@ -264,7 +265,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                       EdgeInsets.only(top: 14, left: 14, right: 14, bottom: 24),
                   child: Text(
                       widget.bookingInfo.studentRequest ??
-                          "Currently there are no requests for this class. Please write down any requests for the teacher.",
+                          AppLocalizations.of(context)!.studentRequestEmpty,
                       style: TextStyle(
                           color: Colors.grey, fontSize: 14, height: 1.5)),
                 )
@@ -297,8 +298,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
               borderRadius: BorderRadius.circular(4.0),
             ),
           ),
-          child: const Text(
-            'Go to meeting',
+          child: Text(
+            AppLocalizations.of(context)!.goToMeeting,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontWeight: FontWeight.normal,
@@ -335,7 +336,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
           builder: (BuildContext context) {
             return ConfirmDialog(
               content: null,
-              title: "Cancel Lesson",
+              title: AppLocalizations.of(context)!.cancelLesson,
               widget: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -377,8 +378,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   const SizedBox(height: 8),
                   Container(
                     alignment: Alignment.center,
-                    child: const Text(
-                      "Lesson Time",
+                    child: Text(
+                      AppLocalizations.of(context)!.lessonTime,
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
@@ -442,9 +443,9 @@ class _ScheduleCardState extends State<ScheduleCard> {
                       controller: textEditingController,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                         hintText:
-                            "What was the reason you cancel this booking?",
+                          AppLocalizations.of(context)!.reasonCancelBooking,
                       ),
                     ),
                   ),
@@ -489,16 +490,16 @@ class _ScheduleCardState extends State<ScheduleCard> {
               onLeftButton: () {
                 Navigator.of(context).pop();
               },
-              leftButton: "Later",
-              rightButton: "Submit",
+              leftButton: AppLocalizations.of(context)!.cancel,
+              rightButton: AppLocalizations.of(context)!.confirm,
               hasLeftButton: true,
             );
           });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+         SnackBar(
             content: Text(
-                'Classes can only be canceled within 2 hours before starting.')),
+                AppLocalizations.of(context)!.cancelLessonNotAllow)),
       );
     }
   }
@@ -518,14 +519,13 @@ class _ScheduleCardState extends State<ScheduleCard> {
         ));
   }
 
-
-  void onPressedLeaveNote( Size size) {
+  void onPressedLeaveNote(Size size) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return ConfirmDialog(
             content: null,
-            title: 'Special Request',
+            title: AppLocalizations.of(context)!.specialRequest,
             widget: Container(
               padding: const EdgeInsets.only(bottom: 8),
               child: TextField(
@@ -544,11 +544,10 @@ class _ScheduleCardState extends State<ScheduleCard> {
             onLeftButton: () {
               Navigator.of(context).pop();
             },
-            leftButton: 'Cancel',
-            rightButton: 'Submit',
+            leftButton: AppLocalizations.of(context)!.cancel,
+            rightButton: AppLocalizations.of(context)!.confirm,
             hasLeftButton: true,
           );
         });
   }
-
 }

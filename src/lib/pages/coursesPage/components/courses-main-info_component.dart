@@ -1,12 +1,8 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:multiselect/multiselect.dart';
-import 'package:provider/provider.dart';
-import 'package:src/pages/coursesPage/components/course-card.dart';
-import 'package:src/providers/courses_provider.dart';
+import 'package:src/l10n/app_localizations.dart';
 
-import '../../../providers/auth_provider.dart';
 import '../../../utilities/const.dart';
 
 class CoursesMainInfoComponent extends StatefulWidget {
@@ -80,8 +76,7 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
           Expanded(
             child: Column(
               children: [
-                const Text(
-                  "Discover Courses",
+                Text(AppLocalizations.of(context)!.discoverCourse,
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -144,8 +139,8 @@ class _CoursesMainInfoComponentState extends State<CoursesMainInfoComponent> {
 
   Widget _buildSubTitle() {
     return Container(
-      child: const Text(
-        'LiveTutor has built the most quality, methodical and scientific courses in the fields of life for those who are in need of improving their knowledge of the fields.',
+      child:  Text(
+        AppLocalizations.of(context)!.discoverCourseSubTitle,
         textAlign: TextAlign.justify,
         style: TextStyle(fontSize: 16, color: Colors.black38, height: 1.2),
       ),

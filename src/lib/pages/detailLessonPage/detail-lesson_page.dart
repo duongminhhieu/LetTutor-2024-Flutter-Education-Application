@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/pages/detailLessonPage/components/list-topics-lesson_component.dart';
 
 import '../../commons/appBar.dart';
@@ -25,7 +26,7 @@ class _DetailLessonPageState extends State<DetailLessonPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar:AppBar(
-          title: Text("Detail Lesson", textAlign: TextAlign.center,),
+          title: Text(AppLocalizations.of(context)!.lessonDetail, textAlign: TextAlign.center,),
 
         ),
         body: Container(

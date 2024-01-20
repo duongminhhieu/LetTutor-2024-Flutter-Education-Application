@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/utilities/validator.dart';
 
 import '../../commons/loadingOverlay.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/setting_provider.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -21,11 +23,14 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   bool rememberUser = false;
-
+   bool _isLocaleVietnamese = true;
 
   @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
+    final SettingsProvider settingsProvider = Provider.of(context, listen: true);
+    _isLocaleVietnamese = settingsProvider.locale == const Locale("vi");
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -35,7 +40,20 @@ class _SignUpPageState extends State<SignUpPage> {
             semanticsLabel: "My SVG", height: 36),
         actions: [
           MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              // set locale
+              setState(() {
+                _isLocaleVietnamese = !_isLocaleVietnamese;
+                if (settingsProvider.locale == const Locale("vi")) {
+                  settingsProvider.setLocale(const Locale("en"));
+                } else if (settingsProvider.locale == const Locale("en")) {
+                  settingsProvider.setLocale(const Locale("vi"));
+                }else{
+                  settingsProvider.setLocale(const Locale("vi"));
+                }
+              });
+
+            },
             minWidth: 20,
             color: Colors.grey.shade300,
             textColor: Colors.white,
@@ -44,8 +62,10 @@ class _SignUpPageState extends State<SignUpPage> {
             child: ClipRRect(
               borderRadius:
               BorderRadius.circular(10), // Adjust the radius as needed
-              child: SvgPicture.asset('lib/assets/images/vietnam.svg',
-                  semanticsLabel: "My SVG", height: 18),
+              child: _isLocaleVietnamese
+                  ? SvgPicture.asset('lib/assets/images/vietnam.svg',
+                  semanticsLabel: "My SVG", height: 18)
+                  : SvgPicture.asset('lib/assets/images/united-states.svg', height: 18),
             ),
           )
         ],
@@ -71,14 +91,14 @@ class _SignUpPageState extends State<SignUpPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Say hello to your English tutors",
+            AppLocalizations.of(context)!.title,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: myColor, fontSize: 32, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Become fluent faster through one on one video chat lessons tailored to your goals.",
+           Text(
+            AppLocalizations.of(context)!.descriptionTitle,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
@@ -90,15 +110,15 @@ class _SignUpPageState extends State<SignUpPage> {
           const SizedBox(height: 16),
           _buildGreyText("PASSWORD"),
           const SizedBox(height: 8),
-          _buildInputField(passwordController, "Enter your password",
+          _buildInputField(passwordController, AppLocalizations.of(context)!.hintPassword,
               isPassword: true, validator: Validator.validatePassword),
           const SizedBox(height: 16),
           _buildGreyText("CONFIRM PASSWORD"),
           const SizedBox(height: 8),
-          _buildInputField(confirmPasswordController, "Confirm your password",
+          _buildInputField(confirmPasswordController, AppLocalizations.of(context)!.confirmPassword,
               isPassword: true, validator: Validator.validateConfirmPassword, isConfirmPassword: true),
           const SizedBox(height: 12),
-          _buildPrimaryColorText('Forgot Password?'),
+          _buildPrimaryColorText(AppLocalizations.of(context)!.forgotPassword),
           const SizedBox(height: 12),
           _buildSignUpButton(),
           const SizedBox(height: 24),
@@ -156,8 +176,8 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: const Color.fromRGBO(4, 104, 211, 1.0),
         minimumSize: const Size.fromHeight(52),
       ),
-      child: const Text(
-        "SIGN UP",
+      child:  Text(
+        AppLocalizations.of(context)!.signUp.toUpperCase(),
         style: TextStyle(fontSize: 20),
       ),
     );
@@ -167,7 +187,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Center(
       child: Column(
         children: [
-          _buildGreyText("Or continue with"),
+          _buildGreyText(AppLocalizations.of(context)!.orContinueWith),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -204,8 +224,8 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildGreyText("Already have an account? "),
-                Text("Login",
+                _buildGreyText(AppLocalizations.of(context)!.alreadyHaveAccount),
+                Text(AppLocalizations.of(context)!.login,
                     style: TextStyle(
                         color: myColor,
                         fontSize: 12,

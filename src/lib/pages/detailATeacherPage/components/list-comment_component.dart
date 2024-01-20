@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:number_paginator/number_paginator.dart';
 import 'package:src/data/model/tutor/tutor.dart';
 import 'package:src/data/model/tutor/tutor_feedback.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 class ListCommentComponent extends StatefulWidget {
   const ListCommentComponent({Key? key, required this.tutor}) : super(key: key);
@@ -36,7 +37,7 @@ class _ListCommentComponentState extends State<ListCommentComponent> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           Container(
-              child: const Text("Others review",
+              child:  Text(AppLocalizations.of(context)!.reviews,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,

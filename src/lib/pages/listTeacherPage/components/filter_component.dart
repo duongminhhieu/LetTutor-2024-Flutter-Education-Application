@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 import 'package:provider/provider.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/providers/tutor_provider.dart';
 
 import '../../../commons/dateSelection.dart';
@@ -51,8 +52,8 @@ class _FilterComponentState extends State<FilterComponent> {
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
-              "Find a tutor",
+            child:  Text(
+              AppLocalizations.of(context)!.findATutor,
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -76,7 +77,7 @@ class _FilterComponentState extends State<FilterComponent> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),
-                          hintText: 'Enter tutor name...',
+                          hintText: AppLocalizations.of(context)!.enterTutorName,
                           hintStyle: TextStyle(
                               fontSize: 14, color: Colors.grey.shade400),
                           isDense: true, // Added this
@@ -92,7 +93,7 @@ class _FilterComponentState extends State<FilterComponent> {
                     builder: (BuildContext context, TutorProvider tutorProvider, Widget? child) {
                       return Container(
                         width: double.infinity, // Set width to match parent
-                        height: 42.0, // Set height to match TextInput
+                        height: 36,
                         alignment: Alignment.center,
                         child: DropDownMultiSelect(
                           isDense: true,
@@ -100,7 +101,7 @@ class _FilterComponentState extends State<FilterComponent> {
                             border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(40.0))),
                             isDense: true, // Added this
-                            contentPadding: EdgeInsets.all(12),
+                            contentPadding: EdgeInsets.all(8),
                           ),
                           onChanged: (List<String> selected) {
                             setState(() {
@@ -109,7 +110,7 @@ class _FilterComponentState extends State<FilterComponent> {
                           },
                           options: nationalities,
                           selectedValues: selectedNationalities,
-                          whenEmpty: "Select tutor nationality",
+                          whenEmpty: AppLocalizations.of(context)!.selectNationality,
                         ),
                       );
                     },
@@ -120,8 +121,8 @@ class _FilterComponentState extends State<FilterComponent> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            child: const Text(
-              'Select available tutoring time:',
+            child:  Text(
+              AppLocalizations.of(context)!.selectAvailableTime,
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -134,12 +135,12 @@ class _FilterComponentState extends State<FilterComponent> {
             child: Column(
               children: [
                 Container(
-                  width: 280,
+                  width: double.infinity,
                   child: DateSelectionWidget(),
                 ),
                 SizedBox(height: 12),
                 Container(
-                  width: 280,
+                  width: double.infinity,
                   child: TimeRangeSelector(),
                 )
               ],

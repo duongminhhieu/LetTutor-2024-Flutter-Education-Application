@@ -4,6 +4,7 @@ import 'package:number_paginator/number_paginator.dart';
 import 'package:provider/provider.dart';
 import 'package:src/commons/appBar.dart';
 import 'package:src/commons/drawer.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:src/pages/coursesPage/components/courses-main-info_component.dart';
 import 'package:src/pages/coursesPage/components/list-courses_component.dart';
 
@@ -147,9 +148,9 @@ class _CoursesPageState extends State<CoursesPage> with TickerProviderStateMixin
                   });
                 },
                 tabs: [
-                  Tab(text: 'Course'),
-                  Tab(text: 'E-Book'),
-                  Tab(text: 'Interactive book'),
+                  Tab(text: AppLocalizations.of(context)!.course),
+                  Tab(text: AppLocalizations.of(context)!.ebook),
+                  Tab(text: AppLocalizations.of(context)!.interactiveBook),
                 ],
               ),
               SizedBox(height: 16),

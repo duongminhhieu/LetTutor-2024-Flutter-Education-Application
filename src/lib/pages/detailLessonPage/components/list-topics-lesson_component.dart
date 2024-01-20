@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:src/l10n/app_localizations.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../data/model/courses/course.dart';
@@ -43,8 +44,8 @@ class _ListTopicsLessonComponentState extends State<ListTopicsLessonComponent> {
         Container(
           padding: const EdgeInsets.only(top: 32, bottom: 12),
           alignment: Alignment.centerLeft,
-          child: const Text(
-            "List topics",
+          child:  Text(
+            AppLocalizations.of(context)!.listOfTopic,
             style: TextStyle(
               color: Colors.black,
               fontSize: 24,

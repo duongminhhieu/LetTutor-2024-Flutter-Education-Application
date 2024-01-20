@@ -32,7 +32,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 40,
+          height: 36,
           padding: EdgeInsets.only(left: 8),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
@@ -45,6 +45,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
                   textAlign: TextAlign.center,
                   textAlignVertical: TextAlignVertical.center,
                   readOnly: true,
+                  style: TextStyle(fontSize: 14),
                   onTap: () => _selectTime(context, true),
                   decoration: InputDecoration(
                     hintText: "Start time",
@@ -63,6 +64,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
                   textAlignVertical: TextAlignVertical.center,
                   textAlign: TextAlign.center,
                   readOnly: true,
+                  style: TextStyle(fontSize: 14),
                   onTap: () => _selectTime(context, false),
                   decoration: InputDecoration(
                     hintText: 'End Time',
