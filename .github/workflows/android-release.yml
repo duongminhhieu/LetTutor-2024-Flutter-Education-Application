@@ -108,9 +108,10 @@ jobs:
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "*.apk,app-release.aab"
+          artifacts: "**/*.apk, **/app-release.aab"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
+
       # - name: Release Build to internal track
       #   uses: r0adkll/upload-google-play@v1
       #   with:
