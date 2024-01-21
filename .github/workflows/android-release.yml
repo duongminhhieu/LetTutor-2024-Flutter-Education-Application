@@ -97,6 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
       - name: Get Android Build from artifacts
         uses: actions/download-artifact@v2
         with:
@@ -105,7 +106,7 @@ jobs:
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*,build/app/outputs/bundle/release/"
+          artifacts: "build/app/outputs/apk/release/*,build/app/outputs/bundle/release/*"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
       # - name: Release Build to internal track
