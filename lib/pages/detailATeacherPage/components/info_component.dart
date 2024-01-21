@@ -293,7 +293,7 @@ class _InfoComponentState extends State<InfoComponent> {
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.tutor.education!,
+                    widget.tutor.education ?? "",
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
@@ -321,7 +321,7 @@ class _InfoComponentState extends State<InfoComponent> {
                   alignment: Alignment.centerLeft,
                   child: Wrap(
                     spacing: 8.0,
-                    children: convertStringToLanguages(widget.tutor.languages)!
+                    children: convertStringToLanguages(widget.tutor.languages ?? "")!
                         .map((label) {
                       return FilterChip(
                         backgroundColor: Colors.lightBlue.shade100,
@@ -400,7 +400,7 @@ class _InfoComponentState extends State<InfoComponent> {
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.tutor.interests!,
+                    widget.tutor.interests ?? "",
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
@@ -428,7 +428,7 @@ class _InfoComponentState extends State<InfoComponent> {
                   padding: EdgeInsets.only(left: 20),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.tutor.experience!,
+                    widget.tutor.experience ?? "",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.normal,
