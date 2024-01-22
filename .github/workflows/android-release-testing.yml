@@ -1,15 +1,10 @@
-name: Android Release Production
+name: Android Release Testing
 on:
   push:
     branches:
-      - master
-      - main
+      - testing
   pull_request:
     branches:
-      - master
-      - main
-      - staging
-      - develop
       - testing
 
   workflow_dispatch:
@@ -82,18 +77,18 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Start Android Release Build Appbundle-Production
-        run: flutter build appbundle --flavor production -t lib/main_prod.dart
+      - name: Start Android Release Build Appbundle-Testing
+        run: flutter build appbundle --flavor flavorTest -t lib/main_test.dart
 
-      - name: Start Android Release Build APK-Production
-        run: flutter build apk --flavor production -t lib/main_prod.dart
+      - name: Start Android Release Build APK-Testing
+        run: flutter build apk --flavor flavorTest -t lib/main_test.dart
 
       - name: Upload Android Release
         uses: actions/upload-artifact@v2
         with:
           name: android-release
           path: |
-            build/app/outputs/bundle/productionRelease/*
+            build/app/outputs/bundle/flavorTestRelease/*
             build/app/outputs/flutter-apk/*
 
   deploy:
@@ -112,8 +107,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "**/*.apk, **/*.aab"
-          tag: v1.0.${{ github.run_number }}
-          name: Release v1.0.${{ github.run_number }}
+          tag: v1.0.${{ github.run_number }}-testing
+          name: Release v1.0.${{ github.run_number }}-testing
           token: ${{ secrets.TOKEN }}
 
       # - name: Release Build to internal track
