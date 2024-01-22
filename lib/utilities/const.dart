@@ -19,6 +19,10 @@ class ImagesPath {
   static const english = "assets/images/britain.png";
 }
 
+class SecretKeys{
+  static const String chatGPTApiKey = 'your_chat_gpt_api_key';
+}
+
 class ConstValue {
   static const descriptionTextScale = 1.5;
   static const courseNameTextScale = 1.75;

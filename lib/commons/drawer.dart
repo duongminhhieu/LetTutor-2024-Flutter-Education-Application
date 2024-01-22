@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:src/commons/loadingOverlay.dart';
+import 'package:src/l10n/app_localizations.dart';
 
 import '../pages/loginPage/login_page.dart';
 import '../providers/auth_provider.dart';
@@ -36,8 +37,8 @@ class CustomDrawer extends StatelessWidget {
                             fit: BoxFit.fitHeight,
                             imageUrl: authProvider.currentUser?.avatar ??
                                 "https://sandbox.api.lettutor.com/avatar/f569c202-7bbf-4620-af77-ecc1419a6b28avatar1700296337596.jpg",
-                            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                Center(
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
                                     child: CircularProgressIndicator(
                                         value: downloadProgress.progress)),
                             errorWidget: (context, url, error) => Image.network(
@@ -67,59 +68,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Container(
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.calendar_month_rounded,
-                    size: 36,
-                    color: Colors.blue,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    "Recurring Lesson Schedule",
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              // Update the state of the app
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Container(
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.co_present,
-                    size: 36,
-                    color: Colors.blue,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    "Tutor",
-                    style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              // Update the state of the app
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Container(
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(
                     Icons.school,
@@ -128,7 +77,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   SizedBox(width: 12),
                   Text(
-                    "Courses",
+                    AppLocalizations.of(context)!.course,
                     style: TextStyle(
                         color: Colors.black87,
                         fontSize: 14,
@@ -146,7 +95,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Container(
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(
                     Icons.people_alt,
@@ -155,7 +104,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   SizedBox(width: 12),
                   Text(
-                    "Become a tutor",
+                    AppLocalizations.of(context)!.becomeATutor,
                     style: TextStyle(
                         color: Colors.black87,
                         fontSize: 14,
@@ -167,12 +116,12 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               // Update the state of the app
               // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, "/becomeATeacherPage");
             },
           ),
           ListTile(
             title: Container(
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(
                     Icons.logout,
@@ -181,7 +130,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   SizedBox(width: 12),
                   Text(
-                    "Log out",
+                    AppLocalizations.of(context)!.logout,
                     style: TextStyle(
                         color: Colors.black87,
                         fontSize: 14,
@@ -208,14 +157,14 @@ class CustomDrawer extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Log out"),
-          content: const Text("Are you sure you want to log out?"),
+          title: Text(AppLocalizations.of(context)!.logout),
+          content: Text(AppLocalizations.of(context)!.doYouWantLogout),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text("Cancel"),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -228,7 +177,7 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text("Log out"),
+              child: Text(AppLocalizations.of(context)!.logout),
             ),
           ],
         );
@@ -241,5 +190,4 @@ class CustomDrawer extends StatelessWidget {
     prefs.clear();
     authProvider.clearUserInfo();
   }
-
 }

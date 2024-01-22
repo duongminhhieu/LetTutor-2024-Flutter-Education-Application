@@ -148,6 +148,6 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
   }
 
   void onPressedChatBubble(BuildContext context, Size size) {
-    // Navigator.pushNamed(context, MyRouter.chatGpt);
+    Navigator.pushNamed(context, "/chatPage");
   }
 }

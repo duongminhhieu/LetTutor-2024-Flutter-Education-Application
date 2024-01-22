@@ -4,6 +4,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:src/commons/loadingOverlay.dart';
 import 'package:src/pages/becomeTutorPage/becomeTutor_page.dart';
+import 'package:src/pages/chatGptPage/chat_gpt_page.dart';
 import 'package:src/pages/settingsPage/setting_page.dart';
 import 'package:src/pages/coursesPage/courses_page.dart';
 import 'package:src/pages/detailATeacherPage/detail-a-teacher_page.dart';
@@ -99,6 +100,7 @@ class MyApp extends StatelessWidget {
           '/profilePage': (context) => ProfilePage(),
           '/settingPage': (context) => SettingPage(),
           '/becomeATeacherPage': (context) => BecomeTutorPage(),
+          '/chatPage': (context) => ChatGPTPage(),
         },
       ),
     );
@@ -139,6 +141,8 @@ class BottomNavBar extends StatelessWidget {
                 '/detailLessonPage': (context) => DetailLessonPage(),
                 '/videoCallPage': (context) => VideoCallPage(),
                 '/profilePage': (context) => ProfilePage(),
+                '/chatPage': (context) => ChatGPTPage(),
+                '/becomeATeacherPage': (context) => BecomeTutorPage(),
               },
             )),
         PersistentBottomNavBarItem(
