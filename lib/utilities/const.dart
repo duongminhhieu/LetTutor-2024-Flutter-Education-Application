@@ -1,4 +1,6 @@
 
+import 'package:src/env.dart';
+
 import '../data/model/user/learn_topic.dart';
 import '../data/model/user/test_preparation.dart';
 
@@ -41,7 +43,7 @@ class ConstValue {
     "IELTS",
     "TOEFL"
   ];
-  static const String BASE_URL = 'https://sandbox.api.lettutor.com/';
+  static String BASE_URL = AppEnvironment.baseApiUrl;
 }
 
 class ButtonType {

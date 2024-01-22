@@ -1,7 +1,7 @@
 import '../../utilities/const.dart';
 
 class APICourse {
-  static const String BASE_URL = ConstValue.BASE_URL;
+  static String BASE_URL = ConstValue.BASE_URL;
 
   static String getDetailCourse(String id) => '${BASE_URL}course/$id';
 

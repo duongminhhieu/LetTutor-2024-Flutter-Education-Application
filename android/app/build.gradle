@@ -60,6 +60,33 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        development {
+            dimension "default"
+            applicationId "com.lettutor.dev"
+            versionNameSuffix "-dev"
+            resValue "string", "app_name", "[DEV] LetTutor"
+        }
+        flavorTest {
+            dimension "default"
+            applicationId "com.lettutor.test"
+            versionNameSuffix "-test"
+            resValue "string", "app_name", "[TEST] LetTutor"
+        }
+        staging {
+            dimension "default"
+            applicationId "com.lettutor.staging"
+            versionNameSuffix "-stg"
+            resValue "string", "app_name", "[STG] LetTutor"
+        }
+        production {
+            dimension "default"
+            applicationId "com.mobile.lettutor"
+            resValue "string", "app_name", "LetTutor 2024"
+        }
+    }
 }
 
 flutter {

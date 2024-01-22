@@ -11,7 +11,7 @@
 
     <application
         tools:replace="android:label"
-        android:label="LetTutor 2024"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

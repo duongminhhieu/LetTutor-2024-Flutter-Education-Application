@@ -1,16 +1,11 @@
-name: Android Release Production
+name: Android Release Staging
 on:
   push:
     branches:
-      - master
-      - main
+      - staging
   pull_request:
     branches:
-      - master
-      - main
       - staging
-      - develop
-      - testing
 
   workflow_dispatch:
 
@@ -82,11 +77,11 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Start Android Release Build Appbundle-Production
-        run: flutter build appbundle --flavor production -t lib/main_prod.dart
+      - name: Start Android Release Build Appbundle-Staging
+        run: flutter build appbundle --flavor staging -t lib/main_staging.dart
 
-      - name: Start Android Release Build APK-Production
-        run: flutter build apk --flavor production -t lib/main_prod.dart
+      - name: Start Android Release Build APK-Staging
+        run: flutter build apk --flavor staging -t lib/main_staging.dart
 
       - name: Upload Android Release
         uses: actions/upload-artifact@v2
