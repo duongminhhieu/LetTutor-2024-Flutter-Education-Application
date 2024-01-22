@@ -93,7 +93,7 @@ jobs:
         with:
           name: android-release
           path: |
-            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/bundle/productionRelease/*
             build/app/outputs/flutter-apk/*
 
   deploy:
@@ -111,7 +111,7 @@ jobs:
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "**/*.apk, **/app-release.aab"
+          artifacts: "**/*.apk, **/*.aab"
           tag: v1.0.${{ github.run_number }}
           name: Release v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}

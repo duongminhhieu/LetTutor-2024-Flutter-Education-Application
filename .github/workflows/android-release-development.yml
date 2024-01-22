@@ -78,7 +78,7 @@ jobs:
         run: flutter pub get
 
       - name: Start Android Release Build Appbundle-Development
-        run: flutter build appbundle --flavor production -t lib/main_dev.dart
+        run: flutter build appbundle --flavor development -t lib/main_dev.dart
 
       - name: Start Android Release Build APK-Development
         run: flutter build apk --flavor development -t lib/main_dev.dart
@@ -88,7 +88,7 @@ jobs:
         with:
           name: android-release
           path: |
-            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/bundle/productionRelease/*
             build/app/outputs/flutter-apk/*
 
   deploy:
@@ -106,7 +106,7 @@ jobs:
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "**/*.apk, **/app-release.aab"
+          artifacts: "**/*.apk, **/*.aab"
           tag: v1.0.${{ github.run_number }}-development
           name: Release v1.0.${{ github.run_number }}-development
           token: ${{ secrets.TOKEN }}
