@@ -88,7 +88,7 @@ jobs:
         with:
           name: android-release
           path: |
-            build/app/outputs/bundle/productionRelease/*
+            build/app/outputs/bundle/developmentRelease/*
             build/app/outputs/flutter-apk/*
 
   deploy:
