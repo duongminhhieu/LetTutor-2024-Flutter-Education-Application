@@ -148,7 +148,9 @@ class _SettingPageState extends State<SettingPage> {
                   subtitle: AppLocalizations.of(context)!.manageWallet,
                 ),
                 SettingsItem(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, "/becomeATeacherPage");
+                  },
                   icons: Icons.co_present,
                   iconStyle: IconStyle(),
                   title: AppLocalizations.of(context)!.becomeATutor,

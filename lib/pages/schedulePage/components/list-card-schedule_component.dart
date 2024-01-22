@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:src/pages/schedulePage/components/scheduleCard.dart';
 
 import '../../../data/model/schedule/booking_info.dart';
-import '../../../providers/auth_provider.dart';
 import '../../../providers/booking_provider.dart';
-import '../../../providers/schedule_provider.dart';
 
 class ListCardScheduleComponent extends StatefulWidget {
   const ListCardScheduleComponent({Key? key, required this.refresh}) : super(key: key);
@@ -34,7 +32,7 @@ class _ListCardScheduleComponentState extends State<ListCardScheduleComponent> {
     lessonList = bookingProvider.lessonList!
         .getRange(_currentPage * _pageSize, bookingProvider.lessonList.length > _pageSize ? (_currentPage + 1) * _pageSize : bookingProvider.lessonList.length)
         .toList();
-    _totalPage = bookingProvider.lessonList.length ~/ _pageSize + 1;
+    _totalPage = bookingProvider.lessonList.length ~/ _pageSize == 0 ? 1 : bookingProvider.lessonList.length ~/ _pageSize;
     super.initState();
   }
 

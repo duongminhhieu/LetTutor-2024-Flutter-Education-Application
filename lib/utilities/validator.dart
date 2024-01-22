@@ -17,6 +17,11 @@ class Validator {
     }
   }
 
+  static bool isValidName(String input){
+    final nameRegExp = RegExp(r'^[a-zA-Z0-9]{2,}$');
+    return nameRegExp.hasMatch(input);
+  }
+
   static String? validatePassword(String value) {
     Pattern pattern = r'^.{6,}$';
     RegExp regex =  RegExp(pattern as String);
