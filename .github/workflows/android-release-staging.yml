@@ -107,7 +107,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "**/*.apk, **/app-release.aab"
-          tag: v1.0.${{ github.run_number }}
+          tag: v1.0.${{ github.run_number }}-staging
+          name: Release v1.0.${{ github.run_number }}-staging
           token: ${{ secrets.TOKEN }}
 
       # - name: Release Build to internal track

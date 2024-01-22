@@ -113,6 +113,7 @@ jobs:
         with:
           artifacts: "**/*.apk, **/app-release.aab"
           tag: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
 
       # - name: Release Build to internal track
