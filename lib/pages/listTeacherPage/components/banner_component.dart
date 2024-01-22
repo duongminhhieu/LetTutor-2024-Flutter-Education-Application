@@ -150,8 +150,8 @@ class _BannerComponentState extends State<BannerComponent> {
           ),
           textAlign: TextAlign.center,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          alignment: WrapAlignment.center,
           children: [
             Text(
               '(starts in: ',
