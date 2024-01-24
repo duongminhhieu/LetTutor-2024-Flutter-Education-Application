@@ -29,39 +29,50 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
         upcomingClass.scheduleDetailInfo!.startPeriodTimestamp!);
   }
 
-
   void _joinMeeting() async {
-    final String meetingToken =
-        upcomingClass.studentMeetingLink?.split('token=')[1] ?? '';
-    Map<String, dynamic> jwtDecoded = JwtDecoder.decode(meetingToken);
-    final String room = jwtDecoded['room'];
+    try {
+      final String meetingToken =
+          upcomingClass.studentMeetingLink?.split('token=')[1] ?? '';
+      Map<String, dynamic> jwtDecoded = JwtDecoder.decode(meetingToken);
+      final String room = jwtDecoded['room'];
 
-    var options = JitsiMeetingOptions(
-      roomNameOrUrl: room,
-      serverUrl: "https://meet.lettutor.com",
-      token: meetingToken,
-      isAudioMuted: true,
-      isAudioOnly: true,
-      isVideoMuted: true,
-    );
+      var options = JitsiMeetingOptions(
+        roomNameOrUrl: room,
+        serverUrl: "https://meet.lettutor.com",
+        token: meetingToken,
+        isAudioMuted: true,
+        isAudioOnly: true,
+        isVideoMuted: true,
+      );
 
-    debugPrint("JitsiMeetingOptions: $options");
-    await JitsiMeetWrapper.joinMeeting(
-      options: options,
-      listener: JitsiMeetingListener(
-        onOpened: () => debugPrint("onOpened"),
-        onConferenceWillJoin: (url) {
-          debugPrint("onConferenceWillJoin: url: $url");
-        },
-        onConferenceJoined: (url) {
-          debugPrint("onConferenceJoined: url: $url");
-        },
-        onConferenceTerminated: (url, error) {
-          debugPrint("onConferenceTerminated: url: $url, error: $error");
-        },
-        onClosed: () => debugPrint("onClosed"),
-      ),
-    );
+      debugPrint("JitsiMeetingOptions: $options");
+      await JitsiMeetWrapper.joinMeeting(
+        options: options,
+        listener: JitsiMeetingListener(
+          onOpened: () => debugPrint("onOpened"),
+          onConferenceWillJoin: (url) {
+            debugPrint("onConferenceWillJoin: url: $url");
+          },
+          onConferenceJoined: (url) {
+            debugPrint("onConferenceJoined: url: $url");
+          },
+          onConferenceTerminated: (url, error) {
+            debugPrint("onConferenceTerminated: url: $url, error: $error");
+          },
+          onClosed: () => debugPrint("onClosed"),
+        ),
+      );
+    } catch (error) {
+      // show message error ScaffoldMessenger
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   @override
@@ -80,7 +91,12 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(ImagesPath.video),
-              Text(AppLocalizations.of(context)!.upComingLesson, style: TextStyle(color: Colors.blue, fontSize: 36, fontWeight: FontWeight.w500,)),
+              Text(AppLocalizations.of(context)!.upComingLesson,
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 36,
+                    fontWeight: FontWeight.w500,
+                  )),
               SizedBox(height: 16),
               Column(
                 children: [
@@ -119,11 +135,14 @@ class _JoinMeetingPageState extends State<JoinMeetingPage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
-                endWidget: Text(AppLocalizations.of(context)!.meetingIsReady , style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),),
+                endWidget: Text(
+                  AppLocalizations.of(context)!.meetingIsReady,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
