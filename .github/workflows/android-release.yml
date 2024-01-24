@@ -114,6 +114,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
-          releaseFiles: build/**/outputs/**/*.aab
+          releaseFiles: "**/*.aab"
           track: internal
           status: draft
