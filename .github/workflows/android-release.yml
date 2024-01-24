@@ -4,13 +4,6 @@ on:
     branches:
       - master
       - main
-  pull_request:
-    branches:
-      - master
-      - main
-      - staging
-      - develop
-      - testing
 
   workflow_dispatch:
 
