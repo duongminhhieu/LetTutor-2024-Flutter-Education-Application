@@ -12,20 +12,22 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = 1
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
 def versionProperties = new Properties()
 def versionPropertiesFile = rootProject.file('versionCode.properties')
 if (versionPropertiesFile.exists()) {
     versionProperties.load(new FileInputStream(versionPropertiesFile))
     println versionProperties
     flutterVersionCode = versionProperties['versionCode']
-} else {
-    flutterVersionCode = 1
-}
-
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
 }
 
 def keystoreProperties = new Properties()
