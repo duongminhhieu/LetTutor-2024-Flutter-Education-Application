@@ -12,10 +12,15 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def versionCodeFile = file('version_code.txt')
-// Read the existing version code or default to 1
-def flutterVersionCode = versionCodeFile.exists() ? versionCodeFile.text.toInteger() : 1
-
+def versionProperties = new Properties()
+def versionPropertiesFile = rootProject.file('versionCode.properties')
+if (versionPropertiesFile.exists()) {
+    versionProperties.load(new FileInputStream(versionPropertiesFile))
+    println versionProperties
+    flutterVersionCode = versionProperties['versionCode']
+} else {
+    flutterVersionCode = 1
+}
 
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
