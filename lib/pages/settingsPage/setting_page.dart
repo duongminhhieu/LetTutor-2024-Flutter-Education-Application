@@ -6,13 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:src/commons/appBar.dart';
 import 'package:src/l10n/app_localizations.dart';
 import 'package:src/providers/auth_provider.dart';
-import 'package:src/providers/courses_provider.dart';
-import 'package:src/providers/schedule_provider.dart';
 import 'package:src/providers/setting_provider.dart';
-import 'package:src/providers/tutor_provider.dart';
 
 import '../../commons/loadingOverlay.dart';
-import '../../providers/booking_provider.dart';
 import '../loginPage/login_page.dart';
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -229,21 +225,9 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
   Future<void> logOut(AuthProvider authProvider) async {
-
-    BookingProvider bookingProvider = Provider.of<BookingProvider>(context, listen: false);
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context, listen: false);
-    ScheduleProvider scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
-    TutorProvider tutorProvider = Provider.of<TutorProvider>(context, listen: false);
-
-    bookingProvider.clearData();
-    coursesProvider.clearData();
-    scheduleProvider.clearData();
-    tutorProvider.clearData();
-    authProvider.clearUserInfo();
-
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
-
+    authProvider.clearUserInfo();
   }
 
 

@@ -7,10 +7,6 @@ import 'package:src/l10n/app_localizations.dart';
 
 import '../pages/loginPage/login_page.dart';
 import '../providers/auth_provider.dart';
-import '../providers/booking_provider.dart';
-import '../providers/courses_provider.dart';
-import '../providers/schedule_provider.dart';
-import '../providers/tutor_provider.dart';
 import '../providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -172,7 +168,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                logOut(authProvider, context);
+                logOut(authProvider);
                 Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
@@ -189,21 +185,9 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Future<void> logOut(AuthProvider authProvider, BuildContext context) async {
-
-    BookingProvider bookingProvider = Provider.of<BookingProvider>(context, listen: false);
-    CoursesProvider coursesProvider = Provider.of<CoursesProvider>(context, listen: false);
-    ScheduleProvider scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
-    TutorProvider tutorProvider = Provider.of<TutorProvider>(context, listen: false);
-
-    bookingProvider.clearData();
-    coursesProvider.clearData();
-    scheduleProvider.clearData();
-    tutorProvider.clearData();
-    authProvider.clearUserInfo();
-
+  Future<void> logOut(AuthProvider authProvider) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
-
+    authProvider.clearUserInfo();
   }
 }

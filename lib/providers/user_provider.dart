@@ -54,5 +54,4 @@ class UserProvider extends ChangeNotifier {
 
   }
 
-
 }

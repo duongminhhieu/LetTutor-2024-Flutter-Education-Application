@@ -86,13 +86,4 @@ class BookingProvider extends ChangeNotifier {
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
-
-  // clear data
-  void clearData() {
-    lessonList = [];
-    totalLessonTime = "";
-    upcomingLesson = null;
-    _errorMessage = null;
-    notifyListeners();
-  }
 }

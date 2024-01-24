@@ -96,12 +96,4 @@ class ScheduleProvider extends ChangeNotifier {
       onFail(error.toString());
     }
   }
-
-  // clear data
-  void clearData() {
-    historyList = [];
-    totalPageHistory = 100;
-    perPage = 5;
-    currentPage = 1;
-  }
 }
