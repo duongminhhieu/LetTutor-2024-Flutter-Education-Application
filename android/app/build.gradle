@@ -14,7 +14,8 @@ if (localPropertiesFile.exists()) {
 
 def versionCodeFile = file('version_code.txt')
 // Read the existing version code or default to 1
-def flutterVersionCode = versionCodeFile.read()?.toInteger() ?: 1
+def flutterVersionCode = versionCodeFile.exists() ? versionCodeFile.text.toInteger() : 1
+
 
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
