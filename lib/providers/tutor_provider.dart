@@ -131,4 +131,15 @@ class TutorProvider extends ChangeNotifier {
         onFail: (error) {});
   }
 
+  // clear data
+  void clearData() {
+    tutors = [];
+    favTutorSecondId = [];
+    tutorInfo = null;
+    totalPage = 100;
+    perPage = 10;
+    currentPage = 1;
+    _errorMessage = null;
+  }
+
 }

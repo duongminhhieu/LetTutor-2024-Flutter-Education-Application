@@ -94,4 +94,14 @@ class CoursesProvider extends ChangeNotifier {
       onFail(error.toString());
     }
   }
+
+  // clear data
+  void clearData() {
+    courseList = [];
+    totalPage = 100;
+    perPage = 5;
+    currentPage = 1;
+    notifyListeners();
+  }
+
 }

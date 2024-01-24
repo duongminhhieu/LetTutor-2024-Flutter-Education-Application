@@ -116,11 +116,11 @@ jobs:
           name: Release v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
 
-      # - name: Release Build to internal track
-      #   uses: r0adkll/upload-google-play@v1
-      #   with:
-      #     serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
-      #     packageName: <YOUR_PACKAGE_NAME>
-      #     releaseFiles: app-release.aab
-      #     track: alpha
-      #     status: completed
+       - name: Release Build to internal track
+         uses: r0adkll/upload-google-play@v1
+         with:
+           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+           packageName: ${{ secrets.ANDROID_PACKAGE_NAME }}
+           releaseFiles: build/**/outputs/**/*.aab
+           track: internal
+           status: draft
