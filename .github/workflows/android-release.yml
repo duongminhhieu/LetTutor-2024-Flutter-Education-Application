@@ -106,14 +106,6 @@ jobs:
         with:
           name: android-release
 
-      - name: Push to Releases
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "**/*.apk, **/*.aab"
-          tag: v1.0.${{ github.run_number }}
-          name: Release v1.0.${{ github.run_number }}
-          token: ${{ secrets.TOKEN }}
-
       - name: Release Build to internal track
         uses: r0adkll/upload-google-play@v1
         with:
@@ -122,3 +114,11 @@ jobs:
           releaseFiles: "**/*.aab"
           track: internal
           status: draft
+
+      - name: Push to Releases
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "**/*.apk, **/*.aab"
+          tag: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
+          token: ${{ secrets.TOKEN }}
