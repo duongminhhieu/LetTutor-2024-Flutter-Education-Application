@@ -31,10 +31,6 @@ import 'package:src/utilities/themes.dart';
 import 'l10n/app_localizations.dart';
 import 'utilities/const.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
