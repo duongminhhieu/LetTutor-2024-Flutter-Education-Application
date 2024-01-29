@@ -40,6 +40,9 @@ The [LetTutor API](https://www.postman.com/lively-astronaut-285000/workspace/let
 - There are 4 environments in this project (Development, Testing, Stage and Production). Make sure to select one of these environments to run the project.
 - Example: `flutter run --flavor production -t lib/main_prod.dart`
 
+# 📽️ Video Demo
+This is a video demo of some key features in the application. [Watch the Video Demo](https://youtu.be/FqPNdVcfYwk?si=Nx6DpoiU9IVd-umm)
+
 # 📸 ScreenShots
 |  |  |  |  |  |
 |-------|------|--------|------|--------|
