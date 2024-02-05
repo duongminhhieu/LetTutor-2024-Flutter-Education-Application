@@ -12,6 +12,10 @@ ANYTIME, ANYWHERE🔥🔥***
 
 ***Start your 1-on-1
 25 Minute Lessons today!***
+# 📥 App Download
+To try the app you can download it from your favorite app store:
+
+<a href="https://play.google.com/store/apps/details?id=com.mobile.lettutor"><img alt="Get it on Google Play" height="100" src="https://github.com/duongminhhieu/LetTutor-2024-Flutter-Education-Application/assets/76527212/a2f69dd5-6e1d-4c51-8177-e91ea592f4b3"></a>
 
 # ✨ Key Features
 
